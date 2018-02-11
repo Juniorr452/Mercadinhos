@@ -1,6 +1,6 @@
-# Mercadinhos
+# Branch teste de NodeJS e Android
 
-![alt text](https://pbs.twimg.com/media/CqQcw6IXgAACX5d.jpg)
+Aviso: Ao sincronizar com o branch pela primeira vez, execute o comando npm install para instalar as dependências.
 
 [Link para o Trello](https://trello.com/b/PogABYk5/projeto-integrador-ii)
 

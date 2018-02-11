@@ -1,0 +1,22 @@
+{
+  "name": "teste_servidor",
+  "version": "1.0.0",
+  "description": "Teste NodeJS",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon bin/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "enio",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "debug": "^3.1.0",
+    "express": "^4.16.2",
+    "http": "0.0.0",
+    "oracledb": "^2.0.15"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.12"
+  }
+}
