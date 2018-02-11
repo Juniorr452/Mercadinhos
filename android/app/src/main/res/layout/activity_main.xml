@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.juniorr.testenodejs.MainActivity">
+
+    <EditText
+        android:id="@+id/ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="IP"
+        android:text="http://192.168.1.8:3000/products"/>
+    <EditText
+        android:id="@+id/produtoNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="Nome do produto"/>
+    <EditText
+        android:id="@+id/produtoPreco"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="Preço"/>
+    <Button
+        android:onClick="enviarProduto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TO-DO? Enviar"/>
+    <Button
+        android:onClick="pegarProdutos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pegar produtos"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/respostaServer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:text="TextView de respostas do server"/>
+    </ScrollView>
+</LinearLayout>
