@@ -1,6 +1,9 @@
 # Branch teste de NodeJS e Android
 
-Aviso: Ao sincronizar com o branch pela primeira vez, execute o comando npm install para instalar as dependências.
+Aviso: Ao sincronizar com o branch pela primeira vez, execute o seguinte comando no console para instalar as dependências e conseguir rodar o servidor.
+```
+npm install
+```
 
 [Link para o Trello](https://trello.com/b/PogABYk5/projeto-integrador-ii)
 
