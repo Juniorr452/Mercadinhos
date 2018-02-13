@@ -4,7 +4,7 @@ var oracledb = require('oracledb');
 var dbConfig = require('../dbconfig');
 
 oracledb.autoCommit = true;
-oracledb.outFormat  = oracledb.OBJECT; // Já codifica o retorno das consultas como objetos Javascript
+oracledb.outFormat  = oracledb.OBJECT; // Já codifica o retorno das consultas como JSON NOMEDACOLUNA : VALOR
 
 // Listar todos os produtos
 exports.get = (request, response, next) =>
