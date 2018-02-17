@@ -1,4 +1,4 @@
-# Mercadinhos
+# Projeto Integrador II
 
 ![alt text](https://pbs.twimg.com/media/CqQcw6IXgAACX5d.jpg)
 
