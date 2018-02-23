@@ -9,15 +9,15 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity {
 
 
-    private FirebaseDatabase fbDataBase;
-    private DatabaseReference dbReference;
+    //private FirebaseDatabase fbDataBase;
+    //private DatabaseReference dbReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fbDataBase = fbDataBase.getInstance();
-        dbReference = fbDataBase.getReference();
+        //fbDataBase = fbDataBase.getInstance();
+        //dbReference = fbDataBase.getReference().;
     }
 }
