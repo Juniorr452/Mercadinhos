@@ -33,8 +33,10 @@ public class MainActivity extends AppCompatActivity
 
     private GoogleApiClient googleApiClient;
 
-    private FirebaseAuth     firebaseAuth;
-    private FirebaseDatabase firebaseDatabase;
+    private FirebaseAuth                   firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+
+    private FirebaseDatabase  firebaseDatabase;
     private DatabaseReference testeDatabaseReference;
 
     @Override
@@ -63,12 +65,27 @@ public class MainActivity extends AppCompatActivity
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        // Auth Listener
+        authStateListener = new FirebaseAuth.AuthStateListener()
+        {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
+            {
+                //  TODO: Mandar pra activity principal
+                if (firebaseAuth.getCurrentUser() != null)
+                    Toast.makeText(MainActivity.this,
+                            "Logado como " + firebaseAuth.getCurrentUser().getDisplayName(),
+                            Toast.LENGTH_LONG).show();
+            }
+        };
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
     }
 
     public void entrar(View v)
@@ -81,6 +98,11 @@ public class MainActivity extends AppCompatActivity
     {
         Intent googleSignInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(googleSignInIntent, RC_GOOGLE_SIGN_IN);
+    }
+
+    public void entrarFacebook(View v)
+    {
+
     }
 
     @Override
@@ -104,7 +126,6 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, "Erro ao logar com sua conta do Google. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
                 }
 
-
                 break;
         }
     }
@@ -113,26 +134,30 @@ public class MainActivity extends AppCompatActivity
     {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task)
                 {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
+                    if (task.isSuccessful())
                     {
-                        if (task.isSuccessful())
-                        {
-                            // TODO: Mandar pra activity principal
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, user.getEmail(), Toast.LENGTH_LONG).show();
-                        }
-                        else
-                        {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Falha na autenticação", Toast.LENGTH_SHORT).show();
-                        }
-
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        Toast.makeText(MainActivity.this, user.getEmail(), Toast.LENGTH_LONG).show();
                     }
-                });
+                    else
+                    {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(MainActivity.this, "Falha na autenticação", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+    }
+
+    private void firebaseAuthWithFacebook()
+    {
+
     }
 }
