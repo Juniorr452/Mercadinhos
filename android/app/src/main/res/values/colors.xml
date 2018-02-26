@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#00BFFF</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="backgroundLogin">#FFFFFF</color>
+    <color name="TIL">#000000</color>
 </resources>

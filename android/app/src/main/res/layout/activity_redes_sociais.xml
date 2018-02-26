@@ -6,60 +6,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mobile.pid.pid.RedesSociaisActivity">
+    android:background="@color/backgroundLogin"
+    tools:context="com.mobile.pid.pid.login.RedesSociaisActivity">
 
     <ImageView
+        android:id="@+id/iv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@mipmap/ic_launcher"
         android:layout_gravity="center"
-        android:layout_marginTop="70dp"/>
+        android:layout_marginTop="38dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/logo" />
 
     <TextView
+        android:id="@+id/tv_bemVindo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bem vindo ao PiD"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:textStyle="bold"
-        android:textSize="16dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/facebook"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/google"
-        android:layout_gravity="center"/>
-
-    <Button
-        android:id="@+id/btn_entrar"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="76dp"
-        android:layout_marginLeft="76dp"
-        android:text="ENTRAR COM E-MAIL" />
+        android:layout_gravity="center"
+        android:text="Bem vindo ao PiD"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
-    <TextView
+    <ImageView
+        android:id="@+id/btn_facebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="40dp"
-        android:text="Não tem uma conta? Crie uma!"/>
+        android:layout_marginTop="40dp"
+        android:background="@drawable/facebook"/>
+
+    <ImageView
+        android:id="@+id/btn_gmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:background="@drawable/google" />
+
+    <ImageView
+        android:id="@+id/btn_email"
+        android:layout_width="257dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/botao_entrar"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_facebook"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        android:id="@+id/tv_criarConta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Ao entrar com e-mail, você está concordando com os Termos do PiD."
-        android:textAlignment="center"
-        android:textSize="11dp" />
-
+        android:layout_marginTop="40dp"
+        android:clickable="true"
+        android:linksClickable="true"
+        android:text="Não tem uma conta? Crie uma!" />
 
 </LinearLayout>
