@@ -21,9 +21,5 @@
         <activity android:name=".login.LoginActivity">
 
         </activity>
-
-        <activity android:name=".login.CriarContaActivity">
-
-        </activity>
     </application>
 </manifest>
