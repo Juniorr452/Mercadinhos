@@ -14,4 +14,7 @@
     <string name="image_insert">Inserir Foto</string>
     <string name="password_remember">Esqueci minha senha</string>
 
+    <string name="facebook_app_id">1966416683622473</string>
+    <string name="fb_login_protocol_scheme">fb1966416683622473</string>
+
 </resources>
