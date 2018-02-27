@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity
     private EditText senha;
 
 
-    //private ImageView btn_voltar;
+    private ImageView btn_voltar;
     //private TextView tv_remember;
 
     @Override
@@ -43,8 +43,8 @@ public class LoginActivity extends AppCompatActivity
 
         auth = FirebaseAuth.getInstance();
 
-        /*btn_voltar = (ImageView) findViewById(R.id.btn_voltar);
-        tv_remember = (TextView) findViewById(R.id.tv_remember);
+        btn_voltar = (ImageView) findViewById(R.id.btn_voltar);
+        /*tv_remember = (TextView) findViewById(R.id.tv_remember);
 
         tv_remember.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,12 +75,12 @@ public class LoginActivity extends AppCompatActivity
                     }
                 });
             }
-        });
+        });*/
 
         btn_voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { finish(); }
-        });*/
+        });
     }
 
     @Override
