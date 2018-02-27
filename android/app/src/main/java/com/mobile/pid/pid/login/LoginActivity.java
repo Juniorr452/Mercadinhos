@@ -1,28 +1,49 @@
 package com.mobile.pid.pid.login;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity
+{
+    private static final String TAG = "LoginActivity";
 
-    private ImageView btn_voltar;
-    private TextView tv_remember;
+    private FirebaseAuth auth;
+
+    private EditText email;
+    private EditText senha;
+
+
+    //private ImageView btn_voltar;
+    //private TextView tv_remember;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btn_voltar = (ImageView) findViewById(R.id.btn_voltar);
+        email = ((TextInputLayout) findViewById(R.id.TILemail)).getEditText();
+        senha = ((TextInputLayout) findViewById(R.id.TILpassword)).getEditText();
+
+        auth = FirebaseAuth.getInstance();
+
+        /*btn_voltar = (ImageView) findViewById(R.id.btn_voltar);
         tv_remember = (TextView) findViewById(R.id.tv_remember);
 
         tv_remember.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +80,69 @@ public class LoginActivity extends AppCompatActivity {
         btn_voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { finish(); }
+        });*/
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        auth.addAuthStateListener(new LoginAuthStateListener(this));
+    }
+
+    public void entrar(View v)
+    {
+        String emailText = email.getText().toString();
+        String senhaText = senha.getText().toString();
+
+        Log.d(TAG, senhaText);
+
+        // TODO: Validar campos
+        auth.signInWithEmailAndPassword(emailText, senhaText).addOnCompleteListener(new LoginOnCompleteListener(this));
+    }
+
+    public void esqueciSenha(View v)
+    {
+        AlertDialog.Builder mBuilder= new AlertDialog.Builder(LoginActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_esqueci_senha, null);
+
+        final TextInputLayout TIL_dialog_email_remember = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_email_remember);
+        final EditText email     = mView.findViewById(R.id.dialog_email_forgot);
+        Button btn_cancel_forgot = mView.findViewById(R.id.btn_cancel_forgot);
+        Button btn_send_email    = mView.findViewById(R.id.btn_send_email);
+
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        btn_send_email.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                // TODO: Validar e-mail
+                String emailText = email.getText().toString();
+
+                FirebaseAuth.getInstance().sendPasswordResetEmail(emailText).addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                            Toast.makeText(LoginActivity.this, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                        else
+                            // TODO: Não foi possível enviar o email
+                            Toast.makeText(LoginActivity.this, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        btn_cancel_forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
         });
     }
 }

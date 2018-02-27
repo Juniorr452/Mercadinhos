@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.mobile.pid.pid.login.RedesSociaisActivity;
 
 public class SplashActivity extends AppCompatActivity
 {
@@ -20,14 +21,14 @@ public class SplashActivity extends AppCompatActivity
 
         // Usuário não está logado
         if (user == null)
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, RedesSociaisActivity.class));
         else
         {
             // TODO: Rediricionar pra activity principal
             Toast.makeText(this, "Saindo da conta " + user.getEmail() +  "...", Toast.LENGTH_SHORT).show();
             firebaseAuth.signOut();
 
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, RedesSociaisActivity.class));
         }
 
         finish();
