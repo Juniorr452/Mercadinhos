@@ -61,7 +61,7 @@
             android:layout_marginLeft="8dp">
 
             <EditText
-                android:id="@+id/dialog_email_remember"
+                android:id="@+id/dialog_email_forgot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -73,7 +73,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -81,14 +81,15 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp">
 
-        <Button
-            android:id="@+id/btn_cancel_remember"
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_cancel_forgot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:text="@string/cancel"/>
+            android:text="@string/cancel"
+            android:foreground="?attr/selectableItemBackgroundBorderless"/>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_send_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,7 +97,7 @@
             android:text="@string/send_email"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@color/backgroundLogin"/>
-    </LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
 
 </LinearLayout>
