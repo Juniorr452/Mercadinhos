@@ -29,6 +29,7 @@
         android:background="@drawable/facebook"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_gravity="center"
+        android:onClick="entrarFacebook"
         android:clickable="true"/>
 
     <android.support.v7.widget.AppCompatImageButton
@@ -37,6 +38,7 @@
         android:background="@drawable/google"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_gravity="center"
+        android:onClick="entrarGoogle"
         android:clickable="true"/>
 
     <android.support.v7.widget.AppCompatTextView
