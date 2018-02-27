@@ -7,14 +7,26 @@
     <string name="back_button">Voltar</string>
     <string name="confirm">OK</string>
     <string name="email">E-mail</string>
+    <string name="user">Usuário</string>
     <string name="password">Senha</string>
+    <string name="password_confirm">Confirmar Senha</string>
     <string name="next">Avançar</string>
     <string name="back">Voltar</string>
     <string name="image_update">Atualizar Foto</string>
     <string name="image_insert">Inserir Foto</string>
     <string name="password_remember">Esqueci minha senha</string>
-
+    <string name="create_account">CRIAR CONTA</string>
+    <string name="lb_create_account">Criar Conta</string>
+    <string name="cancel">CANCELAR</string>
+    <string name="success_create_login">Conta criada com sucesso.</string>
+    <string name="error_create_login">Ocorreu um erro. Verifique os campos acima.</string>
+    <string name="message_insert_email">Insira o e-mail de sua conta no campo abaixo para enviarmos sua senha.</string>
+    <string name="send_email">ENVIAR E-MAIL</string>
+    <string name="success_send_email">E-mail enviado com sucesso.</string>
+    <string name="lb_remember">Esqueci minha senha</string>
+    <string name="keep_conect">Mantenha-me conectado</string>
+    <string name="message_create_account">Não tem uma conta? Crie uma!</string>
+    
     <string name="facebook_app_id">1966416683622473</string>
     <string name="fb_login_protocol_scheme">fb1966416683622473</string>
-
 </resources>
