@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/backgroundLogin"
+    android:background="@color/white"
     tools:context="com.mobile.pid.pid.login.RedesSociaisActivity">
 
     <android.support.v7.widget.AppCompatImageView

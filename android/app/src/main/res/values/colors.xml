@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#00BFFF</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="backgroundLogin">#FFFFFF</color>
-    <color name="TIL">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray">#737373</color>
+    <color name="gray_light">#f2f2f2</color>
 </resources>

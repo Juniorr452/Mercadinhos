@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/border_posts">
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="29dp"
+            android:layout_height="29dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginLeft="8dp">
+
+            <ImageView
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+
+                android:background="@mipmap/ic_launcher" />
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user"
+            android:layout_marginLeft="8dp"/>
+
+        <com.like.LikeButton
+            app:icon_type="Star"
+            app:circle_start_color="@color/colorPrimary"
+            app:like_drawable="@drawable/thumb_on"
+            android:layout_marginLeft="160dp"
+            app:unlike_drawable="@drawable/thumb_off"
+            app:dots_primary_color="@color/colorAccent"
+            app:dots_secondary_color="@color/colorPrimary"
+            app:circle_end_color="@color/colorAccent"
+            app:icon_size="25dp"
+            app:liked="true"
+            app:anim_scale_factor="2"
+            app:is_enabled="false" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/border_posts">
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:text="UAEHUAHEUAEHUAEHUAHEUAHEUAHEUA
+            HEUAHEUAHEUAHEUAHEUAHEUAHEUAHEUAHEUAHEHAU
+            EHAUEHAUEHAUEHAU"/>
+    </RelativeLayout>
+</LinearLayout>

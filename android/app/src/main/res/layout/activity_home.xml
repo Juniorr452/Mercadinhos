@@ -5,29 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mobile.pid.pid.feed.FeedActivity">
+    tools:context="com.mobile.pid.pid.feed.HomeActivity">
 
-    <Toolbar
+    <FrameLayout
+        android:id="@+id/home_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:title="@string/nav_feed"
-        android:titleTextColor="@color/backgroundLogin">
+        android:layout_height="match_parent"
+        android:layout_above="@id/home_menu">
+    </FrameLayout>
 
-    </Toolbar>
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_menu"
+        android:id="@+id/home_menu"
         android:layout_width="match_parent"
         android:layout_gravity="bottom"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemIconTint="@color/backgroundLogin"
-        app:itemTextColor="@color/backgroundLogin"
         android:layout_alignParentStart="true"
         android:visibility="visible"
-        android:background="@color/colorPrimaryDark"
-        app:menu="@menu/nav_items">
-
-
+        android:background="@color/white"
+        app:menu="@menu/nav_items"
+        app:itemIconTint="@color/nav_items_color"
+        app:itemTextColor="@color/nav_items_color">
     </android.support.design.widget.BottomNavigationView>
 </RelativeLayout>
