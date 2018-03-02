@@ -116,57 +116,6 @@ public class RedesSociaisActivity extends AppCompatActivity
                     Log.d(TAG, "facebook:onError", error);
                 }
             });
-
-        // LOGAR POR EMAIL
-        /*btn_email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(RedesSociaisActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // CRIAR UMA NOVA CONTA
-        tv_criarConta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_criar_conta, null);
-
-                final TextInputLayout TIL_dialog_username = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_username);
-                final TextInputLayout TIL_dialog_email = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_email);
-                final TextInputLayout TIL_dialog_password = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_password);
-                final TextInputLayout TIL_dialog_password_confirm = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_password_confirm);
-                Button btn_create_account = (Button) mView.findViewById(R.id.btn_create_account);
-                Button btn_cancel_account = (Button) mView.findViewById(R.id.btn_cancel_account);
-
-                btn_create_account.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(!TIL_dialog_email.getEditText().getText().toString().isEmpty()) {
-                            Toast.makeText(RedesSociaisActivity.this, R.string.success_create_login, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(RedesSociaisActivity.this, R.string.error_create_login, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-
-                mBuilder.setView(mView);
-                final AlertDialog dialog = mBuilder.create();
-                dialog.show();
-
-                btn_cancel_account.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.cancel();
-                    }
-                });
-            }
-        });*/
     }
 
     @Override
@@ -174,6 +123,12 @@ public class RedesSociaisActivity extends AppCompatActivity
     {
         super.onStart();
         firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 
     @Override

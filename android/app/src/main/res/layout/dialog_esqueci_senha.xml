@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="@string/send_email"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:backgroundTint="@color/colorPrimary"
             android:textColor="@color/white"/>
     </android.support.v7.widget.LinearLayoutCompat>
 
