@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.feed;
+package com.mobile.pid.pid.home;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,13 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.feed.fragments.BuscarFragment;
-import com.mobile.pid.pid.feed.fragments.FeedFragment;
-import com.mobile.pid.pid.feed.fragments.PerfilFragment;
-import com.mobile.pid.pid.feed.fragments.TurmasFragment;
+import com.mobile.pid.pid.home.fragments.BuscarFragment;
+import com.mobile.pid.pid.home.fragments.FeedFragment;
+import com.mobile.pid.pid.home.fragments.PerfilFragment;
+import com.mobile.pid.pid.home.fragments.TurmasFragment;
 
 public class HomeActivity extends AppCompatActivity {
 

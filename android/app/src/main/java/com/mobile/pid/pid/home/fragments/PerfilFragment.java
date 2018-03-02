@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.feed.fragments;
+package com.mobile.pid.pid.home.fragments;
 
 
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import com.mobile.pid.pid.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TurmasFragment extends Fragment {
+public class PerfilFragment extends Fragment {
 
 
-    public TurmasFragment() {
+    public PerfilFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class TurmasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_turmas, container, false);
+        return inflater.inflate(R.layout.fragment_perfil, container, false);
     }
 
 }
