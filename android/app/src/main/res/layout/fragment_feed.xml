@@ -2,15 +2,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_feed"
     tools:context="com.mobile.pid.pid.home.fragments.FeedFragment">
 
-
-    <Toolbar
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:title="@string/nav_feed"
-        android:titleTextColor="@color/white">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </Toolbar>
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_feed"
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginRight="15dp"/>
+
+        </Toolbar>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
 </FrameLayout>
