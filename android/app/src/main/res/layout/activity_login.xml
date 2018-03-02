@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundLogin"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.mobile.pid.pid.login.LoginActivity">
 
@@ -103,7 +103,7 @@
         android:layout_height="wrap_content"
         android:text="@string/login_confirm"
         android:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="@color/backgroundLogin"
+        android:textColor="@color/white"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:onClick="entrar"
