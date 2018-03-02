@@ -2,16 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mobile.pid.pid.home.fragments.FeedFragment"
-    android:background="@color/gray_light">
+    tools:context="com.mobile.pid.pid.home.fragments.FeedFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewFeed"
+
+    <Toolbar
         android:layout_width="match_parent"
-        android:layout_margin="8dp"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:title="@string/nav_feed"
+        android:titleTextColor="@color/white">
 
-    </android.support.v7.widget.RecyclerView>
-
-
+    </Toolbar>
 </FrameLayout>
