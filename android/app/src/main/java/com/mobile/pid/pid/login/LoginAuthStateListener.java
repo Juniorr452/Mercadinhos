@@ -29,6 +29,8 @@ public class LoginAuthStateListener implements FirebaseAuth.AuthStateListener
     {
         if (firebaseAuth.getCurrentUser() != null)
         {
+            FirebaseAuth.getInstance().removeAuthStateListener(this);
+
             Toast.makeText(a,
                     "Logado como " + firebaseAuth.getCurrentUser().getEmail(),
                     Toast.LENGTH_SHORT).show();

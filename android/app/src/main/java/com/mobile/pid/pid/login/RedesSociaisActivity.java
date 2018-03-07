@@ -36,6 +36,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
@@ -180,8 +181,8 @@ public class RedesSociaisActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                String username = dialog_username.getText().toString();
-                String email    = dialog_email.getText().toString();
+                final String username = dialog_username.getText().toString();
+                final String email    = dialog_email.getText().toString();
                 String senha    = dialog_password.getText().toString();
                 String senhaC   = dialog_password_confirm.getText().toString();
 
@@ -197,19 +198,28 @@ public class RedesSociaisActivity extends AppCompatActivity
                             if (task.isSuccessful())
                             {
                                 Toast.makeText(RedesSociaisActivity.this, R.string.success_create_login, Toast.LENGTH_SHORT).show();
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                                // TODO: Manda pra uma activity pra avisar ele a completar o perfil
+                                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                                final UserProfileChangeRequest atualizarNome = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(username)
+                                        .build();
+                                user.updateProfile(atualizarNome).addOnCompleteListener(new OnCompleteListener<Void>()
+                                {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task)
+                                    {
+                                        Usuario usuario = new Usuario(user.getUid(), username, email);
+                                        usuario.cadastrar();
+                                    }
+                                });
                             }
                             else
                             {
                                 Log.e(TAG, task.getException().toString());
                                 Toast.makeText(RedesSociaisActivity.this, "Aconteceu um erro", Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
-
                 }
                 else
                     Toast.makeText(RedesSociaisActivity.this, R.string.error_create_login, Toast.LENGTH_SHORT).show();
