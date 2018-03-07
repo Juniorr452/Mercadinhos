@@ -52,39 +52,15 @@ public class Turma
         return this.capaUrl;
     }
 
-    public InfoUsuario getProfessores()
-    {
-        return new InfoUsuario("nomee", "foto u r eleee");
+    public List<InfoUsuario> getProfessores() {
+        return professores;
     }
 
-    /*public List<InfoUsuario> getAlunos() {
+    public List<InfoUsuario> getAlunos() {
         return this.alunos;
     }
 
     public List<Integer> getDiasDaSemana() {
         return this.diasDaSemana;
-    }*/
-
-    // Informação do usuário (Nome e Foto) nesse tipo: https://qph.fs.quoracdn.net/main-qimg-c4c82ebf15b46df728e39f2a0149b9ad
-    class InfoUsuario
-    {
-        private String nome;
-        private String fotoUrl;
-
-        public InfoUsuario() {}
-
-        public InfoUsuario(String nome, String fotoUrl)
-        {
-            this.nome = nome;
-            this.fotoUrl = fotoUrl;
-        }
-
-        public String getNome() {
-            return nome;
-        }
-
-        public String getFotoUrl() {
-            return fotoUrl;
-        }
     }
 }

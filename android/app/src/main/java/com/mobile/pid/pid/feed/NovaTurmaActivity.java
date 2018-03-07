@@ -122,9 +122,6 @@ public class NovaTurmaActivity extends AppCompatActivity
                         String capaUrl = taskSnapshot.getDownloadUrl().toString();
                         Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getPhotoUrl().toString(), user.getDisplayName(), diasDaSemana);
                         cadastrarTurma(novaTurma, turmaId);
-
-                        Toast.makeText(NovaTurmaActivity.this, "Sucesso", Toast.LENGTH_SHORT);
-                        NovaTurmaActivity.this.finish();
                     }
                 });
             }
@@ -149,7 +146,9 @@ public class NovaTurmaActivity extends AppCompatActivity
         turmaUsuarioDbRef.child("nome").setValue(nomeTurma);
         turmaUsuarioDbRef.child("capaUrl").setValue(fotoCapaUrl);
         turmaUsuarioDbRef.child("diasDaSemana").setValue(diasDaSemana);
-        Log.d(TAG, t.toString());
+
+        Toast.makeText(this, "Sucesso", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     // TODO: Dias da semana
