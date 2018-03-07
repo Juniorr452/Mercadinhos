@@ -1,15 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.mobile.pid.pid.feed.fragments.PerfilFragment">
 
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:title="@string/nav_profile"
         android:titleTextColor="@color/white">
 
     </Toolbar>
-</FrameLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/sair_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sair"
+        android:layout_gravity="center" />
+</LinearLayout>

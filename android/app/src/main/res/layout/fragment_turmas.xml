@@ -1,15 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.mobile.pid.pid.feed.fragments.TurmasFragment">
 
-    <Toolbar
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:title="@string/nav_classes"
-        android:titleTextColor="@color/white">
+        android:layout_height="wrap_content">
 
-    </Toolbar>
-</FrameLayout>
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:title="@string/nav_classes"
+            android:titleTextColor="@color/white">
+        </Toolbar>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_turmas"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:tabMode="fixed"
+            android:background="@color/colorPrimary"
+            app:tabTextColor="@android:color/white"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabIndicatorColor="@android:color/white">
+
+        </android.support.design.widget.TabLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/turmas_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
+</LinearLayout>

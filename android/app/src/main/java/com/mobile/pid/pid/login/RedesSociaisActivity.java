@@ -36,6 +36,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
@@ -116,57 +117,6 @@ public class RedesSociaisActivity extends AppCompatActivity
                     Log.d(TAG, "facebook:onError", error);
                 }
             });
-
-        // LOGAR POR EMAIL
-        /*btn_email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(RedesSociaisActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // CRIAR UMA NOVA CONTA
-        tv_criarConta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_criar_conta, null);
-
-                final TextInputLayout TIL_dialog_username = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_username);
-                final TextInputLayout TIL_dialog_email = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_email);
-                final TextInputLayout TIL_dialog_password = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_password);
-                final TextInputLayout TIL_dialog_password_confirm = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_password_confirm);
-                Button btn_create_account = (Button) mView.findViewById(R.id.btn_create_account);
-                Button btn_cancel_account = (Button) mView.findViewById(R.id.btn_cancel_account);
-
-                btn_create_account.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(!TIL_dialog_email.getEditText().getText().toString().isEmpty()) {
-                            Toast.makeText(RedesSociaisActivity.this, R.string.success_create_login, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(RedesSociaisActivity.this, R.string.error_create_login, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-
-                mBuilder.setView(mView);
-                final AlertDialog dialog = mBuilder.create();
-                dialog.show();
-
-                btn_cancel_account.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.cancel();
-                    }
-                });
-            }
-        });*/
     }
 
     @Override
@@ -174,6 +124,12 @@ public class RedesSociaisActivity extends AppCompatActivity
     {
         super.onStart();
         firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 
     @Override
@@ -225,8 +181,8 @@ public class RedesSociaisActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                String username = dialog_username.getText().toString();
-                String email    = dialog_email.getText().toString();
+                final String username = dialog_username.getText().toString();
+                final String email    = dialog_email.getText().toString();
                 String senha    = dialog_password.getText().toString();
                 String senhaC   = dialog_password_confirm.getText().toString();
 
@@ -242,19 +198,28 @@ public class RedesSociaisActivity extends AppCompatActivity
                             if (task.isSuccessful())
                             {
                                 Toast.makeText(RedesSociaisActivity.this, R.string.success_create_login, Toast.LENGTH_SHORT).show();
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                                // TODO: Manda pra uma activity pra avisar ele a completar o perfil
+                                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                                final UserProfileChangeRequest atualizarNome = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(username)
+                                        .build();
+                                user.updateProfile(atualizarNome).addOnCompleteListener(new OnCompleteListener<Void>()
+                                {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task)
+                                    {
+                                        Usuario usuario = new Usuario(user.getUid(), username, email);
+                                        usuario.cadastrar();
+                                    }
+                                });
                             }
                             else
                             {
                                 Log.e(TAG, task.getException().toString());
                                 Toast.makeText(RedesSociaisActivity.this, "Aconteceu um erro", Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
-
                 }
                 else
                     Toast.makeText(RedesSociaisActivity.this, R.string.error_create_login, Toast.LENGTH_SHORT).show();

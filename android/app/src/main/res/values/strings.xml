@@ -9,6 +9,7 @@
     <string name="confirm">OK</string>
     <string name="email">E-mail</string>
     <string name="user">Usuário</string>
+    <string name="nome_e_sobrenome">Nome e Sobrenome</string>
     <string name="password">Senha</string>
     <string name="password_confirm">Confirmar Senha</string>
     <string name="next">Avançar</string>
@@ -27,13 +28,35 @@
     <string name="lb_remember">Esqueci minha senha</string>
     <string name="keep_conect">Mantenha-me conectado</string>
     <string name="message_create_account">Não tem uma conta? Crie uma!</string>
+
     <string name="facebook_app_id">1966416683622473</string>
     <string name="fb_login_protocol_scheme">fb1966416683622473</string>
+
     <string name="nav_feed">Feed</string>
     <string name="nav_profile">Perfil</string>
     <string name="nav_search">Buscar</string>
     <string name="nav_classes">Turmas</string>
+
+    <string name="tab_turmas_criadas">Turmas Criadas</string>
+    <string name="tab_turmas_matriculadas">Turmas Matriculadas</string>
+
     <string name="nav_study">Estudar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sair">Sair</string>
+
+    <string name="nova_turma">Nova Turma</string>
+    <string name="criar_turma">Criar turma</string>
+    <string name="nome_da_turma">Nome da Turma</string>
+    <string name="dias_da_semana">Dias da semana</string>
+    <string name="segunda_feira">Segunda-Feira</string>
+    <string name="ter_a_feira">Terça-Feira</string>
+    <string name="quarta_feira">Quarta-Feira</string>
+    <string name="quinta_feira">Quinta-Feira</string>
+    <string name="sexta_feira">Sexta-Feira</string>
+    <string name="s_bado">Sábado</string>
+    <string name="domingo">Domingo</string>
+    <string name="pin">PIN (Opcional)</string>
+    <string name="completar_acao">Completar Ação Usando</string>
+
 </resources>
