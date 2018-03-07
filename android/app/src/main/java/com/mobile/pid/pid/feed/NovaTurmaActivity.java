@@ -41,7 +41,7 @@ public class NovaTurmaActivity extends AppCompatActivity
     EditText pinEditText;
 
     Uri imagemUri;
-    List<String> diasDaSemana;
+    List<Integer> diasDaSemana;
 
     DatabaseReference usuariosDatabaseReference;
     DatabaseReference turmasDatabaseReference;
@@ -140,8 +140,15 @@ public class NovaTurmaActivity extends AppCompatActivity
     // Erro aqui ao usar o setValue com a Turma t
     private void cadastrarTurma(Turma t, String turmaId)
     {
-        turmasDatabaseReference.child(turmaId).setValue("aaa");
-        usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId).setValue("aaa");
+        DatabaseReference turmaUsuarioDbRef = usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId);
+        turmasDatabaseReference.child(turmaId).setValue(t);
+
+        String nomeTurma   = t.getNome();
+        String fotoCapaUrl = t.getCapaUrl();
+
+        turmaUsuarioDbRef.child("nome").setValue(nomeTurma);
+        turmaUsuarioDbRef.child("capaUrl").setValue(fotoCapaUrl);
+        turmaUsuarioDbRef.child("diasDaSemana").setValue(diasDaSemana);
         Log.d(TAG, t.toString());
     }
 

@@ -14,14 +14,14 @@ public class Turma
     private String nome;
     private String pin;
 
-    List<String> diasDaSemana;
+    private List<Integer> diasDaSemana;
 
-    List<InfoUsuario> professores;
-    List<InfoUsuario> alunos;
+    private List<InfoUsuario> professores;
+    private List<InfoUsuario> alunos;
 
     public Turma() {}
 
-    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, List<String> diasDaSemana)
+    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, List<Integer> diasDaSemana)
     {
         this.capaUrl = capaUrl;
         this.nome = nome;
@@ -40,26 +40,38 @@ public class Turma
         this.nome = nome;
     }
 
-    /*public Object[] getProfessores() {
-        return this.professores.toArray();
-    }*/
+    public String getPin(){
+        return this.pin;
+    }
+
+    public void setPin(String pin){
+        this.pin = pin;
+    }
+
+    public String getCapaUrl() {
+        return this.capaUrl;
+    }
+
+    public InfoUsuario getProfessores()
+    {
+        return new InfoUsuario("nomee", "foto u r eleee");
+    }
 
     /*public List<InfoUsuario> getAlunos() {
         return this.alunos;
     }
 
-    public List<String> getDiasDaSemana()
-    {
+    public List<Integer> getDiasDaSemana() {
         return this.diasDaSemana;
     }*/
 
     // Informação do usuário (Nome e Foto) nesse tipo: https://qph.fs.quoracdn.net/main-qimg-c4c82ebf15b46df728e39f2a0149b9ad
-    private class InfoUsuario
+    class InfoUsuario
     {
         private String nome;
         private String fotoUrl;
 
-        public InfoUsuario() { }
+        public InfoUsuario() {}
 
         public InfoUsuario(String nome, String fotoUrl)
         {
@@ -71,16 +83,8 @@ public class Turma
             return nome;
         }
 
-        public void setNome(String nome) {
-            this.nome = nome;
-        }
-
         public String getFotoUrl() {
             return fotoUrl;
-        }
-
-        public void setFotoUrl(String fotoUrl) {
-            this.fotoUrl = fotoUrl;
         }
     }
 }
