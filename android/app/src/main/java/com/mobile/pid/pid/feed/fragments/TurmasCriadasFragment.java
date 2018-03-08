@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.feed.HomeActivity;
 import com.mobile.pid.pid.feed.NovaTurmaActivity;
 
 /**

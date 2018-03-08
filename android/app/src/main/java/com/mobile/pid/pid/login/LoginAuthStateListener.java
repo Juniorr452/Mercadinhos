@@ -1,14 +1,13 @@
 package com.mobile.pid.pid.login;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.mobile.pid.pid.feed.HomeActivity;
+import com.mobile.pid.pid.home.HomeActivity;
 
 /**
  * Created by junio on 27/02/2018.

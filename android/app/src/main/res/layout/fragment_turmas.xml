@@ -4,12 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
     android:orientation="vertical"
     tools:context="com.mobile.pid.pid.feed.fragments.TurmasFragment">
-=======
-    tools:context="com.mobile.pid.pid.home.fragments.TurmasFragment">
->>>>>>> Jonas
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
