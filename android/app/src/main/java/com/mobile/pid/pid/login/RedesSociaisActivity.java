@@ -1,7 +1,11 @@
 package com.mobile.pid.pid.login;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -160,7 +164,7 @@ public class RedesSociaisActivity extends AppCompatActivity
 
     public void dialogCriarConta(View v)
     {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this);
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_criar_conta, null);
 
         /*final TextInputLayout TIL_dialog_username = mView.findViewById(R.id.TIL_dialog_username);
@@ -229,15 +233,21 @@ public class RedesSociaisActivity extends AppCompatActivity
 
 
         mBuilder.setView(mView);
-        final AlertDialog dialog = mBuilder.create();
-        dialog.show();
 
-        btn_cancel_account.setOnClickListener(new View.OnClickListener() {
+        mBuilder.setPositiveButton("Criar", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                dialog.cancel();
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
             }
         });
+
+        mBuilder.setNegativeButton("Cancelar", null);
+
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#737373"));
+
     }
 
     // TODO: Validação

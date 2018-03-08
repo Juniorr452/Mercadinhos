@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.feed;
+package com.mobile.pid.pid.home;
 
 import android.annotation.SuppressLint;
 import android.support.design.internal.BottomNavigationItemView;
