@@ -15,8 +15,8 @@ import com.mobile.pid.pid.home.fragments.FeedFragment;
 import com.mobile.pid.pid.home.fragments.PerfilFragment;
 import com.mobile.pid.pid.home.fragments.TurmasFragment;
 
-public class HomeActivity extends AppCompatActivity {
-
+public class HomeActivity extends AppCompatActivity
+{
     private BottomNavigationView home_menu;
     private FrameLayout          home_frame;
 
@@ -26,7 +26,8 @@ public class HomeActivity extends AppCompatActivity {
     private PerfilFragment perfilFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -46,8 +47,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch (item.getItemId()) {
-
+                switch (item.getItemId())
+                {
                     case R.id.menu_feed:
                         setFragment(feedFragment);
                         return true;
@@ -69,8 +70,8 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void setFragment(Fragment fragment) {
-
+    private void setFragment(Fragment fragment)
+    {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.home_frame, fragment);
         fragmentTransaction.commit();
