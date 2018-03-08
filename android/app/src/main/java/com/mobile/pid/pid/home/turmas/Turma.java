@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.feed;
+package com.mobile.pid.pid.home.turmas;
 
 import java.util.ArrayList;
 import java.util.List;

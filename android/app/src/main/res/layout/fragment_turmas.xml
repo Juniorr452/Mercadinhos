@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mobile.pid.pid.feed.fragments.TurmasFragment">
+    tools:context="com.mobile.pid.pid.turmas.fragments.TurmasFragment">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

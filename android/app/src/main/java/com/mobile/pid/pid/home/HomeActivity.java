@@ -10,10 +10,10 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.fragments.BuscarFragment;
-import com.mobile.pid.pid.home.fragments.FeedFragment;
-import com.mobile.pid.pid.home.fragments.PerfilFragment;
-import com.mobile.pid.pid.home.fragments.TurmasFragment;
+import com.mobile.pid.pid.home.buscar.BuscarFragment;
+import com.mobile.pid.pid.home.feed.FeedFragment;
+import com.mobile.pid.pid.home.perfil.PerfilFragment;
+import com.mobile.pid.pid.home.turmas.TurmasFragment;
 
 public class HomeActivity extends AppCompatActivity
 {

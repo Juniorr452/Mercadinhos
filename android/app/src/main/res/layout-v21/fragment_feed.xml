@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_feed"
-    tools:context="com.mobile.pid.pid.home.fragments.FeedFragment">
+    tools:context="com.mobile.pid.pid.home.feed.FeedFragment">
 
 
     <Toolbar

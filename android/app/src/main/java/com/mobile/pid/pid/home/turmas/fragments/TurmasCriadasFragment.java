@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.feed.fragments;
+package com.mobile.pid.pid.home.turmas.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.feed.NovaTurmaActivity;
+import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
 
 /**
  * A simple {@link Fragment} subclass.

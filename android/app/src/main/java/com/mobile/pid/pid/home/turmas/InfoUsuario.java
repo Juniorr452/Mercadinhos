@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.feed;
+package com.mobile.pid.pid.home.turmas;
 
 /**
  * Created by junio on 07/03/2018.
