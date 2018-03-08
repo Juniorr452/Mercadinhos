@@ -2,6 +2,7 @@ package com.mobile.pid.pid.feed;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by junio on 07/03/2018.
@@ -14,14 +15,14 @@ public class Turma
     private String nome;
     private String pin;
 
-    private List<Integer> diasDaSemana;
+    private Map<String, Integer> diasDaSemana;
 
     private List<InfoUsuario> professores;
     private List<InfoUsuario> alunos;
 
     public Turma() {}
 
-    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, List<Integer> diasDaSemana)
+    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, Map<String, Integer> diasDaSemana)
     {
         this.capaUrl = capaUrl;
         this.nome = nome;
@@ -60,7 +61,7 @@ public class Turma
         return this.alunos;
     }
 
-    public List<Integer> getDiasDaSemana() {
+    public Map<String, Integer> getDiasDaSemana() {
         return this.diasDaSemana;
     }
 }
