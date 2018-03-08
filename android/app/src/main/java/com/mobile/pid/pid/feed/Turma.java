@@ -2,6 +2,7 @@ package com.mobile.pid.pid.feed;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by junio on 07/03/2018.
@@ -14,14 +15,14 @@ public class Turma
     private String nome;
     private String pin;
 
-    List<String> diasDaSemana;
+    private Map<String, Integer> diasDaSemana;
 
-    List<InfoUsuario> professores;
-    List<InfoUsuario> alunos;
+    private List<InfoUsuario> professores;
+    private List<InfoUsuario> alunos;
 
     public Turma() {}
 
-    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, List<String> diasDaSemana)
+    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, Map<String, Integer> diasDaSemana)
     {
         this.capaUrl = capaUrl;
         this.nome = nome;
@@ -40,47 +41,27 @@ public class Turma
         this.nome = nome;
     }
 
-    /*public Object[] getProfessores() {
-        return this.professores.toArray();
-    }*/
+    public String getPin(){
+        return this.pin;
+    }
 
-    /*public List<InfoUsuario> getAlunos() {
+    public void setPin(String pin){
+        this.pin = pin;
+    }
+
+    public String getCapaUrl() {
+        return this.capaUrl;
+    }
+
+    public List<InfoUsuario> getProfessores() {
+        return professores;
+    }
+
+    public List<InfoUsuario> getAlunos() {
         return this.alunos;
     }
 
-    public List<String> getDiasDaSemana()
-    {
+    public Map<String, Integer> getDiasDaSemana() {
         return this.diasDaSemana;
-    }*/
-
-    // Informação do usuário (Nome e Foto) nesse tipo: https://qph.fs.quoracdn.net/main-qimg-c4c82ebf15b46df728e39f2a0149b9ad
-    private class InfoUsuario
-    {
-        private String nome;
-        private String fotoUrl;
-
-        public InfoUsuario() { }
-
-        public InfoUsuario(String nome, String fotoUrl)
-        {
-            this.nome = nome;
-            this.fotoUrl = fotoUrl;
-        }
-
-        public String getNome() {
-            return nome;
-        }
-
-        public void setNome(String nome) {
-            this.nome = nome;
-        }
-
-        public String getFotoUrl() {
-            return fotoUrl;
-        }
-
-        public void setFotoUrl(String fotoUrl) {
-            this.fotoUrl = fotoUrl;
-        }
     }
 }

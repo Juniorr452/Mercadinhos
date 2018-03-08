@@ -25,7 +25,10 @@ import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class NovaTurmaActivity extends AppCompatActivity
@@ -41,7 +44,7 @@ public class NovaTurmaActivity extends AppCompatActivity
     EditText pinEditText;
 
     Uri imagemUri;
-    List<String> diasDaSemana;
+    Map<String, Integer> diasDaSemana;
 
     DatabaseReference usuariosDatabaseReference;
     DatabaseReference turmasDatabaseReference;
@@ -75,7 +78,7 @@ public class NovaTurmaActivity extends AppCompatActivity
             }
         });
 
-        diasDaSemana = new ArrayList<>(7);
+        diasDaSemana = new HashMap<>(7);
     }
 
     public void carregarImagem(View v)
@@ -122,9 +125,6 @@ public class NovaTurmaActivity extends AppCompatActivity
                         String capaUrl = taskSnapshot.getDownloadUrl().toString();
                         Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getPhotoUrl().toString(), user.getDisplayName(), diasDaSemana);
                         cadastrarTurma(novaTurma, turmaId);
-
-                        Toast.makeText(NovaTurmaActivity.this, "Sucesso", Toast.LENGTH_SHORT);
-                        NovaTurmaActivity.this.finish();
                     }
                 });
             }
@@ -140,25 +140,69 @@ public class NovaTurmaActivity extends AppCompatActivity
     // Erro aqui ao usar o setValue com a Turma t
     private void cadastrarTurma(Turma t, String turmaId)
     {
-        turmasDatabaseReference.child(turmaId).setValue("aaa");
-        usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId).setValue("aaa");
-        Log.d(TAG, t.toString());
+        // Cadastrar a turma
+        turmasDatabaseReference.child(turmaId).setValue(t);
+
+        // Cadastrar a turma criada dentro do usuário
+        DatabaseReference usuarioTurmaDbRef = usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId);
+
+        String nomeTurma   = t.getNome();
+        String fotoCapaUrl = t.getCapaUrl();
+
+        usuarioTurmaDbRef.child("nome").setValue(nomeTurma);
+        usuarioTurmaDbRef.child("capaUrl").setValue(fotoCapaUrl);
+        usuarioTurmaDbRef.child("diasDaSemana").setValue(diasDaSemana);
+
+        Toast.makeText(this, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
-    // TODO: Dias da semana
     public void onCheckboxClicked(View v)
     {
-        /*Consumer<String> acao;
+        Consumer<String> acao;
         boolean checado = ((CheckBox) v).isChecked();
 
-        if (checado)
-            acao = dia -> diasDaSemana.add(dia);
-
+        // TODO: Achar um jeito melhor de fazer isso
         switch(v.getId())
         {
-            case R.id.nova_turma_segunda:
+            case R.id.nova_turma_domingo:
+                addOuRemoverDia(checado, (CheckBox) v, Calendar.SUNDAY);
                 break;
-        }*/
+
+            case R.id.nova_turma_segunda:
+                addOuRemoverDia(checado, (CheckBox) v, Calendar.MONDAY);
+                break;
+
+            case R.id.nova_turma_terca:
+                addOuRemoverDia(checado, (CheckBox) v, Calendar.TUESDAY);
+                break;
+
+            case R.id.nova_turma_quarta:
+                addOuRemoverDia(checado, (CheckBox) v, Calendar.WEDNESDAY);
+                break;
+
+            case R.id.nova_turma_quinta:
+                addOuRemoverDia(checado, (CheckBox) v, Calendar.THURSDAY);
+                break;
+
+            case R.id.nova_turma_sexta:
+                addOuRemoverDia(checado, (CheckBox) v, Calendar.FRIDAY);
+                break;
+
+            case R.id.nova_turma_sabado:
+                addOuRemoverDia(checado, (CheckBox) v, Calendar.SATURDAY);
+                break;
+        }
+    }
+
+    private void addOuRemoverDia(boolean checado, CheckBox checkboxDia, int numeroDia)
+    {
+        String nomeDia = checkboxDia.getText().toString();
+
+        if (checado)
+            diasDaSemana.put(nomeDia, numeroDia);
+        else
+            diasDaSemana.remove(nomeDia);
     }
 
     // TODO: Validação
