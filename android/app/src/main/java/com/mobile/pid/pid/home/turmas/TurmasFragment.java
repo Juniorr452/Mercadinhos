@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.home.fragments;
+package com.mobile.pid.pid.home.turmas;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.feed.fragments.TurmasCriadasFragment;
-import com.mobile.pid.pid.feed.fragments.TurmasMatriculadasFragment;
+import com.mobile.pid.pid.home.turmas.fragments.TurmasCriadasFragment;
+import com.mobile.pid.pid.home.turmas.fragments.TurmasMatriculadasFragment;
 
 /**
  * A simple {@link Fragment} subclass.

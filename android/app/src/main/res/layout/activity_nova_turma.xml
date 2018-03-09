@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mobile.pid.pid.feed.NovaTurmaActivity">
+    tools:context="com.mobile.pid.pid.home.turmas.NovaTurmaActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_nova_turma"

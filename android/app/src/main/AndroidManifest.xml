@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name=".splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".feed.NovaTurmaActivity"></activity>
+        <activity android:name=".home.turmas.NovaTurmaActivity"></activity>
     </application>
 
 </manifest>

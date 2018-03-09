@@ -1,4 +1,4 @@
-package com.mobile.pid.pid;
+package com.mobile.pid.pid.splash;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
