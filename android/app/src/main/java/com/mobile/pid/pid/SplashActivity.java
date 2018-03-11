@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.mobile.pid.pid.feed.HomeActivity;
+import com.mobile.pid.pid.home.HomeActivity;
 import com.mobile.pid.pid.login.RedesSociaisActivity;
 
 public class SplashActivity extends AppCompatActivity

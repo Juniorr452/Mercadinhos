@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.feed.fragments;
+package com.mobile.pid.pid.home.fragments;
 
 
 import android.app.Activity;

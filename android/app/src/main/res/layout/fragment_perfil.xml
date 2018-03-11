@@ -10,6 +10,117 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:title="@string/nav_profile"
+        android:titleTextColor="@color/white"
+        android:id="@+id/toolbarProfile">
+
+    </Toolbar>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbarProfile"
+        android:background="@color/gray"
+        android:id="@+id/user_capa"/>
+
+    <LinearLayout
+        android:id="@+id/seguindo"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_below="@id/user_capa"
+        android:orientation="vertical"
+        android:layout_toStartOf="@+id/image_logoUser"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Seguindo"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="31"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/seguidores"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_below="@id/user_capa"
+        android:orientation="vertical"
+        android:layout_toEndOf="@+id/image_logoUser"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Seguidores"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5M"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"/>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/user_label"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:gravity="center"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/image_logoUser"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:text="Jonas Ramos"
+            android:textStyle="bold"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:text="jjonasramos"
+            android:textSize="12dp"/>
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/image_logoUser"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@+id/toolbarProfile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="78dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_label"
+        android:background="@color/colorPrimaryDark"
+        android:title="TAB"
         android:titleTextColor="@color/white">
 
     </Toolbar>
