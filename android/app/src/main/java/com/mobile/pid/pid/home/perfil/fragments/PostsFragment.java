@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.home.feed;
+package com.mobile.pid.pid.home.perfil.fragments;
 
 
 import android.os.Bundle;
@@ -16,12 +16,12 @@ import com.mobile.pid.pid.R;
 /**
  * A simple {@link Fragment} subclass.
  */
+public class PostsFragment extends Fragment {
 
-// https://www.youtube.com/watch?v=4mwnhvRzRfw LINK PRA USAR RECYCLER/CARD/FRAGMENT
-public class FeedFragment extends Fragment {
+    private RecyclerView recycler_view_perfil;
 
 
-    public FeedFragment() {
+    public PostsFragment() {
         // Required empty public constructor
     }
 
@@ -30,19 +30,18 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
-        RecyclerView recycler_view = view.findViewById(R.id.recycler_view);
-        recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recycler_view.setAdapter(new RecyclerViewAdapter());
+        recycler_view_perfil = (RecyclerView) view.findViewById(R.id.recycler_view_perfil);
+        recycler_view_perfil.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler_view_perfil.setAdapter(new RecyclerViewAdapter());
 
         return view;
-
     }
 
     // METODOS ===========================================================================
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    private class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private CardView card_feed;
         private TextView tv_user_feed;
@@ -81,5 +80,4 @@ public class FeedFragment extends Fragment {
             return 5;
         }
     }
-
 }
