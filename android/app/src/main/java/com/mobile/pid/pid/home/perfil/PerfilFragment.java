@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.perfil.fragments.TurmasPerfilFragment;
+import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 
 /**
@@ -74,7 +74,7 @@ public class PerfilFragment extends Fragment {
                 case 0:
                     return new PostsFragment();
                 case 1:
-                    return new TurmasPerfilFragment();
+                    return new CurtidasPerfilFragment();
                 default:
                     return null;
             }

@@ -13,12 +13,12 @@ import com.mobile.pid.pid.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TurmasPerfilFragment extends Fragment {
+public class CurtidasPerfilFragment extends Fragment {
 
     private RecyclerView recyclerView_turmas_perfil;
 
 
-    public TurmasPerfilFragment() {
+    public CurtidasPerfilFragment() {
         // Required empty public constructor
     }
 
@@ -26,7 +26,7 @@ public class TurmasPerfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_turmas_perfil, container, false);
+        View view = inflater.inflate(R.layout.fragment_curtidas_perfil, container, false);
 
         recyclerView_turmas_perfil = (RecyclerView) view.findViewById(R.id.recycler_view_perfil);
 

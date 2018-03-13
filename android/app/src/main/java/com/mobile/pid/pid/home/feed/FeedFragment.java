@@ -42,7 +42,7 @@ public class FeedFragment extends Fragment {
 
     // METODOS ===========================================================================
 
-    private class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private CardView card_feed;
         private TextView tv_user_feed;
