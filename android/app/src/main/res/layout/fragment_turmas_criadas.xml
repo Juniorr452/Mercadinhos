@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.mobile.pid.pid.feed.fragments.TurmasCriadasFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_turmas_criadas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Turmas Criadas" />
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_adicionar_turma"
