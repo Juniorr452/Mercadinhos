@@ -2,6 +2,7 @@ package com.mobile.pid.pid.home.feed;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,10 @@ import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
 
+import java.io.PipedOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -20,11 +25,17 @@ import com.mobile.pid.pid.R;
 // https://www.youtube.com/watch?v=4mwnhvRzRfw LINK PRA USAR RECYCLER/CARD/FRAGMENT
 public class FeedFragment extends Fragment {
 
+    private List<Post> posts;
+
 
     public FeedFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,54 +43,20 @@ public class FeedFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
+        posts = new ArrayList<Post>();
+
+        posts.add(new Post("jonas", "teste"));
+        posts.add(new Post("jonas", "teste"));
+        posts.add(new Post("jonas", "teste"));
+        posts.add(new Post("jonas", "teste"));
+        posts.add(new Post("jonas", "teste"));
+
         RecyclerView recycler_view = view.findViewById(R.id.recycler_view);
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recycler_view.setAdapter(new RecyclerViewAdapter());
+
+        recycler_view.setAdapter(new FeedAdapter(getActivity(), posts));
 
         return view;
 
     }
-
-    // METODOS ===========================================================================
-
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
-        private CardView card_feed;
-        private TextView tv_user_feed;
-        private TextView tv_message_feed;
-
-        public RecyclerViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        public RecyclerViewHolder(LayoutInflater inflater, ViewGroup container) {
-            super(inflater.inflate(R.layout.post_layout, container, false));
-
-            card_feed = itemView.findViewById(R.id.card_feed);
-            tv_user_feed = itemView.findViewById(R.id.tv_user_feed);
-            tv_message_feed = itemView.findViewById(R.id.tv_message_feed);
-
-        }
-
-    }
-
-    private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
-
-        @Override
-        public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new RecyclerViewHolder(inflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return 5;
-        }
-    }
-
 }
