@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.feed.Turma;
+import com.mobile.pid.pid.home.turmas.Turma;
 
 import java.util.List;
 

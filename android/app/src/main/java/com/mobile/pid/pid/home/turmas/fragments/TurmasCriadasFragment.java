@@ -21,8 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
 
 import com.mobile.pid.pid.adapters.TurmaAdapter;
-import com.mobile.pid.pid.turmas.NovaTurmaActivity;
-import com.mobile.pid.pid.turmas.Turma;
+import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
+import com.mobile.pid.pid.home.turmas.Turma;
 
 import java.util.ArrayList;
 import java.util.List;
