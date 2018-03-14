@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.adapters;
+package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

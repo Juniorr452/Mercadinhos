@@ -18,7 +18,5 @@ public class Post {
         return user;
     }
 
-    public String getText() {
-        return text;
-    }
+    public String getText() { return text; }
 }

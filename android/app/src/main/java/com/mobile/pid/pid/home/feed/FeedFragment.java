@@ -4,17 +4,15 @@ package com.mobile.pid.pid.home.feed;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.adapters.PostAdapter;
 
-import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class FeedFragment extends Fragment {
         RecyclerView recycler_view = view.findViewById(R.id.recycler_view);
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recycler_view.setAdapter(new FeedAdapter(getActivity(), posts));
+        recycler_view.setAdapter(new PostAdapter(getActivity(), posts));
 
         return view;
 

@@ -14,9 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
+import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
+import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,7 +53,7 @@ public class PerfilFragment extends Fragment {
         tabs.setupWithViewPager(perfilViewPager);
 
         collapsing_tb = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_tb);
-        collapsing_tb.setTitle("Jonas Ramos"); //TODO pegar nome do usuario e colocar aqui
+        collapsing_tb.setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
         return view;
     }
@@ -63,7 +66,7 @@ public class PerfilFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 2;
+            return 4;
         }
 
         @Override
@@ -75,6 +78,10 @@ public class PerfilFragment extends Fragment {
                     return new PostsFragment();
                 case 1:
                     return new CurtidasPerfilFragment();
+                case 2:
+                    return new SeguindoFragment();
+                case 3:
+                    return new SeguidoresFragment();
                 default:
                     return null;
             }
@@ -89,7 +96,11 @@ public class PerfilFragment extends Fragment {
                 case 0:
                     return getString(R.string.tab_perfil_posts);
                 case 1:
-                    return getString(R.string.tab_perfil_turmas);
+                    return getString(R.string.tab_perfil_curtidos);
+                case 2:
+                    return getString(R.string.following);
+                case 3:
+                    return getString(R.string.followers);
                 default:
                     return null;
             }
