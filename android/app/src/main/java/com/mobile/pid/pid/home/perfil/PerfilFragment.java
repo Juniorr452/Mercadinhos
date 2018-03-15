@@ -1,18 +1,30 @@
 package com.mobile.pid.pid.home.perfil;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
@@ -20,6 +32,9 @@ import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
+
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +47,7 @@ public class PerfilFragment extends Fragment {
     private TabLayout tabs;
     private ViewPager perfilViewPager;
     private PagerAdapter perfilPageAdapter;
+    private ImageView image_collapse;
 
 
     public PerfilFragment() {
@@ -48,12 +64,20 @@ public class PerfilFragment extends Fragment {
         perfilPageAdapter    = new PerfilPageAdapter(getChildFragmentManager());
         perfilViewPager      = view.findViewById(R.id.viewpager_perfil);
         tabs                 = (TabLayout) view.findViewById(R.id.tab_perfil);
+        image_collapse = (ImageView) view.findViewById(R.id.image_collapse);
 
         perfilViewPager.setAdapter(perfilPageAdapter);
         tabs.setupWithViewPager(perfilViewPager);
 
         collapsing_tb = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_tb);
         collapsing_tb.setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        
+        image_collapse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO mostrar a imagem como um pop-up
+            }
+        });
 
         return view;
     }

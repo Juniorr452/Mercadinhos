@@ -13,7 +13,7 @@
         app:title="@string/nova_turma"
         app:titleTextColor="@color/white"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimaryDark">
     </android.support.v7.widget.Toolbar>
 
     <!-- TODO: Formulário nova turma -->

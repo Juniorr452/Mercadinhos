@@ -14,7 +14,7 @@
         <Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorPrimaryDark"
             android:title="@string/nav_classes"
             android:titleTextColor="@color/white">
         </Toolbar>
@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             app:tabMode="fixed"
-            android:background="@color/colorPrimary"
+            app:tabIndicatorHeight="3dp"
+            android:background="@color/colorPrimaryDark"
             app:tabTextColor="@android:color/white"
             app:tabSelectedTextColor="@android:color/white"
             app:tabIndicatorColor="@android:color/white">
