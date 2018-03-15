@@ -30,7 +30,7 @@
                 app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
 
                 <ImageView
-                    android:id="@+id/image_collapse"
+                    android:id="@+id/image_user"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
