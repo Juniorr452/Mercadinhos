@@ -1,11 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.mobile.pid.pid.AtualizarPerfilActivity">
 
     <!--TODO: Nome, sexo, data de nascimento...-->
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/TIL_atualizar_nome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp">
 
-</android.support.constraint.ConstraintLayout>
+        <EditText
+            android:id="@+id/et_atualizar_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nome_e_sobrenome"
+            android:inputType="textEmailAddress"
+            android:textSize="15dp"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/TIL_atualizar_sexo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp">
+
+        <EditText
+            android:id="@+id/et_atualizar_sexo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sexo"
+            android:inputType="textEmailAddress"
+            android:textSize="15dp"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/TIL_atualizar_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp">
+
+        <EditText
+            android:id="@+id/et_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/data_de_nascimento"
+            android:inputType="textEmailAddress"
+            android:textSize="15dp"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Atualizar"
+        android:onClick="botaoAtualizarPerfil"/>
+</LinearLayout>

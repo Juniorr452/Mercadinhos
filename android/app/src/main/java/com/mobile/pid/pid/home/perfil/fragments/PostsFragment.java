@@ -58,9 +58,4 @@ public class PostsFragment extends Fragment {
 
         return view;
     }
-
-    // TODO: Coloquei o FAB com essa função por enquanto
-    public void configuracoes(View v) {
-        startActivity(new Intent(getContext(), AtualizarPerfilActivity.class));
-    }
 }
