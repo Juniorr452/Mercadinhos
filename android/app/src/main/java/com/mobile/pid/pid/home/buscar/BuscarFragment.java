@@ -1,9 +1,7 @@
 package com.mobile.pid.pid.home.buscar;
 
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,15 +10,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.adapters.TurmaAdapter;
-import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
+import com.mobile.pid.pid.home.adapters.TurmaAdapter;
 import com.mobile.pid.pid.home.turmas.Turma;
 
 import java.util.ArrayList;

@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
 
-import com.mobile.pid.pid.adapters.TurmaAdapter;
+import com.mobile.pid.pid.home.adapters.TurmaAdapter;
 import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
 import com.mobile.pid.pid.home.turmas.Turma;
 

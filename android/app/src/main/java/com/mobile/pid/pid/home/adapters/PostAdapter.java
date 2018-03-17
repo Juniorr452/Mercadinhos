@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.home.feed;
+package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.Post;
 
 import java.util.List;
 
@@ -16,12 +17,12 @@ import java.util.List;
  * Created by jonasramos on 13/03/18.
  */
 
-public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.RecyclerViewHolder>{
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHolder>{
 
     private Context context;
     private List<Post> posts;
 
-    public FeedAdapter(Context context, List<Post> posts) {
+    public PostAdapter(Context context, List<Post> posts) {
         this.context = context;
         this.posts = posts;
     }
@@ -39,7 +40,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.RecyclerViewHo
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return posts.size() + 10;
     }
 
 
