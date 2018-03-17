@@ -1,6 +1,7 @@
 package com.mobile.pid.pid.home.perfil.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mobile.pid.pid.AtualizarPerfilActivity;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
 import com.mobile.pid.pid.home.feed.Post;
@@ -55,5 +57,10 @@ public class PostsFragment extends Fragment {
 
 
         return view;
+    }
+
+    // TODO: Coloquei o FAB com essa função por enquanto
+    public void configuracoes(View v) {
+        startActivity(new Intent(getContext(), AtualizarPerfilActivity.class));
     }
 }
