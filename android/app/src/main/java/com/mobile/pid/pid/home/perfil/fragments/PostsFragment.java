@@ -45,10 +45,6 @@ public class PostsFragment extends Fragment {
         posts = new ArrayList<Post>();
 
         posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
 
         recycler_view_perfil = (RecyclerView) view.findViewById(R.id.recycler_view_perfil);
         recycler_view_perfil.setLayoutManager(new LinearLayoutManager(getActivity()));

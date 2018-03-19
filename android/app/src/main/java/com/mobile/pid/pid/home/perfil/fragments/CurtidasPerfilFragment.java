@@ -37,10 +37,6 @@ public class CurtidasPerfilFragment extends Fragment {
         posts = new ArrayList<Post>();
 
         posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
-        posts.add(new Post("jonas", "teste"));
 
         recyclerView_turmas_perfil = (RecyclerView) view.findViewById(R.id.recyclerView_turmas_perfil);
         recyclerView_turmas_perfil.setLayoutManager(new LinearLayoutManager(getActivity()));

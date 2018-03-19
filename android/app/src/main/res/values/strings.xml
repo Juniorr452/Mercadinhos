@@ -59,4 +59,5 @@
     <string name="completar_acao">Completar Ação Usando</string>
     <string name="data_de_nascimento">Data de Nascimento</string>
     <string name="sexo">Sexo</string>
+    <string name="follow">Seguir</string>
 </resources>
