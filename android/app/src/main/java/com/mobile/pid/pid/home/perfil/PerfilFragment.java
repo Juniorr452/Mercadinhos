@@ -2,15 +2,18 @@ package com.mobile.pid.pid.home.perfil;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +28,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mobile.pid.pid.AtualizarPerfilActivity;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.UsuarioLogado;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
+import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
 import com.mobile.pid.pid.login.Usuario;
 
 /**
@@ -38,7 +43,9 @@ import com.mobile.pid.pid.login.Usuario;
  */
 
 // https://www.youtube.com/watch?v=BTYuLho5_rE COLLAPSING TOOLBAR
-public class PerfilFragment extends Fragment {
+public class PerfilFragment extends Fragment
+{
+    private static final String TAG = "PerfilFragment";
 
     // componentes
     private CollapsingToolbarLayout collapsing_perfil;
@@ -46,6 +53,7 @@ public class PerfilFragment extends Fragment {
     private ViewPager viewPager_perfil;
     private PagerAdapter pageAdapter_perfil;
     private ImageView imageView_user;
+    private FloatingActionButton fabConfiguracoes;
 
     //firebase
     private FirebaseAuth auth;
@@ -69,6 +77,7 @@ public class PerfilFragment extends Fragment {
         viewPager_perfil     = view.findViewById(R.id.viewpager_perfil);
         tabLayout_perfil     = (TabLayout) view.findViewById(R.id.tab_perfil);
         imageView_user       = (ImageView) view.findViewById(R.id.image_user);
+        fabConfiguracoes     = view.findViewById(R.id.fab_edit_perfil);
 
         // FIREBASE - PEGAR OS DADOS DO USUARIO LOGADO
         auth = FirebaseAuth.getInstance();
@@ -97,6 +106,7 @@ public class PerfilFragment extends Fragment {
         collapsing_perfil.setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         //collapsing_perfil.setTitle(UsuarioLogado.user.getNome()); //TODO PEGAR NOME DO USUARIO DO BANCO
 
+        //Log.d(TAG, UsuarioLogado.user.getNome()); // NULL POINTER EXCEPTION
 
         // AO CLICAR NA FOTO DO USUARIO, CRIA UM DIALOG MOSTRANDO ELA EM TAMANHO REAL.
         imageView_user.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +129,12 @@ public class PerfilFragment extends Fragment {
             }
         });
 
+        fabConfiguracoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AtualizarPerfilActivity.class));
+            }
+        });
 
         return view;
     }

@@ -79,7 +79,6 @@
             android:layout_margin="25dp"
             android:clickable="true"
             android:elevation="5dp"
-            android:tint="@android:color/white"
             app:fabSize="normal"
             app:srcCompat="@drawable/icon_settings" />
     </android.support.design.widget.CoordinatorLayout>

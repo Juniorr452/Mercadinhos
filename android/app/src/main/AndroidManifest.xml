@@ -16,10 +16,10 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".login.RedesSociaisActivity" />
         <activity android:name=".login.LoginActivity" />
 
@@ -44,6 +44,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".home.HomeActivity">
+
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +53,8 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".home.turmas.NovaTurmaActivity"></activity>
+        <activity android:name=".home.turmas.NovaTurmaActivity" />
+        <activity android:name=".AtualizarPerfilActivity"></activity>
     </application>
 
 </manifest>
