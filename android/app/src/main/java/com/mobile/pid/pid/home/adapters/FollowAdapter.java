@@ -73,8 +73,10 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
             textView_user      = (TextView) itemView.findViewById(R.id.textView_user);
             btn_follow         = (Button) itemView.findViewById(R.id.btn_follow);
 
-            if(context_cod == 1) {
+            if(context_cod == 1) { // SE TIVER NO FRAGMENT DE SEGUINDO
                 setFollowStateButton(btn_follow);
+            } else { // SE TIVER NO FRAGMENT DE SEGUIDORES
+
             }
 
             btn_follow.setOnClickListener(new View.OnClickListener() {

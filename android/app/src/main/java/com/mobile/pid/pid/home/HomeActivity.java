@@ -9,11 +9,20 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.UsuarioLogado;
 import com.mobile.pid.pid.home.buscar.BuscarFragment;
 import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 import com.mobile.pid.pid.home.turmas.TurmasFragment;
+import com.mobile.pid.pid.login.Usuario;
 
 public class HomeActivity extends AppCompatActivity
 {
@@ -24,6 +33,11 @@ public class HomeActivity extends AppCompatActivity
     private BuscarFragment buscarFragment;
     private TurmasFragment turmasFragment;
     private PerfilFragment perfilFragment;
+
+    private FirebaseAuth auth;
+    private FirebaseUser user_logged;
+    private DatabaseReference user_database;
+    private String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -68,6 +82,8 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
+
+        loadDataUser(); // CARREGAR TODOS OS DADOS DO USUARIO LOGADO
     }
 
     private void setFragment(Fragment fragment)
@@ -75,6 +91,27 @@ public class HomeActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.home_frame, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void loadDataUser() {
+
+        auth = FirebaseAuth.getInstance();
+        user_logged = auth.getCurrentUser();
+        user_id = user_logged.getUid();
+
+        user_database = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
+
+        user_database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UsuarioLogado.user = dataSnapshot.getValue(Usuario.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 
