@@ -162,29 +162,23 @@ public class RedesSociaisActivity extends AppCompatActivity
         }
     }
 
+    // DIALOG CRIAR CONTA ----------------------------------------
     public void dialogCriarConta(View v)
     {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_criar_conta, null);
-
-        /*final TextInputLayout TIL_dialog_username = mView.findViewById(R.id.TIL_dialog_username);
-        final TextInputLayout TIL_dialog_email = mView.findViewById(R.id.TIL_dialog_email);
-        final TextInputLayout TIL_dialog_password = mView.findViewById(R.id.TIL_dialog_password);
-        final TextInputLayout TIL_dialog_password_confirm =  mView.findViewById(R.id.TIL_dialog_password_confirm);*/
 
         final EditText dialog_username         = mView.findViewById(R.id.dialog_username);
         final EditText dialog_email            = mView.findViewById(R.id.dialog_email);
         final EditText dialog_password         = mView.findViewById(R.id.dialog_password);
         final EditText dialog_password_confirm = mView.findViewById(R.id.dialog_password_confirm);
 
-        Button btn_create_account = (Button) mView.findViewById(R.id.btn_create_account);
-        Button btn_cancel_account = (Button) mView.findViewById(R.id.btn_cancel_account);
+        mBuilder.setView(mView);
 
-        btn_create_account.setOnClickListener(new View.OnClickListener()
-        {
+        mBuilder.setPositiveButton(R.string.create_account, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(DialogInterface dialogInterface, int i) {
+
                 final String username = dialog_username.getText().toString();
                 final String email    = dialog_email.getText().toString();
                 String senha    = dialog_password.getText().toString();
@@ -212,7 +206,7 @@ public class RedesSociaisActivity extends AppCompatActivity
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task)
                                     {
-                                        Usuario usuario = new Usuario(user.getUid(), username, email);
+                                        Usuario usuario = new Usuario(username, email);
                                         usuario.cadastrar();
                                     }
                                 });
@@ -228,21 +222,11 @@ public class RedesSociaisActivity extends AppCompatActivity
                 else
                     Toast.makeText(RedesSociaisActivity.this, R.string.error_create_login, Toast.LENGTH_SHORT).show();
 
-            }
-        });
-
-
-        mBuilder.setView(mView);
-
-        mBuilder.setPositiveButton("Criar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
 
             }
         });
 
-        mBuilder.setNegativeButton("Cancelar", null);
+        mBuilder.setNegativeButton(R.string.cancel, null);
 
         AlertDialog dialog = mBuilder.create();
         dialog.show();

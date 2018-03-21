@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -88,7 +89,7 @@ public class HomeActivity extends AppCompatActivity
         });
 
         loadDataUser(); // CARREGAR TODOS OS DADOS DO USUARIO LOGADO
-        checarUsuarioNovo();
+
     }
 
     private void setFragment(Fragment fragment)
@@ -123,7 +124,7 @@ public class HomeActivity extends AppCompatActivity
     // https://www.youtube.com/watch?v=eVPSzXxIaW4
     private void checarUsuarioNovo()
     {
-        if (UsuarioLogado.user.getSexo() == null) {
+        //if (UsuarioLogado.user.getSexo() == null) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setTitle(R.string.atualizar_perfil);
@@ -142,7 +143,7 @@ public class HomeActivity extends AppCompatActivity
             });
 
             AlertDialog dialog = builder.show();
-        }
+        //}
     }
 }
 

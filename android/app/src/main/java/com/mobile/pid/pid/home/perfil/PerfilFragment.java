@@ -96,6 +96,7 @@ public class PerfilFragment extends Fragment
         viewPager_perfil.setAdapter(pageAdapter_perfil);
         tabLayout_perfil.setupWithViewPager(viewPager_perfil);
 
+
         collapsing_perfil.setTitle(UsuarioLogado.user.getNome()); // NOME DO USUARIO LOGADO
 
         // AO CLICAR NA FOTO DO USUARIO, CRIA UM DIALOG MOSTRANDO ELA EM TAMANHO REAL.
@@ -119,14 +120,8 @@ public class PerfilFragment extends Fragment
             }
         });
 
-        /*fabConfiguracoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AtualizarPerfilActivity.class));
-            }
-        });*/
 
-        //fab_menu_edit.setColorNormal(R.color.colorAccent);
+
         fab_menu_edit.setColorNormalResId(R.color.colorAccent);
         fab_menu_signout.setColorNormalResId(R.color.colorAccent);
 

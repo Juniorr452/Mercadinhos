@@ -1,9 +1,6 @@
 package com.mobile.pid.pid;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,21 +11,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.login.Usuario;
 
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class AtualizarPerfilActivity extends AppCompatActivity
 {
@@ -72,7 +62,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         });
 
         user = UsuarioLogado.user;
-        usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user.getUid());
+        usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user.Uid());
 
         // Colocar dados nos campos
         etNome.setText(UsuarioLogado.user.getNome());

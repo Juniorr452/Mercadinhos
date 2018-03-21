@@ -26,7 +26,6 @@ public class Usuario
         this.nome    = nome;
         this.email   = email;
         this.fotoUrl = FOTO_PADRAO_URL;
-        this.sexo    = null;
     }
 
     public Usuario(String nome, String email, String fotoUrl)
@@ -34,16 +33,15 @@ public class Usuario
         this.nome    = nome;
         this.email   = email;
         this.fotoUrl = fotoUrl;
-        this.sexo    = null;
     }
 
     void cadastrar()
     {
-        DatabaseReference usuarioDatabaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(getUid());
+        DatabaseReference usuarioDatabaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(Uid());
         usuarioDatabaseReference.setValue(this);
     }
 
-    public String getUid(){
+    public String Uid(){
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
