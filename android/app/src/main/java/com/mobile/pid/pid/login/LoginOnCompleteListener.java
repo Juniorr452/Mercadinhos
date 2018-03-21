@@ -39,12 +39,11 @@ public class LoginOnCompleteListener implements OnCompleteListener<AuthResult>
                 Log.d(TAG, "Novo usuário");
 
                 FirebaseUser user = task.getResult().getUser();
-                String Uid     = user.getUid();
                 String nome    = user.getDisplayName();
                 String email   = user.getEmail();
                 String fotoUrl = user.getPhotoUrl().toString();
 
-                Usuario usuario = new Usuario(Uid, nome, email, fotoUrl);
+                Usuario usuario = new Usuario(nome, email, fotoUrl);
                 usuario.cadastrar();
             }
             else
