@@ -49,6 +49,9 @@ dependencies {
 
     // Displaying images
     compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    // Floating Action Menu
+    compile 'com.github.clans:fab:1.6.2'
 }
 
 

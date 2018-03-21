@@ -3,10 +3,11 @@ package com.mobile.pid.pid.home.perfil;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -53,13 +58,15 @@ public class PerfilFragment extends Fragment
     private ViewPager viewPager_perfil;
     private PagerAdapter pageAdapter_perfil;
     private ImageView imageView_user;
-    private FloatingActionButton fabConfiguracoes;
+    //private FloatingActionButton fabConfiguracoes;
+    private FloatingActionMenu fab_menu;
+    private FloatingActionButton fab_menu_edit;
+    private FloatingActionButton fab_menu_signout;
 
     //firebase
-    private FirebaseAuth auth;
-    private FirebaseUser user_logged;
-    private DatabaseReference user_database;
-    private String user_id;
+
+    private TextView count_followers;
+    private TextView count_following;
 
 
     public PerfilFragment() {
@@ -77,36 +84,17 @@ public class PerfilFragment extends Fragment
         viewPager_perfil     = view.findViewById(R.id.viewpager_perfil);
         tabLayout_perfil     = (TabLayout) view.findViewById(R.id.tab_perfil);
         imageView_user       = (ImageView) view.findViewById(R.id.image_user);
-        fabConfiguracoes     = view.findViewById(R.id.fab_edit_perfil);
+        //fabConfiguracoes     = view.findViewById(R.id.fab_edit_perfil);
+        collapsing_perfil    = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_tb);
 
-        // FIREBASE - PEGAR OS DADOS DO USUARIO LOGADO
-        auth = FirebaseAuth.getInstance();
-        user_logged = auth.getCurrentUser();
-        user_id = user_logged.getUid();
+        fab_menu             = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
+        fab_menu_edit        = (FloatingActionButton) view.findViewById(R.id.fab_menu_edit);
+        fab_menu_signout     = (FloatingActionButton) view.findViewById(R.id.fab_menu_signout);
 
-        user_database = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
-
-        user_database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UsuarioLogado.user = dataSnapshot.getValue(Usuario.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        // -------------------------------------------
         viewPager_perfil.setAdapter(pageAdapter_perfil);
         tabLayout_perfil.setupWithViewPager(viewPager_perfil);
 
-        collapsing_perfil = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_tb);
-        collapsing_perfil.setTitle(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        //collapsing_perfil.setTitle(UsuarioLogado.user.getNome()); //TODO PEGAR NOME DO USUARIO DO BANCO
-
-        //Log.d(TAG, UsuarioLogado.user.getNome()); // NULL POINTER EXCEPTION
+        collapsing_perfil.setTitle(UsuarioLogado.user.getNome()); // NOME DO USUARIO LOGADO
 
         // AO CLICAR NA FOTO DO USUARIO, CRIA UM DIALOG MOSTRANDO ELA EM TAMANHO REAL.
         imageView_user.setOnClickListener(new View.OnClickListener() {
@@ -129,9 +117,22 @@ public class PerfilFragment extends Fragment
             }
         });
 
-        fabConfiguracoes.setOnClickListener(new View.OnClickListener() {
+        /*fabConfiguracoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AtualizarPerfilActivity.class));
+            }
+        });*/
+
+        //fab_menu_edit.setColorNormal(R.color.colorAccent);
+        fab_menu_edit.setColorNormalResId(R.color.colorAccent);
+        fab_menu_signout.setColorNormalResId(R.color.colorAccent);
+
+
+        fab_menu_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fab_menu.close(true);
                 startActivity(new Intent(getActivity(), AtualizarPerfilActivity.class));
             }
         });
