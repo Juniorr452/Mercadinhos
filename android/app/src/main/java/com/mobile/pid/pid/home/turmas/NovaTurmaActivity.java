@@ -46,7 +46,6 @@ public class NovaTurmaActivity extends AppCompatActivity
     DatabaseReference turmasDatabaseReference;
     StorageReference  turmasStorageReference;
 
-    // TODO: Nova turma código
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

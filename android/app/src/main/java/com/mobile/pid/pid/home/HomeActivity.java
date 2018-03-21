@@ -1,9 +1,12 @@
 package com.mobile.pid.pid.home;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mobile.pid.pid.AtualizarPerfilActivity;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.UsuarioLogado;
 import com.mobile.pid.pid.home.buscar.BuscarFragment;
@@ -84,6 +88,7 @@ public class HomeActivity extends AppCompatActivity
         });
 
         loadDataUser(); // CARREGAR TODOS OS DADOS DO USUARIO LOGADO
+        checarUsuarioNovo();
     }
 
     private void setFragment(Fragment fragment)
@@ -93,8 +98,8 @@ public class HomeActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void loadDataUser() {
-
+    private void loadDataUser()
+    {
         auth = FirebaseAuth.getInstance();
         user_logged = auth.getCurrentUser();
         user_id = user_logged.getUid();
@@ -112,6 +117,34 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    // Se o usuário for novo, mostrar dialog pedindo pra completar o perfil
+    // https://www.youtube.com/watch?v=eVPSzXxIaW4
+    public void checarUsuarioNovo()
+    {
+        if (UsuarioLogado.user.getSexo() == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Completar perfil");
+            builder.setMessage("Deseja completar seu perfil agora?");
+
+            builder.setPositiveButton("Vamos lá!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(new Intent(HomeActivity.this, AtualizarPerfilActivity.class));
+                }
+            });
+
+            builder.setNegativeButton("Agora não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            AlertDialog dialog = builder.show();
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package com.mobile.pid.pid.home.perfil;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
 import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
+import com.mobile.pid.pid.login.RedesSociaisActivity;
 import com.mobile.pid.pid.login.Usuario;
 
 /**
@@ -128,12 +130,24 @@ public class PerfilFragment extends Fragment
         fab_menu_edit.setColorNormalResId(R.color.colorAccent);
         fab_menu_signout.setColorNormalResId(R.color.colorAccent);
 
-
         fab_menu_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fab_menu.close(true);
                 startActivity(new Intent(getActivity(), AtualizarPerfilActivity.class));
+            }
+        });
+
+        fab_menu_signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Context c = getActivity();
+
+                fab_menu.close(true);
+                FirebaseAuth.getInstance().signOut();
+
+                startActivity(new Intent(c, RedesSociaisActivity.class));
             }
         });
 
