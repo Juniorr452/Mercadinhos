@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.mobile.pid.pid.UsuarioLogado;
 import com.mobile.pid.pid.home.HomeActivity;
 
 /**
