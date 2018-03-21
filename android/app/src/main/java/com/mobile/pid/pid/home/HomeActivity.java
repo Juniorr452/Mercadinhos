@@ -121,26 +121,24 @@ public class HomeActivity extends AppCompatActivity
 
     // Se o usuário for novo, mostrar dialog pedindo pra completar o perfil
     // https://www.youtube.com/watch?v=eVPSzXxIaW4
-    public void checarUsuarioNovo()
+    private void checarUsuarioNovo()
     {
         if (UsuarioLogado.user.getSexo() == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setTitle("Completar perfil");
-            builder.setMessage("Deseja completar seu perfil agora?");
+            builder.setTitle(R.string.atualizar_perfil);
+            builder.setMessage(R.string.message_update_profile);
 
-            builder.setPositiveButton("Vamos lá!", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.letsgo, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     startActivity(new Intent(HomeActivity.this, AtualizarPerfilActivity.class));
                 }
             });
 
-            builder.setNegativeButton("Agora não", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.notnow, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
+                public void onClick(DialogInterface dialogInterface, int i) { }
             });
 
             AlertDialog dialog = builder.show();

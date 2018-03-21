@@ -62,4 +62,7 @@
     <string name="follow">Seguir</string>
     <string name="editprofile">Editar Perfil</string>
     <string name="atualizar_perfil">Atualizar Perfil</string>
+    <string name="message_update_profile">Ei, você precisa atualizar seu perfil. Vamos fazer isto agora?</string>
+    <string name="letsgo">Vamos lá!</string>
+    <string name="notnow">Agora não</string>
 </resources>
