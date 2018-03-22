@@ -13,8 +13,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.login.Usuario;
 
 import java.text.DateFormatSymbols;
@@ -23,9 +28,6 @@ import java.util.Calendar;
 public class AtualizarPerfilActivity extends AppCompatActivity
 {
     private static final String TAG = "AtualizarPerfilActivity";
-
-    private static final String MASCULINO = "Masculino";
-    private static final String FEMININO  = "Feminino";
 
     // TODO: Alterar para os tipos apropriados + tarde
     // TODO: Carregar os dados do banco para os campos dps que terminar de fazer o layout.
@@ -37,8 +39,49 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     String sexo;
     String dataNasc;
 
+    // FIREBASE
+    FirebaseUser user;
+    FirebaseAuth auth;
+    String user_id;
     DatabaseReference usuarioDatabaseRef;
-    Usuario user;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // TODO ATUALIZAR NOME DO PERFIL NO AUTH
+
+        usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
+
+        usuarioDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Usuario user_logado = dataSnapshot.getValue(Usuario.class);
+                sexo = user_logado.getSexo();
+                dataNasc = user_logado.getDataNascimento();
+                etNome.setText(user_logado.getNome());
+
+                if (sexo != null)
+                {
+                    if (sexo.equals(R.string.male))
+                        rbMasculino.setChecked(true);
+                    else
+                        rbFeminino.setChecked(true);
+                }
+                else
+                    rbMasculino.setChecked(true);
+
+
+                if (dataNasc != null)
+                    btnData.setText(dataNasc);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,39 +104,23 @@ public class AtualizarPerfilActivity extends AppCompatActivity
             }
         });
 
-        user = UsuarioLogado.user;
-        usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user.Uid());
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        user_id = user.getUid();
 
-        // Colocar dados nos campos
-        etNome.setText(UsuarioLogado.user.getNome());
-
-        sexo = user.getSexo();
-        if (sexo != null)
-        {
-            if (sexo.equals(MASCULINO))
-                rbMasculino.setChecked(true);
-            else
-                rbFeminino.setChecked(true);
-        }
-        else
-            rbMasculino.setChecked(true);
-
-        dataNasc = user.getDataNascimento();
-        if (dataNasc != null)
-            btnData.setText(dataNasc);
     }
 
     public void botaoAtualizarPerfil(View v)
     {
         String nome = etNome.getText().toString();
 
-        Log.d(TAG, "Sexo: " + sexo);
-        Log.d(TAG, "Data: " + dataNasc);
+        Log.d(TAG, R.string.gender + sexo);
+        Log.d(TAG, R.string.date + dataNasc);
 
         if (validarCampos(nome, dataNasc))
             atualizarPerfil(nome, sexo, dataNasc);
         else
-            Toast.makeText(this, "Preencha todos os campos.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.fill_fields, Toast.LENGTH_SHORT).show();
     }
 
     public boolean validarCampos(String nome, String data)
@@ -111,11 +138,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         switch(id)
         {
             case R.id.atualizar_perfil_radio_masculino:
-                sexo = MASCULINO;
+                sexo = getString(R.string.male);
                 break;
 
             case R.id.atualizar_perfil_radio_feminino:
-                sexo = FEMININO;
+                sexo = getString(R.string.female);
                 break;
         }
     }
@@ -151,7 +178,8 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         usuarioDatabaseRef.child("sexo").setValue(sexo);
         usuarioDatabaseRef.child("dataNascimento").setValue(dataNasc);
 
-        Toast.makeText(this, "Dados atualizados com sucesso", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AtualizarPerfilActivity.this
+                , R.string.updated_data, Toast.LENGTH_SHORT).show();
         finish();
     }
 }
