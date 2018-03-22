@@ -35,6 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
                     android:clickable="true"
                     android:fitsSystemWindows="true"
                     android:foreground="@drawable/gradient_image"
@@ -112,17 +113,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-        <!--<android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_edit_perfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="25dp"
-            android:clickable="true"
-            android:elevation="5dp"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/icon_settings" />-->
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/fab_menu"

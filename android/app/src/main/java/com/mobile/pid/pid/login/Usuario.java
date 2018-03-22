@@ -37,11 +37,11 @@ public class Usuario
 
     void cadastrar()
     {
-        DatabaseReference usuarioDatabaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(getUid());
+        DatabaseReference usuarioDatabaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(Uid());
         usuarioDatabaseReference.setValue(this);
     }
 
-    public String getUid(){
+    public String Uid(){
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 

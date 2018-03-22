@@ -4,7 +4,7 @@ package com.mobile.pid.pid.home.perfil;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,20 +15,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,12 +34,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.AtualizarPerfilActivity;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.UsuarioLogado;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
-import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
 import com.mobile.pid.pid.login.RedesSociaisActivity;
 import com.mobile.pid.pid.login.Usuario;
 
@@ -53,6 +49,8 @@ import com.mobile.pid.pid.login.Usuario;
 public class PerfilFragment extends Fragment
 {
     private static final String TAG = "PerfilFragment";
+    private View view;
+
 
     // componentes
     private CollapsingToolbarLayout collapsing_perfil;
@@ -65,7 +63,14 @@ public class PerfilFragment extends Fragment
     private FloatingActionButton fab_menu_edit;
     private FloatingActionButton fab_menu_signout;
 
+    private Usuario user_logado;
+
     //firebase
+
+    DatabaseReference db;
+    String user_id;
+    FirebaseUser user;
+    FirebaseAuth auth;
 
     private TextView count_followers;
     private TextView count_following;
@@ -75,28 +80,38 @@ public class PerfilFragment extends Fragment
         // Required empty public constructor
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        collapsing_perfil.setTitle(user.getDisplayName());
+        Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
+        // TODO COLOCAR GLIDE PARA SETAR IMAGEM DO USUARIO
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_perfil, container ,false);
+        view = inflater.inflate(R.layout.fragment_perfil, container ,false);
+
+        // FIREBASEEEE
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        user_id = user.getUid();
 
         pageAdapter_perfil   = new PerfilPageAdapter(getChildFragmentManager());
-        viewPager_perfil     = view.findViewById(R.id.viewpager_perfil);
+        viewPager_perfil     = (ViewPager) view.findViewById(R.id.viewpager_perfil);
         tabLayout_perfil     = (TabLayout) view.findViewById(R.id.tab_perfil);
         imageView_user       = (ImageView) view.findViewById(R.id.image_user);
-        //fabConfiguracoes     = view.findViewById(R.id.fab_edit_perfil);
         collapsing_perfil    = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_tb);
-
         fab_menu             = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
         fab_menu_edit        = (FloatingActionButton) view.findViewById(R.id.fab_menu_edit);
         fab_menu_signout     = (FloatingActionButton) view.findViewById(R.id.fab_menu_signout);
 
         viewPager_perfil.setAdapter(pageAdapter_perfil);
         tabLayout_perfil.setupWithViewPager(viewPager_perfil);
-
-        collapsing_perfil.setTitle(UsuarioLogado.user.getNome()); // NOME DO USUARIO LOGADO
 
         // AO CLICAR NA FOTO DO USUARIO, CRIA UM DIALOG MOSTRANDO ELA EM TAMANHO REAL.
         imageView_user.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +124,7 @@ public class PerfilFragment extends Fragment
 
                 ImageView image_user_fullsize = (ImageView) dialog.findViewById(R.id.image_user_fullsize);
 
-                image_user_fullsize.setImageDrawable(imageView_user.getDrawable());
+                Glide.with(getActivity()).load(user.getPhotoUrl()).into(image_user_fullsize);
                 dialog.show();
 
                 image_user_fullsize.setOnClickListener(new View.OnClickListener() {
@@ -119,14 +134,6 @@ public class PerfilFragment extends Fragment
             }
         });
 
-        /*fabConfiguracoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AtualizarPerfilActivity.class));
-            }
-        });*/
-
-        //fab_menu_edit.setColorNormal(R.color.colorAccent);
         fab_menu_edit.setColorNormalResId(R.color.colorAccent);
         fab_menu_signout.setColorNormalResId(R.color.colorAccent);
 

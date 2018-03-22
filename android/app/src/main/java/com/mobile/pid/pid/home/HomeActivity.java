@@ -14,19 +14,13 @@ import android.widget.FrameLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.AtualizarPerfilActivity;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.UsuarioLogado;
 import com.mobile.pid.pid.home.buscar.BuscarFragment;
 import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 import com.mobile.pid.pid.home.turmas.TurmasFragment;
-import com.mobile.pid.pid.login.Usuario;
 
 public class HomeActivity extends AppCompatActivity
 {
@@ -86,9 +80,6 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
-
-        loadDataUser(); // CARREGAR TODOS OS DADOS DO USUARIO LOGADO
-        checarUsuarioNovo();
     }
 
     private void setFragment(Fragment fragment)
@@ -98,53 +89,30 @@ public class HomeActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    private void loadDataUser()
-    {
-        auth = FirebaseAuth.getInstance();
-        user_logged = auth.getCurrentUser();
-        user_id = user_logged.getUid();
-
-        user_database = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
-
-        user_database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UsuarioLogado.user = dataSnapshot.getValue(Usuario.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     // Se o usuário for novo, mostrar dialog pedindo pra completar o perfil
     // https://www.youtube.com/watch?v=eVPSzXxIaW4
-    public void checarUsuarioNovo()
+    private void checarUsuarioNovo()
     {
-        if (UsuarioLogado.user.getSexo() == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //if (UsuarioController.user.getSexo() == null) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setTitle("Completar perfil");
-            builder.setMessage("Deseja completar seu perfil agora?");
+            builder.setTitle(R.string.atualizar_perfil);
+            builder.setMessage(R.string.message_update_profile);
 
-            builder.setPositiveButton("Vamos lá!", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.letsgo, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     startActivity(new Intent(HomeActivity.this, AtualizarPerfilActivity.class));
                 }
             });
 
-            builder.setNegativeButton("Agora não", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.notnow, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
+                public void onClick(DialogInterface dialogInterface, int i) { }
             });
 
             AlertDialog dialog = builder.show();
-        }
+        //}
     }
 }
 
