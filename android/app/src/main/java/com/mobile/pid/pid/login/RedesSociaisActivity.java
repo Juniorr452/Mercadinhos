@@ -208,6 +208,7 @@ public class RedesSociaisActivity extends AppCompatActivity
                                     {
                                         Usuario usuario = new Usuario(username, email);
                                         usuario.cadastrar();
+                                        //TODO SETAR IMAGEM PADRAO DO BANCO
                                     }
                                 });
                             }
