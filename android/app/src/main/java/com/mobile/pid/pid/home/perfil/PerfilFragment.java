@@ -86,6 +86,7 @@ public class PerfilFragment extends Fragment
 
         collapsing_perfil.setTitle(user.getDisplayName());
         Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
+        //Glide.with(this).load(user.getPhotoUrl()).override(10,10).error(R.drawable.logo).into(imageView_user);
         // TODO COLOCAR GLIDE PARA SETAR IMAGEM DO USUARIO
 
     }
