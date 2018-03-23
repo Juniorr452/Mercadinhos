@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.mobile.pid.pid.AtualizarPerfilActivity;
+import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.buscar.BuscarFragment;
 import com.mobile.pid.pid.home.feed.FeedFragment;

@@ -1,4 +1,4 @@
-package com.mobile.pid.pid;
+package com.mobile.pid.pid.home.perfil;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -23,13 +23,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.login.Usuario;
 
+import java.io.File;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
@@ -37,8 +40,9 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 {
     private static final String TAG = "AtualizarPerfilActivity";
 
-    // TODO: Alterar para os tipos apropriados + tarde
-    // TODO: Carregar os dados do banco para os campos dps que terminar de fazer o layout.
+    private static final int RC_CAMERA = 0;
+    private static final int RC_PHOTO_PICKER = 1;
+
     EditText etNome;
     RadioButton rbMasculino;
     RadioButton rbFeminino;
@@ -58,13 +62,31 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     DatabaseReference usuarioDatabaseRef;
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_atualizar_perfil);
 
-        // TODO ATUALIZAR NOME DO PERFIL NO AUTH
-        // adiciona a foto com efeito embaçado
-        Glide.with(this).load(user.getPhotoUrl()).override(20,20).error(android.R.drawable.dark_header).into(imageView_user_blur);
-        Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
+        Toolbar atualizarPerfilToolbar = findViewById(R.id.toolbar_atualizar_perfil);
+
+        etNome      = ((TextInputLayout) findViewById(R.id.TIL_atualizar_nome)).getEditText();
+        rbMasculino = findViewById(R.id.atualizar_perfil_radio_masculino);
+        rbFeminino  = findViewById(R.id.atualizar_perfil_radio_feminino);
+        btnData     = findViewById(R.id.btn_atualizar_data);
+        imageView_user_blur = findViewById(R.id.imageView_user_blur);
+        imageView_user = findViewById(R.id.imageView_user);
+
+        atualizarPerfilToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        atualizarPerfilToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        user_id = user.getUid();
 
         usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
 
@@ -96,34 +118,10 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
             }
         });
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_atualizar_perfil);
-
-        Toolbar atualizarPerfilToolbar = findViewById(R.id.toolbar_atualizar_perfil);
-
-        etNome      = ((TextInputLayout) findViewById(R.id.TIL_atualizar_nome)).getEditText();
-        rbMasculino = findViewById(R.id.atualizar_perfil_radio_masculino);
-        rbFeminino  = findViewById(R.id.atualizar_perfil_radio_feminino);
-        btnData     = findViewById(R.id.btn_atualizar_data);
-        imageView_user_blur = findViewById(R.id.imageView_user_blur);
-        imageView_user = findViewById(R.id.imageView_user);
-
-        atualizarPerfilToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        atualizarPerfilToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        user_id = user.getUid();
+        // adiciona a foto com efeito embaçado
+        Glide.with(this).load(user.getPhotoUrl()).override(20,20).error(android.R.drawable.dark_header).into(imageView_user_blur);
+        Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
 
         imageView_user.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,12 +136,12 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(i == 0) {
                             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(takePicture, 0);
+                            startActivityForResult(takePicture, RC_CAMERA);
                         } else {
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("image/jpeg");
                             intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                            startActivityForResult(Intent.createChooser(intent, getString(R.string.completar_acao)), 1);
+                            startActivityForResult(Intent.createChooser(intent, getString(R.string.completar_acao)), RC_PHOTO_PICKER);
                         }
                     }
                 });
@@ -154,18 +152,40 @@ public class AtualizarPerfilActivity extends AppCompatActivity
             }
         });
     }
-        // TODO FAZER PEGAR A FOTO QUE FOI SELECIONADA OU FOI TIRADA
+
+    /*@Override
+    protected void onStart()
+    {
+        super.onStart();
+    }*/
+
+    // TODO FAZER PEGAR A FOTO QUE FOI SELECIONADA OU FOI TIRADA
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 0 && resultCode == RESULT_OK)
+        if (resultCode == RESULT_OK)
         {
-            //SE TIRAR FOTO
-        } else {
-            imagemUri = data.getData();
-            imageView_user.setImageURI(imagemUri);
-            imageView_user_blur.setImageURI(imagemUri);
+            Log.d(TAG, "Deu");
+            switch (requestCode)
+            {
+                case RC_CAMERA:
+                    // TODO: CAMERA
+                    break;
+
+                case RC_PHOTO_PICKER:
+                    Log.d(TAG, "WOOO");
+                    imagemUri = data.getData();
+
+                    Glide.with(this).load(imagemUri).into(imageView_user);
+                    Glide.with(this).load(imagemUri).into(imageView_user_blur);
+                    break;
+            }
+        }
+        else
+        {
+            Log.d(TAG, resultCode + " Não deu");
         }
     }
 
@@ -239,6 +259,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
         Toast.makeText(AtualizarPerfilActivity.this
                 , R.string.updated_data, Toast.LENGTH_SHORT).show();
+
+        // Atualizar no Auth
+
+        //user.updateProfile(new UserProfileChangeRequest());
+
         finish();
     }
 }

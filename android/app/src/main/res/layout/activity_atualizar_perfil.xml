@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mobile.pid.pid.AtualizarPerfilActivity">
+    tools:context="com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_atualizar_perfil"
@@ -66,6 +66,8 @@
                         <ImageView
                             android:id="@+id/imageView_user"
                             android:layout_width="110dp"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
                             android:clickable="true"
                             android:layout_height="110dp"
                             android:foreground="?attr/selectableItemBackgroundBorderless"/>
