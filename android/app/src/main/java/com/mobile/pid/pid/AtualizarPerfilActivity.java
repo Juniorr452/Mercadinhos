@@ -1,18 +1,26 @@
 package com.mobile.pid.pid;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +43,10 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     RadioButton rbMasculino;
     RadioButton rbFeminino;
     Button btnData;
+    ImageView imageView_user_blur;
+    ImageView imageView_user;
+
+    Uri imagemUri;
 
     String sexo;
     String dataNasc;
@@ -50,6 +62,9 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         super.onStart();
 
         // TODO ATUALIZAR NOME DO PERFIL NO AUTH
+        // adiciona a foto com efeito embaçado
+        Glide.with(this).load(user.getPhotoUrl()).override(20,20).error(android.R.drawable.dark_header).into(imageView_user_blur);
+        Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
 
         usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
 
@@ -95,6 +110,8 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         rbMasculino = findViewById(R.id.atualizar_perfil_radio_masculino);
         rbFeminino  = findViewById(R.id.atualizar_perfil_radio_feminino);
         btnData     = findViewById(R.id.btn_atualizar_data);
+        imageView_user_blur = findViewById(R.id.imageView_user_blur);
+        imageView_user = findViewById(R.id.imageView_user);
 
         atualizarPerfilToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         atualizarPerfilToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -108,6 +125,48 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         user = auth.getCurrentUser();
         user_id = user.getUid();
 
+        imageView_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String[] items = new String[] {"Tirar foto", "Escolher na galeria"};
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(AtualizarPerfilActivity.this, android.R.layout.select_dialog_item, items);
+                AlertDialog.Builder builder = new AlertDialog.Builder(AtualizarPerfilActivity.this);
+                builder.setTitle(R.string.select_image);
+
+                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(i == 0) {
+                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(takePicture, 0);
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.setType("image/jpeg");
+                            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                            startActivityForResult(Intent.createChooser(intent, getString(R.string.completar_acao)), 1);
+                        }
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+    }
+        // TODO FAZER PEGAR A FOTO QUE FOI SELECIONADA OU FOI TIRADA
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 0 && resultCode == RESULT_OK)
+        {
+            //SE TIRAR FOTO
+        } else {
+            imagemUri = data.getData();
+            imageView_user.setImageURI(imagemUri);
+            imageView_user_blur.setImageURI(imagemUri);
+        }
     }
 
     public void botaoAtualizarPerfil(View v)
