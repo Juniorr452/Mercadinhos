@@ -73,4 +73,6 @@
     <string name="updated_data">Dados atualizados com sucesso!</string>
     <string name="change_profile_photo">Alterar foto de perfil</string>
     <string name="select_image">Selecionar imagem</string>
+    <string name="entrando">Entrando...</string>
+    <string name="fazendo_login">Fazendo o login...</string>
 </resources>

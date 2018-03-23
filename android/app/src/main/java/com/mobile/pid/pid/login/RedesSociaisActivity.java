@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.login;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -64,6 +65,8 @@ public class RedesSociaisActivity extends AppCompatActivity
     private LoginAuthStateListener  authStateListener;
     private LoginOnCompleteListener loginOnCompleteListener;
 
+    ProgressDialog progressDialog;
+
     private ImageView btn_email;
     private TextView tv_criarConta;
 
@@ -73,10 +76,14 @@ public class RedesSociaisActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_redes_sociais);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(getString(R.string.entrando));
+        progressDialog.setMessage(getString(R.string.fazendo_login));
+
         firebaseAuth           = FirebaseAuth.getInstance();
         firebaseDatabase       = FirebaseDatabase.getInstance();
 
-        loginOnCompleteListener = new LoginOnCompleteListener(this);
+        loginOnCompleteListener = new LoginOnCompleteListener(this, progressDialog);
         authStateListener       = new LoginAuthStateListener(this);
 
         // Google Sign In - https://www.youtube.com/watch?v=-ywVw2O1pP8
@@ -184,7 +191,7 @@ public class RedesSociaisActivity extends AppCompatActivity
                 String senha    = dialog_password.getText().toString();
                 String senhaC   = dialog_password_confirm.getText().toString();
 
-                Log.d(TAG, senha);
+                progressDialog.show();
 
                 if(validarCamposCriarConta(username, email, senha, senhaC))
                 {
@@ -214,6 +221,7 @@ public class RedesSociaisActivity extends AppCompatActivity
                             }
                             else
                             {
+                                progressDialog.dismiss();
                                 Log.e(TAG, task.getException().toString());
                                 Toast.makeText(RedesSociaisActivity.this, "Aconteceu um erro", Toast.LENGTH_SHORT).show();
                             }
@@ -266,11 +274,14 @@ public class RedesSociaisActivity extends AppCompatActivity
 
     public void entrarGoogle(View v)
     {
+        progressDialog.show();
         Intent googleSignInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(googleSignInIntent, RC_GOOGLE_SIGN_IN);
     }
 
-    public void entrarFacebook(View v) {
+    public void entrarFacebook(View v)
+    {
+        progressDialog.show();
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
     }
 

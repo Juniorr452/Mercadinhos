@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -47,6 +50,9 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     private static final int RC_CAMERA = 0;
     private static final int RC_PHOTO_PICKER = 1;
 
+    ProgressBar  progressBar;
+    LinearLayout conteudo;
+
     EditText etNome;
     RadioButton rbMasculino;
     RadioButton rbFeminino;
@@ -73,12 +79,17 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
         Toolbar atualizarPerfilToolbar = findViewById(R.id.toolbar_atualizar_perfil);
 
+        progressBar = findViewById(R.id.pb_atualizar_perfil);
+        conteudo    = findViewById(R.id.ll_atualizar_perfil);
+
         etNome      = ((TextInputLayout) findViewById(R.id.TIL_atualizar_nome)).getEditText();
         rbMasculino = findViewById(R.id.atualizar_perfil_radio_masculino);
         rbFeminino  = findViewById(R.id.atualizar_perfil_radio_feminino);
         btnData     = findViewById(R.id.btn_atualizar_data);
         imageView_user_blur = findViewById(R.id.imageView_user_blur);
         imageView_user = findViewById(R.id.imageView_user);
+
+        conteudo.setVisibility(View.GONE);
 
         atualizarPerfilToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         atualizarPerfilToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -115,6 +126,9 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
                 if (dataNasc != null)
                     btnData.setText(dataNasc);
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -156,12 +170,6 @@ public class AtualizarPerfilActivity extends AppCompatActivity
             }
         });
     }
-
-    /*@Override
-    protected void onStart()
-    {
-        super.onStart();
-    }*/
 
     // TODO FAZER PEGAR A FOTO QUE FOI SELECIONADA OU FOI TIRADA
     @Override
@@ -257,6 +265,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
     public void atualizarPerfil(String nome, String sexo, String dataNasc)
     {
+        // TODO: Atualizar nome em outros lugares
         usuarioDatabaseRef.child("nome").setValue(nome);
         usuarioDatabaseRef.child("sexo").setValue(sexo);
         usuarioDatabaseRef.child("dataNascimento").setValue(dataNasc);
