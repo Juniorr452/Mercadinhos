@@ -58,6 +58,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     DatabaseReference usuarioDatabaseRef;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
@@ -78,13 +83,13 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
                 if (sexo != null)
                 {
-                    if (sexo.equals(R.string.male))
+                    if (sexo.equals(getString(R.string.male)))
                         rbMasculino.setChecked(true);
                     else
                         rbFeminino.setChecked(true);
                 }
                 else
-                    rbMasculino.setChecked(true);
+                    rbMasculino.setChecked(false);
 
 
                 if (dataNasc != null)
