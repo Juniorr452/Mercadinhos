@@ -17,7 +17,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -45,7 +44,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".home.HomeActivity">
-
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,7 +53,7 @@
             -->
         </activity>
         <activity android:name=".home.turmas.NovaTurmaActivity" />
-        <activity android:name=".AtualizarPerfilActivity"></activity>
+        <activity android:name=".AtualizarPerfilActivity" />
+        <activity android:name=".home.turmas.detalhes_turma.DetalhesTurma"></activity>
     </application>
-
 </manifest>

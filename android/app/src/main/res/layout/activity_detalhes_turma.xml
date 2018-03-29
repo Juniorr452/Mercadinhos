@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_tb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                android:fitsSystemWindows="true"
+                app:contentScrim="?attr/colorPrimaryDark"
+                app:expandedTitleMarginStart="25dp"
+                app:expandedTitleMarginBottom="35dp"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/capa_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:scaleType="fitXY"
+                        android:background="@color/gray"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_turma_nome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sistemas Operacionais"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="60dp"
+                            android:textSize="18dp"
+                            android:textColor="@color/white"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/qtd_professor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/teacher"
+                                android:layout_marginLeft="4dp"/>
+
+                            <TextView
+                                android:id="@+id/qtd_aluno"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="30"
+                                android:layout_marginLeft="15dp"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/student"
+                                android:layout_marginLeft="4dp"/>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="50dp"
+                    android:layout_gravity="center"
+                    app:cardElevation="4dp">
+
+                    <ImageView
+                        android:id="@+id/icon_turma"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"/>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:layout_collapseMode="pin"
+                    app:titleTextColor="@color/white"/>
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:tabGravity="fill"
+                app:tabIndicatorHeight="3dp"
+                android:background="@color/colorPrimaryDark"
+                app:tabMode="scrollable"
+                app:tabTextColor="@android:color/white"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabIndicatorColor="@android:color/white"
+                android:gravity="bottom"/>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_turma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

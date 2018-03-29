@@ -34,7 +34,7 @@
     <string name="nav_profile">Perfil</string>
     <string name="nav_search">Buscar</string>
     <string name="nav_classes">Turmas</string>
-    <string name="tab_turmas_criadas">Turmas Criadas</string>
+    <string name="tab_turmas_criadas">Minhas Turmas</string>
     <string name="tab_turmas_matriculadas">Turmas Matriculadas</string>
     <string name="tab_perfil_posts">Posts</string>
     <string name="tab_perfil_curtidos">Curtidos</string>
@@ -73,4 +73,8 @@
     <string name="updated_data">Dados atualizados com sucesso!</string>
     <string name="change_profile_photo">Alterar foto de perfil</string>
     <string name="select_image">Selecionar imagem</string>
+    <string name="teacher">Professor</string>
+    <string name="student">Alunos</string>
+    <string name="chats">Chats</string>
+    <string name="trabalhos">Trabalhos</string>
 </resources>

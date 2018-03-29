@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -58,6 +59,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     DatabaseReference usuarioDatabaseRef;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
@@ -78,13 +84,13 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
                 if (sexo != null)
                 {
-                    if (sexo.equals(R.string.male))
+                    if (sexo.equals(getString(R.string.male)))
                         rbMasculino.setChecked(true);
                     else
                         rbFeminino.setChecked(true);
                 }
                 else
-                    rbMasculino.setChecked(true);
+                    rbMasculino.setChecked(false);
 
 
                 if (dataNasc != null)
@@ -112,6 +118,8 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         btnData     = findViewById(R.id.btn_atualizar_data);
         imageView_user_blur = findViewById(R.id.imageView_user_blur);
         imageView_user = findViewById(R.id.imageView_user);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         atualizarPerfilToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         atualizarPerfilToolbar.setNavigationOnClickListener(new View.OnClickListener() {
