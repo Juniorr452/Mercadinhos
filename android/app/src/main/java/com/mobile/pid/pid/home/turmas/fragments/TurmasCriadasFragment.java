@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
@@ -32,6 +36,9 @@ import java.util.List;
 public class TurmasCriadasFragment extends Fragment
 {
     private static final String TAG = "TurmasCriadasFragment";
+
+    private ProgressBar progressBar;
+    private FrameLayout conteudo;
 
     private DatabaseReference turmasCriadasRef;
     private ChildEventListener turmasCriadasChildEventListener;
@@ -51,6 +58,7 @@ public class TurmasCriadasFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         turmasCriadas = new ArrayList<>();
         turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 1);
 
@@ -58,10 +66,14 @@ public class TurmasCriadasFragment extends Fragment
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
-        turmasCriadasChildEventListener = new ChildEventListener() {
+
+        turmasCriadasRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 turmaAdapter.add(dataSnapshot.getValue(Turma.class));
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -80,12 +92,16 @@ public class TurmasCriadasFragment extends Fragment
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError)
+            {
 
             }
-        };
+        });
+    }
 
-        turmasCriadasRef.addChildEventListener(turmasCriadasChildEventListener);
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -94,9 +110,13 @@ public class TurmasCriadasFragment extends Fragment
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_turmas_criadas, container, false);
 
-        // Recycler View
         recyclerView = v.findViewById(R.id.rv_turmas_criadas);
+        progressBar = v.findViewById(R.id.pb_turmas_criadas);
+        conteudo    = v.findViewById(R.id.fl_turmas_criadas);
 
+        conteudo.setVisibility(View.GONE);
+
+        // Recycler View
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);

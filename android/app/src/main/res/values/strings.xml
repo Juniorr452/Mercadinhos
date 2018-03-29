@@ -77,4 +77,6 @@
     <string name="student">Alunos</string>
     <string name="chats">Chats</string>
     <string name="trabalhos">Trabalhos</string>
+    <string name="entrando">Entrando...</string>
+    <string name="fazendo_login">Fazendo o login...</string>
 </resources>
