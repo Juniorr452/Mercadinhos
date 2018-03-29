@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.home.turmas.detalhes_turma;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -26,18 +27,31 @@ public class DetalhesTurma extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_turma);
 
-        //PagerAdapter turmasPageAdapter    = new DetalheTurmasPageAdapter();
-        ViewPager turmasViewPager      = findViewById(R.id.viewpager_turma);
+        PagerAdapter detalhesPageAdapter    = new DetalheTurmasPageAdapter(this.getSupportFragmentManager());
+        ViewPager detalhesViewPager      = findViewById(R.id.viewpager_turma);
         TabLayout turmasTabLayout      = findViewById(R.id.tab);
 
-        //turmasViewPager.setAdapter(turmasPageAdapter);
-        //turmasTabLayout.setupWithViewPager(turmasViewPager);
+        detalhesViewPager.setAdapter(detalhesPageAdapter);
+        turmasTabLayout.setupWithViewPager(detalhesViewPager);
 
 
-    }
+    }/*
+
+    private class DetalheTurmasPagerAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return 0;
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return false;
+        }
+    }*/
 
     // Tabs and ViewPager - https://www.youtube.com/watch?v=zQekzaAgIlQ
-    /*private class DetalheTurmasPageAdapter extends FragmentPagerAdapter
+    private class DetalheTurmasPageAdapter extends FragmentPagerAdapter
     {
         public DetalheTurmasPageAdapter(FragmentManager fm) {
             super(fm);
@@ -76,5 +90,5 @@ public class DetalhesTurma extends AppCompatActivity {
                     return null;
             }
         }
-    }*/
+    }
 }

@@ -52,7 +52,7 @@ public class TurmasCriadasFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         turmasCriadas = new ArrayList<>();
-        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas);
+        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 1);
 
         // Pegar os dados de turmas criadas pelo usuário no db
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

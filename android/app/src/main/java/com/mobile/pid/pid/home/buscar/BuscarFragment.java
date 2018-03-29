@@ -1,6 +1,7 @@
 package com.mobile.pid.pid.home.buscar;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
 import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +49,7 @@ public class BuscarFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         turmasCriadas = new ArrayList<>();
-        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas);
+        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 0);
 
         turmasRef = FirebaseDatabase.getInstance().getReference().child("turmas");
         turmasChildEventListener = new ChildEventListener() {
@@ -93,22 +96,8 @@ public class BuscarFragment extends Fragment
         recyclerView.setLayoutManager(llm);
 
         recyclerView.setAdapter(turmaAdapter);
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
 
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
+        turmaAdapter.setUid("123123");
 
         return v;
     }
