@@ -58,8 +58,8 @@
                         android:layout_height="match_parent"
                         android:background="@color/gray"
                         android:scaleType="centerCrop"
-                        android:foreground="@drawable/gradient_image"
-                        android:adjustViewBounds="true"/>
+                        android:adjustViewBounds="true"
+                        android:foreground="@drawable/gradient_image"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"

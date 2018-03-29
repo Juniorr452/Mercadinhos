@@ -77,9 +77,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         return listaTurmas.size();
     }
 
-
-
-    public class TurmaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener
+    public class TurmaViewHolder extends RecyclerView.ViewHolder //implements View.OnClickListener, View.OnLongClickListener
     {
         public ImageView capa;
         public TextView  nome;
@@ -92,20 +90,26 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
             capa = itemView.findViewById(R.id.turma_capa);
             nome = itemView.findViewById(R.id.turma_nome);
             dia  = itemView.findViewById(R.id.turma_dia);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            /*itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);*/
+
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
-                    layoutInflater.getContext().startActivity(new Intent(layoutInflater.getContext(), DetalhesTurma.class));
-                    Toast.makeText(layoutInflater.getContext(), nome.getText().toString(), Toast.LENGTH_SHORT).show();
+                public void onClick(View view)
+                {
+                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+                    Turma  t = listaTurmas.get(getPosition());
+
+                    i.putExtra("turma", t);
+
+                    layoutInflater.getContext().startActivity(i);
                 }
             });
         }
 
-
-        @Override
+        /*@Override
         public void onClick(View view) {
 
         }
@@ -113,7 +117,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         @Override
         public boolean onLongClick(View view) {
             return false;
-        }
+        }*/
     }
 
     public void setUid(String uid) {

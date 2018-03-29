@@ -69,8 +69,12 @@ public class TurmasCriadasFragment extends Fragment
 
         turmasCriadasRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                turmaAdapter.add(dataSnapshot.getValue(Turma.class));
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+                Turma t = dataSnapshot.getValue(Turma.class);
+                t.setUid(dataSnapshot.getKey());
+
+                turmaAdapter.add(t);
 
                 progressBar.setVisibility(View.GONE);
                 conteudo.setVisibility(View.VISIBLE);
@@ -122,22 +126,6 @@ public class TurmasCriadasFragment extends Fragment
         recyclerView.setLayoutManager(llm);
 
         recyclerView.setAdapter(turmaAdapter);
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
 
         // FAB
         fabAdicionarTurma = v.findViewById(R.id.fab_adicionar_turma);
