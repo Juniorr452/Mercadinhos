@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.login;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -25,9 +26,10 @@ public class LoginActivity extends AppCompatActivity
 
     private FirebaseAuth auth;
 
+    ProgressDialog progressDialog;
+
     private EditText email;
     private EditText senha;
-
 
     private ImageView btn_voltar;
     //private TextView tv_remember;
@@ -40,10 +42,13 @@ public class LoginActivity extends AppCompatActivity
 
         email = ((TextInputLayout) findViewById(R.id.TILemail)).getEditText();
         senha = ((TextInputLayout) findViewById(R.id.TILpassword)).getEditText();
+        btn_voltar = (ImageView) findViewById(R.id.btn_voltar);
 
         auth = FirebaseAuth.getInstance();
 
-        btn_voltar = (ImageView) findViewById(R.id.btn_voltar);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(getString(R.string.entrando));
+        progressDialog.setMessage(getString(R.string.fazendo_login));
         /*tv_remember = (TextView) findViewById(R.id.tv_remember);
 
         tv_remember.setOnClickListener(new View.OnClickListener() {
@@ -95,10 +100,10 @@ public class LoginActivity extends AppCompatActivity
         String emailText = email.getText().toString();
         String senhaText = senha.getText().toString();
 
-        Log.d(TAG, senhaText);
+        progressDialog.show();
 
         // TODO: Validar campos
-        auth.signInWithEmailAndPassword(emailText, senhaText).addOnCompleteListener(new LoginOnCompleteListener(this));
+        auth.signInWithEmailAndPassword(emailText, senhaText).addOnCompleteListener(new LoginOnCompleteListener(this, progressDialog));
     }
 
     public void esqueciSenha(View v)
