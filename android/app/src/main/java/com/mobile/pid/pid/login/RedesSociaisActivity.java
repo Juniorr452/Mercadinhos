@@ -208,14 +208,14 @@ public class RedesSociaisActivity extends AppCompatActivity
                                 final UserProfileChangeRequest atualizarNome = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(username)
                                         .build();
+
                                 user.updateProfile(atualizarNome).addOnCompleteListener(new OnCompleteListener<Void>()
                                 {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task)
                                     {
-                                        Usuario usuario = new Usuario(username, email);
+                                        Usuario usuario = new Usuario(user.getUid(), username, email);
                                         usuario.cadastrar();
-                                        //TODO SETAR IMAGEM PADRAO DO BANCO
                                     }
                                 });
                             }
@@ -230,8 +230,6 @@ public class RedesSociaisActivity extends AppCompatActivity
                 }
                 else
                     Toast.makeText(RedesSociaisActivity.this, R.string.error_create_login, Toast.LENGTH_SHORT).show();
-
-
             }
         });
 

@@ -105,7 +105,8 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int flags)
+    {
         dest.writeString(this.uid);
         dest.writeString(this.capaUrl);
         dest.writeString(this.nome);
@@ -119,14 +120,16 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         dest.writeList(this.alunos);
     }
 
-    protected Turma(Parcel in) {
+    protected Turma(Parcel in)
+    {
         this.uid = in.readString();
         this.capaUrl = in.readString();
         this.nome = in.readString();
         this.pin = in.readString();
         int diasDaSemanaSize = in.readInt();
         this.diasDaSemana = new HashMap<String, Integer>(diasDaSemanaSize);
-        for (int i = 0; i < diasDaSemanaSize; i++) {
+        for (int i = 0; i < diasDaSemanaSize; i++)
+        {
             String key = in.readString();
             Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
             this.diasDaSemana.put(key, value);
@@ -137,7 +140,8 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         in.readList(this.alunos, InfoUsuario.class.getClassLoader());
     }
 
-    public static final Creator<Turma> CREATOR = new Creator<Turma>() {
+    public static final Creator<Turma> CREATOR = new Creator<Turma>()
+    {
         @Override
         public Turma createFromParcel(Parcel source) {
             return new Turma(source);

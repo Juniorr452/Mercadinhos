@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -67,7 +68,32 @@ public class TurmasCriadasFragment extends Fragment
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
 
-        turmasCriadasRef.addChildEventListener(new ChildEventListener() {
+        turmasCriadasRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    for(DataSnapshot dataTurma : dataSnapshot.getChildren())
+                    {
+                        Turma t = dataSnapshot.getValue(Turma.class);
+                        t.setUid(dataSnapshot.getKey());
+
+                        turmaAdapter.add(t);
+                    }
+                }
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        /*turmasCriadasRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {
@@ -100,7 +126,7 @@ public class TurmasCriadasFragment extends Fragment
             {
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -135,7 +161,7 @@ public class TurmasCriadasFragment extends Fragment
                 startActivity(new Intent(getContext(), NovaTurmaActivity.class));
             }
         });
+
         return v;
     }
-
 }
