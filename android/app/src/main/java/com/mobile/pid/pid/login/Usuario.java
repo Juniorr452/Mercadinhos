@@ -2,6 +2,7 @@ package com.mobile.pid.pid.login;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
@@ -12,6 +13,9 @@ public class Usuario
 {
     private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/fotos_perfil%2Fpadrao.png?alt=media&token=2b50ce6b-9556-41ec-beb7-160ab3f371f7";
 
+    @Exclude
+    private String uid;
+
     private String nome;
     private String email;
     private String fotoUrl;
@@ -21,15 +25,17 @@ public class Usuario
 
     public Usuario() { }
 
-    public Usuario(String nome, String email)
+    public Usuario(String uid, String nome, String email)
     {
+        this.uid     = uid;
         this.nome    = nome;
         this.email   = email;
         this.fotoUrl = FOTO_PADRAO_URL;
     }
 
-    public Usuario(String nome, String email, String fotoUrl)
+    public Usuario(String uid, String nome, String email, String fotoUrl)
     {
+        this.uid     = uid;
         this.nome    = nome;
         this.email   = email;
         this.fotoUrl = fotoUrl;
@@ -37,12 +43,13 @@ public class Usuario
 
     void cadastrar()
     {
-        DatabaseReference usuarioDatabaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(Uid());
+        DatabaseReference usuarioDatabaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(getUid());
         usuarioDatabaseReference.setValue(this);
     }
 
-    public String Uid(){
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    @Exclude
+    public String getUid(){
+        return this.uid;
     }
 
     public String getFotoUrl() {

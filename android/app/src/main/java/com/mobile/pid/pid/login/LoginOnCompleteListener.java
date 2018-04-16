@@ -40,11 +40,12 @@ public class LoginOnCompleteListener implements OnCompleteListener<AuthResult>
                 Log.d(TAG, "Novo usuário");
 
                 FirebaseUser user = task.getResult().getUser();
+                String uid     = user.getUid();
                 String nome    = user.getDisplayName();
                 String email   = user.getEmail();
                 String fotoUrl = user.getPhotoUrl().toString();
 
-                Usuario usuario = new Usuario(nome, email, fotoUrl);
+                Usuario usuario = new Usuario(uid, nome, email, fotoUrl);
                 usuario.cadastrar();
             }
             else
@@ -58,6 +59,5 @@ public class LoginOnCompleteListener implements OnCompleteListener<AuthResult>
             progressDialog.dismiss();
             Toast.makeText(c, "Falha na autenticação. Tente logar com outro serviço.", Toast.LENGTH_SHORT).show();
         }
-
     }
 }
