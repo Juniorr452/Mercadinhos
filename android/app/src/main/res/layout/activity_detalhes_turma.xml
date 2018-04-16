@@ -37,8 +37,9 @@
                         android:id="@+id/capa_detail"
                         android:layout_width="match_parent"
                         android:layout_height="130dp"
-                        android:scaleType="fitXY"
-                        android:background="@color/gray"/>
+                        android:scaleType="centerCrop"
+                        android:background="@color/gray"
+                        android:adjustViewBounds="true"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
