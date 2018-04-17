@@ -54,7 +54,8 @@
             -->
         </activity>
         <activity android:name=".home.turmas.NovaTurmaActivity" />
-        <activity android:name=".home.perfil.AtualizarPerfilActivity"></activity>
-        <activity android:name=".home.turmas.detalhes_turma.DetalhesTurma"></activity>
+        <activity android:name=".home.perfil.AtualizarPerfilActivity" />
+        <activity android:name=".home.turmas.detalhes_turma.DetalhesTurmaAluno" />
+        <activity android:name=".home.turmas.detalhes_turma.DetalhesTurmaProfessor"></activity>
     </application>
 </manifest>

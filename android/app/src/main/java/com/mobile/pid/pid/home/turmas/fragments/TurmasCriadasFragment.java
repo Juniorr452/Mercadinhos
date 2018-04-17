@@ -64,6 +64,7 @@ public class TurmasCriadasFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
+
         turmasCriadas = new ArrayList<>();
         turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 1);
 
@@ -71,6 +72,7 @@ public class TurmasCriadasFragment extends Fragment
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
+
 
         turmasCriadasRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -100,7 +102,7 @@ public class TurmasCriadasFragment extends Fragment
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                turmaAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -118,6 +120,7 @@ public class TurmasCriadasFragment extends Fragment
 
             }
         });
+
 
         /*turmasCriadasRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -193,8 +196,6 @@ public class TurmasCriadasFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-
-
     }
 
     @Override
@@ -225,6 +226,8 @@ public class TurmasCriadasFragment extends Fragment
                 startActivity(new Intent(getContext(), NovaTurmaActivity.class));
             }
         });
+
+
 
         return v;
     }

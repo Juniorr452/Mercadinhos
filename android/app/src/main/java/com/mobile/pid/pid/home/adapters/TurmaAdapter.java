@@ -8,14 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
-import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurmaAluno;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurmaProfessor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by junio on 12/03/2018.
@@ -24,7 +25,7 @@ import java.util.List;
 // TODO: Estudar essa p**** direito
 public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHolder>
 {
-    public static final int COD_BUSCAR_FRAGMENT = 0;
+    public static final int COD_TURMAS_MATRICULADAS = 0;
     public static final int COD_TURMAS_CRIADAS = 1;
 
     private List<Turma>    listaTurmas;
@@ -62,14 +63,27 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
         holder.nome.setText(t.getNome());
 
-        // TODO: Dias
-        holder.dia.setText("Dia");
+        // DIAS DA SEMANA
+        Map<String, Integer> dias = t.getDiasDaSemana();
+        String dia = "";
+
+        for (Map.Entry<String, Integer> entry: dias.entrySet())
+            if(dia.isEmpty())
+                dia = entry.getKey();
+            else
+                dia += " - " + entry.getKey();
+
+        holder.dia.setText(dia);
     }
 
     public void add(Turma t)
     {
         listaTurmas.add(0, t);
         notifyItemInserted(0);
+    }
+
+    public void clear() {
+        listaTurmas.clear();
     }
 
     @Override
@@ -96,8 +110,20 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 @Override
                 public void onClick(View view)
                 {
-                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+
                     Turma  t = listaTurmas.get(getPosition());
+                    Intent i = null;
+
+                    switch(COD_CONTEXT) {
+                        case COD_TURMAS_CRIADAS:
+                            i = new Intent(layoutInflater.getContext(), DetalhesTurmaProfessor.class);
+                            break;
+                        case COD_TURMAS_MATRICULADAS:
+                            i = new Intent(layoutInflater.getContext(), DetalhesTurmaAluno.class);
+                            break;
+                        default:
+                            break;
+                    }
 
                     i.putExtra("turma", t);
 

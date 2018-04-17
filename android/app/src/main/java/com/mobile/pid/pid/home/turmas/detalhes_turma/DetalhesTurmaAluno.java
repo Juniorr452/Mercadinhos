@@ -1,7 +1,6 @@
 package com.mobile.pid.pid.home.turmas.detalhes_turma;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,12 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -27,7 +22,7 @@ import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment;
 
-public class DetalhesTurma extends AppCompatActivity
+public class DetalhesTurmaAluno extends AppCompatActivity
 {
     Turma turma;
     Toolbar toolbar_detalhes;
@@ -41,7 +36,7 @@ public class DetalhesTurma extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_turma);
+        setContentView(R.layout.activity_detalhes_turma_aluno);
 
         PagerAdapter detalhesPageAdapter  = new DetalheTurmasPageAdapter(this.getSupportFragmentManager());
         ViewPager detalhesViewPager       = findViewById(R.id.viewpager_turma);

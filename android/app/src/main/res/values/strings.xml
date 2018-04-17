@@ -80,4 +80,6 @@
     <string name="entrando">Entrando...</string>
     <string name="fazendo_login">Fazendo o login...</string>
     <string name="sad_message">Não encontramos nenhuma turma</string>
+    <string name="solicitacoes">Solicitações</string>
+    <string name="change">Alterar</string>
 </resources>
