@@ -22,7 +22,9 @@
             android:id="@+id/rv_turmas_criadas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_adicionar_turma"
@@ -33,6 +35,31 @@
             android:tint="@android:color/white"
             android:src="@android:drawable/ic_input_add"
             app:fabSize="normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/sad_face"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/sad_face"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/sad_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sad_message"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="16dp"/>
+        </LinearLayout>
+
+
 
     </FrameLayout>
 </RelativeLayout>

@@ -79,4 +79,5 @@
     <string name="trabalhos">Trabalhos</string>
     <string name="entrando">Entrando...</string>
     <string name="fazendo_login">Fazendo o login...</string>
+    <string name="sad_message">Não encontramos nenhuma turma</string>
 </resources>

@@ -91,9 +91,6 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
             nome = itemView.findViewById(R.id.turma_nome);
             dia  = itemView.findViewById(R.id.turma_dia);
 
-            /*itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);*/
-
             itemView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -108,16 +105,6 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 }
             });
         }
-
-        /*@Override
-        public void onClick(View view) {
-
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            return false;
-        }*/
     }
 
     public void setUid(String uid) {

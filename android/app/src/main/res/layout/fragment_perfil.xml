@@ -42,46 +42,78 @@
                     android:src="@drawable/logo"
                     app:layout_collapseMode="parallax" />
 
-                <!-- SEGUINDO-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/following"
-                    android:layout_gravity="bottom|left"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="25dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp">
 
-                <TextView
-                    android:id="@+id/count_following"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|left"
-                    android:text="350"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="90dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
+                    <!-- POSTS-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_perfil_posts"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginLeft="25dp"/>
 
-                <!-- SEGUIDORES -->
+                    <TextView
+                        android:id="@+id/count_posts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:text="350"
+                        android:layout_marginLeft="8dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/followers"
-                    android:layout_gravity="bottom|left"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="150dp"/>
+                    <!-- SEGUINDO-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/following"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginLeft="8dp"/>
 
-                <TextView
-                    android:id="@+id/count_followers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|left"
-                    android:text="350"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="225dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
+                    <TextView
+                        android:id="@+id/count_following"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:text="350"
+                        android:layout_marginLeft="8dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+
+                    <!-- SEGUIDORES -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/followers"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginLeft="8dp"/>
+
+                    <TextView
+                        android:id="@+id/count_followers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:text="350"
+                        android:layout_marginLeft="8dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+
+
+
+
+
+
+
+
+
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar_perfil"

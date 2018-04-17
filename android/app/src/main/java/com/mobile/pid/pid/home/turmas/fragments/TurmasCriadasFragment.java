@@ -11,8 +11,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +42,8 @@ public class TurmasCriadasFragment extends Fragment
 
     private ProgressBar progressBar;
     private FrameLayout conteudo;
+    private ImageView sadFace;
+    private TextView sadMessage;
 
     private DatabaseReference turmasCriadasRef;
     private ChildEventListener turmasCriadasChildEventListener;
@@ -68,7 +72,54 @@ public class TurmasCriadasFragment extends Fragment
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
 
-        turmasCriadasRef.addValueEventListener(new ValueEventListener() {
+        turmasCriadasRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.exists())
+                {
+                    for(DataSnapshot dataTurma : dataSnapshot.getChildren())
+                    {
+                        Turma t = dataSnapshot.getValue(Turma.class);
+                        t.setUid(dataSnapshot.getKey());
+
+                        turmaAdapter.add(t);
+                    }
+
+                    sadFace.setVisibility(View.GONE);
+                    sadMessage.setVisibility(View.GONE);
+                }
+                else
+                {
+                    sadFace.setVisibility(View.VISIBLE);
+                    sadMessage.setVisibility(View.VISIBLE);
+                }
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                turmaAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        /*turmasCriadasRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -81,6 +132,16 @@ public class TurmasCriadasFragment extends Fragment
 
                         turmaAdapter.add(t);
                     }
+
+                    sadFace.setVisibility(View.GONE);
+                    sadMessage.setVisibility(View.GONE);
+
+                    turmaAdapter.notifyDataSetChanged();
+                }
+                else
+                {
+                    sadFace.setVisibility(View.VISIBLE);
+                    sadMessage.setVisibility(View.VISIBLE);
                 }
 
                 progressBar.setVisibility(View.GONE);
@@ -91,7 +152,7 @@ public class TurmasCriadasFragment extends Fragment
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
         /*turmasCriadasRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -132,6 +193,8 @@ public class TurmasCriadasFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
+
+
     }
 
     @Override
@@ -143,7 +206,8 @@ public class TurmasCriadasFragment extends Fragment
         recyclerView = v.findViewById(R.id.rv_turmas_criadas);
         progressBar = v.findViewById(R.id.pb_turmas_criadas);
         conteudo    = v.findViewById(R.id.fl_turmas_criadas);
-
+        sadFace     = v.findViewById(R.id.sad_face);
+        sadMessage  = v.findViewById(R.id.sad_message);
         conteudo.setVisibility(View.GONE);
 
         // Recycler View

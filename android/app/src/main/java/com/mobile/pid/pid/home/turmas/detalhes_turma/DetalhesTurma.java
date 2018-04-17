@@ -11,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
@@ -28,7 +30,7 @@ import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment
 public class DetalhesTurma extends AppCompatActivity
 {
     Turma turma;
-
+    Toolbar toolbar_detalhes;
     ImageView capa;
     TextView  nomeTurma;
 
@@ -45,6 +47,15 @@ public class DetalhesTurma extends AppCompatActivity
         ViewPager detalhesViewPager       = findViewById(R.id.viewpager_turma);
         TabLayout turmasTabLayout         = findViewById(R.id.tab);
         Intent i                          = getIntent();
+        toolbar_detalhes = findViewById(R.id.toolbar_detalhes);
+
+        toolbar_detalhes.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar_detalhes.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         nomeTurma = findViewById(R.id.tv_turma_nome);
         capa      = findViewById(R.id.capa_detail);
