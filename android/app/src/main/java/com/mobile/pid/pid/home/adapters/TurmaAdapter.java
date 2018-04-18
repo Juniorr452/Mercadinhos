@@ -1,7 +1,9 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +65,28 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
         holder.nome.setText(t.getNome());
 
+        holder.opcoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(layoutInflater.getContext())
+                    .setTitle("Excluir a turma?")
+                    .setMessage("Deseja realmente excluir a turma?")
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .show();
+            }
+        });
+
         // DIAS DA SEMANA
         Map<String, Integer> dias = t.getDiasDaSemana();
         String dia = "";
@@ -96,6 +120,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     public class TurmaViewHolder extends RecyclerView.ViewHolder //implements View.OnClickListener, View.OnLongClickListener
     {
         public ImageView capa;
+        public ImageView opcoes;
         public TextView  nome;
         public TextView  dia;
 
@@ -103,9 +128,10 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         {
             super(itemView);
 
-            capa = itemView.findViewById(R.id.turma_capa);
-            nome = itemView.findViewById(R.id.turma_nome);
-            dia  = itemView.findViewById(R.id.turma_dia);
+            capa   = itemView.findViewById(R.id.turma_capa);
+            opcoes = itemView.findViewById(R.id.turma_opcoes);
+            nome   = itemView.findViewById(R.id.turma_nome);
+            dia    = itemView.findViewById(R.id.turma_dia);
 
             itemView.setOnClickListener(new View.OnClickListener()
             {
