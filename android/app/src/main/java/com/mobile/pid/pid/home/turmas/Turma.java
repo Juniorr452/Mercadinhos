@@ -85,6 +85,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return this.diasDaSemana;
     }
 
+    @Exclude
     public String getQtdProfessores(){
         if (professores == null)
             return "0";
@@ -92,6 +93,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             return Integer.toString(professores.size());
     }
 
+    @Exclude
     public String getQtdAlunos(){
         if (alunos == null)
             return "0";

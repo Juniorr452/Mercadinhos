@@ -66,12 +66,56 @@ public class TurmasCriadasFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-
         turmasCriadas = new ArrayList<>();
         turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 1);
 
         // Pegar os dados de turmas criadas pelo usuário no db
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
+
+        turmasCriadasRef.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    recyclerView.getRecycledViewPool().clear();
+                    turmaAdapter.notifyDataSetChanged();
+
+                    for(DataSnapshot dataTurma : dataSnapshot.getChildren())
+                    {
+                        Turma t = dataTurma.getValue(Turma.class);
+                        t.setUid(dataTurma.getKey());
+
+                        turmaAdapter.add(t);
+                    }
+
+                    sadFace.setVisibility(View.GONE);
+                    sadMessage.setVisibility(View.GONE);
+                }
+                else
+                {
+                    sadFace.setVisibility(View.VISIBLE);
+                    sadMessage.setVisibility(View.VISIBLE);
+                }
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // NÃO FUNCIONA. AQUELE LOADING QUANDO NÃO TEM NENHUMA TURMA CRIADA CONTINUA
+        // DEIXA ONVALUELISTENER MSM
+
+        // Pegar os dados de turmas criadas pelo usuário no db
+        /*String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
 
@@ -81,13 +125,18 @@ public class TurmasCriadasFragment extends Fragment
 
                 if (dataSnapshot.exists())
                 {
-                    for(DataSnapshot dataTurma : dataSnapshot.getChildren())
+                    /*for(DataSnapshot dataTurma : dataSnapshot.getChildren())
                     {
                         Turma t = dataSnapshot.getValue(Turma.class);
                         t.setUid(dataSnapshot.getKey());
 
                         turmaAdapter.add(t);
                     }
+
+                    Turma t = dataSnapshot.getValue(Turma.class);
+                    t.setUid(dataSnapshot.getKey());
+
+                    turmaAdapter.add(t);
 
                     sadFace.setVisibility(View.GONE);
                     sadMessage.setVisibility(View.GONE);
@@ -121,7 +170,7 @@ public class TurmasCriadasFragment extends Fragment
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -157,8 +206,6 @@ public class TurmasCriadasFragment extends Fragment
                 startActivity(new Intent(getContext(), NovaTurmaActivity.class));
             }
         });
-
-
 
         return v;
     }

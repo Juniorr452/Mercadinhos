@@ -150,6 +150,7 @@ public class PerfilFragment extends Fragment
                 FirebaseAuth.getInstance().signOut();
 
                 startActivity(new Intent(c, RedesSociaisActivity.class));
+                getActivity().finish();
             }
         });
 

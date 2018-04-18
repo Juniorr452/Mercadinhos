@@ -1,8 +1,10 @@
 package com.mobile.pid.pid.home.turmas;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.HomeActivity;
+import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -102,13 +106,14 @@ public class NovaTurmaActivity extends AppCompatActivity
         final String nomeTurma = nomeTurmaEditText.getText().toString();
         final String pinTurma  = pinEditText.getText().toString();
 
-        // Verificar os campos
-        if (validarCampos(nomeTurma))
+        try
         {
+            validarCampos(nomeTurma);
+
             // Pegar o ID da turma e o usuário logado que está criando a turma
             final String turmaId = turmasDatabaseReference.push().getKey();
 
-            // Enviar  a imagem selecionada para o  Firebase Storage (Se houver) e pegar a url.
+            // Enviar a imagem selecionada para o  Firebase Storage (Se houver) e pegar a url.
             if (imagemUri != null)
             {
                 String nomeImagem = imagemUri.getLastPathSegment();
@@ -128,6 +133,19 @@ public class NovaTurmaActivity extends AppCompatActivity
                 Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, user.getPhotoUrl().toString(), user.getDisplayName(), diasDaSemana);
                 cadastrarTurma(novaTurma, turmaId);
             }
+        }
+        catch(NoSuchFieldException e)
+        {
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.Error)
+                .setMessage(e.getMessage())
+                .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
         }
     }
 
@@ -201,8 +219,12 @@ public class NovaTurmaActivity extends AppCompatActivity
     }
 
     // TODO: Validação
-    private boolean validarCampos(String nomeTurma)
+    private void validarCampos(String nomeTurma) throws NoSuchFieldException
     {
-        return true;
+        if (nomeTurma == null || nomeTurma.equals(""))
+            throw new NoSuchFieldException(getString(R.string.preencha_nome_turma));
+
+        if (diasDaSemana.size() == 0)
+            throw new NoSuchFieldException(getString(R.string.Preencha_dia_semana));
     }
 }
