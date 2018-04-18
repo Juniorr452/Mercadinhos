@@ -86,4 +86,8 @@
     <string name="excluir_turma">Excluir Turma</string>
     <string name="editar_turma">Editar Turma</string>
     <string name="confirmar">Confirmar</string>
+    <string name="Error">Erro</string>
+    <string name="Ok">Ok</string>
+    <string name="preencha_nome_turma">Preencha o nome da turma</string>
+    <string name="Preencha_dia_semana">Selecione pelo menos um dia da semana</string>
 </resources>

@@ -117,26 +117,24 @@ public class HomeActivity extends AppCompatActivity
     // https://www.youtube.com/watch?v=eVPSzXxIaW4
     private void checarUsuarioNovo(Usuario user)
     {
-        if (user.getSexo() == null) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (user.getSexo() == null)
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.atualizar_perfil)
+                .setMessage(R.string.message_update_profile)
+                .setPositiveButton(R.string.letsgo, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(new Intent(HomeActivity.this, AtualizarPerfilActivity.class));
+                    }
+                })
+                .setNegativeButton(R.string.notnow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-            builder.setTitle(R.string.atualizar_perfil);
-            builder.setMessage(R.string.message_update_profile);
+                    }
+                })
+                .show();
 
-            builder.setPositiveButton(R.string.letsgo, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    startActivity(new Intent(HomeActivity.this, AtualizarPerfilActivity.class));
-                }
-            });
-
-            builder.setNegativeButton(R.string.notnow, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) { }
-            });
-
-            AlertDialog dialog = builder.show();
-        }
     }
 }
 
