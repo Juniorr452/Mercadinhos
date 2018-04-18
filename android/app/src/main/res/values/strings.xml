@@ -82,4 +82,8 @@
     <string name="sad_message">Não encontramos nenhuma turma</string>
     <string name="solicitacoes">Solicitações</string>
     <string name="change">Alterar</string>
+    <string name="atualizar">Atualizar</string>
+    <string name="excluir_turma">Excluir Turma</string>
+    <string name="editar_turma">Editar Turma</string>
+    <string name="confirmar">Confirmar</string>
 </resources>

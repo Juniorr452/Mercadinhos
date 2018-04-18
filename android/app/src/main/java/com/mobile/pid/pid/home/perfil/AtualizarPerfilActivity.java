@@ -43,7 +43,9 @@ import com.mobile.pid.pid.login.Usuario;
 
 import java.io.File;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AtualizarPerfilActivity extends AppCompatActivity
 {
@@ -172,7 +174,6 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         });
     }
 
-    // TODO FAZER PEGAR A FOTO QUE FOI SELECIONADA OU FOI TIRADA
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -184,8 +185,8 @@ public class AtualizarPerfilActivity extends AppCompatActivity
             switch (requestCode)
             {
                 case RC_CAMERA:
-                    // TODO: CAMERA
-                   break;
+                    //TODO tirar foto com a camera e guardar
+                    break;
 
                 case RC_PHOTO_PICKER:
                     Log.d(TAG, "WOOO");

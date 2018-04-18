@@ -35,7 +35,7 @@ public class DetalhesTurmaProfessor extends AppCompatActivity {
     Toolbar toolbar_detalhes;
     ImageView capa;
     TextView nomeTurma;
-    ImageView editar_nome;
+    ImageView editar_turma;
 
     TextView qtdProfessores;
     TextView qtdAlunos;
@@ -49,7 +49,7 @@ public class DetalhesTurmaProfessor extends AppCompatActivity {
         ViewPager detalhesViewPager       = findViewById(R.id.viewpager_turma);
         TabLayout turmasTabLayout         = findViewById(R.id.tab);
         Intent i                          = getIntent();
-        toolbar_detalhes = findViewById(R.id.toolbar_detalhes);
+        toolbar_detalhes                  = findViewById(R.id.toolbar_detalhes);
 
         // Pegar os dados
         turma = i.getParcelableExtra("turma");
@@ -64,32 +64,14 @@ public class DetalhesTurmaProfessor extends AppCompatActivity {
 
         nomeTurma = findViewById(R.id.tv_turma_nome);
         capa      = findViewById(R.id.capa_detail);
-        editar_nome = findViewById(R.id.edit_name_turma);
+        editar_turma = findViewById(R.id.edit_turma);
 
-        // EDITAR NOME DA TURMA
-        editar_nome.setOnClickListener(new View.OnClickListener() {
+        editar_turma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetalhesTurmaProfessor.this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_alterar_nome, null);
-                builder.setView(mView);
-
-                TextInputLayout TIL_alterar_nome = mView.findViewById(R.id.TIL_nome_turma);
-
-                TIL_alterar_nome.getEditText().setText(turma.getNome());
-
-                builder.setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO alterar no banco todo o nome da turma
-                    }
-                });
-
-                builder.setNegativeButton(R.string.cancel, null);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#737373"));
+                Intent i = new Intent(DetalhesTurmaProfessor.this, EditarTurma.class);
+                i.putExtra("turma", turma);
+                startActivity(i);
             }
         });
 

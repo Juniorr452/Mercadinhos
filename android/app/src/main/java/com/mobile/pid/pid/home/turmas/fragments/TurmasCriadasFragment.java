@@ -2,10 +2,12 @@ package com.mobile.pid.pid.home.turmas.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -73,10 +75,10 @@ public class TurmasCriadasFragment extends Fragment
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
 
-
         turmasCriadasRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
                 if (dataSnapshot.exists())
                 {
                     for(DataSnapshot dataTurma : dataSnapshot.getChildren())
@@ -120,77 +122,6 @@ public class TurmasCriadasFragment extends Fragment
 
             }
         });
-
-
-        /*turmasCriadasRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if (dataSnapshot.exists())
-                {
-                    for(DataSnapshot dataTurma : dataSnapshot.getChildren())
-                    {
-                        Turma t = dataSnapshot.getValue(Turma.class);
-                        t.setUid(dataSnapshot.getKey());
-
-                        turmaAdapter.add(t);
-                    }
-
-                    sadFace.setVisibility(View.GONE);
-                    sadMessage.setVisibility(View.GONE);
-
-                    turmaAdapter.notifyDataSetChanged();
-                }
-                else
-                {
-                    sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.VISIBLE);
-                }
-
-                progressBar.setVisibility(View.GONE);
-                conteudo.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
-        /*turmasCriadasRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s)
-            {
-                Turma t = dataSnapshot.getValue(Turma.class);
-                t.setUid(dataSnapshot.getKey());
-
-                turmaAdapter.add(t);
-
-                progressBar.setVisibility(View.GONE);
-                conteudo.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-
-            }
-        });*/
     }
 
     @Override

@@ -86,6 +86,8 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         listaTurmas.clear();
     }
 
+    public List<Turma> getLista() { return listaTurmas; }
+
     @Override
     public int getItemCount() {
         return listaTurmas.size();
