@@ -12,8 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
-import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurmaAluno;
-import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurmaProfessor;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 
 import java.util.List;
 import java.util.Map;
@@ -25,8 +24,10 @@ import java.util.Map;
 // TODO: Estudar essa p**** direito
 public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHolder>
 {
-    public static final int COD_TURMAS_MATRICULADAS = 0;
-    public static final int COD_TURMAS_CRIADAS = 1;
+    private static final int COD_TURMAS_MATRICULADAS = 0;
+    private static final int COD_TURMAS_CRIADAS = 1;
+    private static final int PROFESSOR = 0;
+    private static final int ALUNO = 1;
 
     private List<Turma>    listaTurmas;
     private LayoutInflater layoutInflater;
@@ -114,20 +115,19 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 {
 
                     Turma  t = listaTurmas.get(getPosition());
-                    Intent i = null;
+                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+                    i.putExtra("turma", t);
 
                     switch(COD_CONTEXT) {
                         case COD_TURMAS_CRIADAS:
-                            i = new Intent(layoutInflater.getContext(), DetalhesTurmaProfessor.class);
+                            i.putExtra("usuario", PROFESSOR);
                             break;
                         case COD_TURMAS_MATRICULADAS:
-                            i = new Intent(layoutInflater.getContext(), DetalhesTurmaAluno.class);
+                            i.putExtra("usuario", ALUNO);
                             break;
                         default:
                             break;
                     }
-
-                    i.putExtra("turma", t);
 
                     layoutInflater.getContext().startActivity(i);
                 }

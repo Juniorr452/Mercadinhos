@@ -20,29 +20,53 @@ import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.SolicitacoesFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment;
 
-public class DetalhesTurmaAluno extends AppCompatActivity
+public class DetalhesTurma extends AppCompatActivity
 {
-    Turma turma;
+
+    private static final int PROFESSOR = 0;
+    private static final int ALUNO = 1;
+
+    Turma turma;;
     Toolbar toolbar_detalhes;
     ImageView capa;
     TextView  nomeTurma;
+    ImageView editarTurma;
 
     TextView qtdProfessores;
     TextView qtdAlunos;
+
+    private int USUARIO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhes_turma_aluno);
+        setContentView(R.layout.activity_detalhes_turma);
 
         PagerAdapter detalhesPageAdapter  = new DetalheTurmasPageAdapter(this.getSupportFragmentManager());
         ViewPager detalhesViewPager       = findViewById(R.id.viewpager_turma);
         TabLayout turmasTabLayout         = findViewById(R.id.tab);
         Intent i                          = getIntent();
-        toolbar_detalhes = findViewById(R.id.toolbar_detalhes);
+        toolbar_detalhes                  = findViewById(R.id.toolbar_detalhes);
+        editarTurma                       = findViewById(R.id.edit_turma);
+
+        // Pegar os dados
+        turma = i.getParcelableExtra("turma");
+        USUARIO = (int) i.getExtras().get("usuario");
+
+        switch (USUARIO) {
+            case PROFESSOR:
+                editarTurma.setVisibility(View.VISIBLE);
+                break;
+            case ALUNO:
+                editarTurma.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
 
         toolbar_detalhes.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar_detalhes.setNavigationOnClickListener(new View.OnClickListener() {
@@ -57,9 +81,6 @@ public class DetalhesTurmaAluno extends AppCompatActivity
 
         qtdProfessores = findViewById(R.id.qtd_professor);
         qtdAlunos      = findViewById(R.id.qtd_aluno);
-
-        // Pegar os dados
-        turma = i.getParcelableExtra("turma");
 
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
 
@@ -93,7 +114,14 @@ public class DetalhesTurmaAluno extends AppCompatActivity
 
         @Override
         public int getCount() {
-            return 2;
+            switch (USUARIO) {
+                case PROFESSOR:
+                    return 3;
+                case ALUNO:
+                    return 2;
+                default:
+                    return 0;
+            }
         }
 
         @Override
@@ -105,6 +133,8 @@ public class DetalhesTurmaAluno extends AppCompatActivity
                     return new ChatsFragment();
                 case 1:
                     return new TrabalhosFragment();
+                case 2:
+                    return new SolicitacoesFragment();
                 default:
                     return null;
             }
@@ -120,6 +150,8 @@ public class DetalhesTurmaAluno extends AppCompatActivity
                     return getString(R.string.chats);
                 case 1:
                     return getString(R.string.trabalhos);
+                case 2:
+                    return getString(R.string.solicitacoes);
                 default:
                     return null;
             }
