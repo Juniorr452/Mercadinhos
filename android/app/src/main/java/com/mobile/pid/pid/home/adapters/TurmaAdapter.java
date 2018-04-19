@@ -8,8 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
@@ -80,11 +86,6 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     public void add(Turma t)
     {
         listaTurmas.add(0, t);
-        notifyItemInserted(0);
-    }
-
-    public void clear() {
-        listaTurmas.clear();
     }
 
     public List<Turma> getLista() { return listaTurmas; }
@@ -115,21 +116,36 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 {
 
                     Turma  t = listaTurmas.get(getPosition());
-                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
-                    i.putExtra("turma", t);
 
-                    switch(COD_CONTEXT) {
-                        case COD_TURMAS_CRIADAS:
-                            i.putExtra("usuario", PROFESSOR);
-                            break;
-                        case COD_TURMAS_MATRICULADAS:
-                            i.putExtra("usuario", ALUNO);
-                            break;
-                        default:
-                            break;
-                    }
+                    FirebaseDatabase.getInstance().getReference("turmas").child(t.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Turma t_db = dataSnapshot.getValue(Turma.class);
 
-                    layoutInflater.getContext().startActivity(i);
+                                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+
+                                    i.putExtra("turma", t_db);
+
+                                    switch(COD_CONTEXT) {
+                                        case COD_TURMAS_CRIADAS:
+                                            i.putExtra("usuario", PROFESSOR);
+                                            break;
+                                        case COD_TURMAS_MATRICULADAS:
+                                            i.putExtra("usuario", ALUNO);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                    layoutInflater.getContext().startActivity(i);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                 }
             });
         }

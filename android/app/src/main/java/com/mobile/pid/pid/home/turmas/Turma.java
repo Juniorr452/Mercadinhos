@@ -33,6 +33,16 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
 
     public Turma() {}
 
+    public Turma(String nome, String pin, String capaUrl, List<InfoUsuario> professores, Map<String, Integer> diasDaSemana)
+    {
+        this.capaUrl = capaUrl;
+        this.nome = nome;
+        this.pin  = pin;
+        this.diasDaSemana = diasDaSemana;
+
+        this.professores = professores;
+    }
+
     public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, Map<String, Integer> diasDaSemana)
     {
         this.capaUrl = capaUrl;
@@ -75,6 +85,11 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
 
     public List<InfoUsuario> getProfessores() {
         return professores;
+    }
+
+    public void setProfessores(List<InfoUsuario> professores)
+    {
+        this.professores = professores;
     }
 
     public List<InfoUsuario> getAlunos() {

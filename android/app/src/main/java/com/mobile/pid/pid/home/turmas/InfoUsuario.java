@@ -28,6 +28,14 @@ public class InfoUsuario implements Parcelable {
         return fotoUrl;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
+
     @Override
     public int describeContents() {
         return 0;
