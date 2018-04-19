@@ -58,7 +58,6 @@ public class TurmasCriadasFragment extends Fragment
 
     private FloatingActionButton fabAdicionarTurma;
 
-    // TODO: Código turmas criadas
     public TurmasCriadasFragment() {
         // Required empty public constructor
     }
@@ -105,6 +104,8 @@ public class TurmasCriadasFragment extends Fragment
 
                 progressBar.setVisibility(View.GONE);
                 conteudo.setVisibility(View.VISIBLE);
+
+                turmaAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -112,67 +113,6 @@ public class TurmasCriadasFragment extends Fragment
 
             }
         });
-
-        // NÃO FUNCIONA. AQUELE LOADING QUANDO NÃO TEM NENHUMA TURMA CRIADA CONTINUA
-        // DEIXA ONVALUELISTENER MSM
-
-        // Pegar os dados de turmas criadas pelo usuário no db
-        /*String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
-
-        turmasCriadasRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                if (dataSnapshot.exists())
-                {
-                    /*for(DataSnapshot dataTurma : dataSnapshot.getChildren())
-                    {
-                        Turma t = dataSnapshot.getValue(Turma.class);
-                        t.setUid(dataSnapshot.getKey());
-
-                        turmaAdapter.add(t);
-                    }
-
-                    Turma t = dataSnapshot.getValue(Turma.class);
-                    t.setUid(dataSnapshot.getKey());
-
-                    turmaAdapter.add(t);
-
-                    sadFace.setVisibility(View.GONE);
-                    sadMessage.setVisibility(View.GONE);
-                }
-                else
-                {
-                    sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.VISIBLE);
-                }
-
-                progressBar.setVisibility(View.GONE);
-                conteudo.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
     @Override
@@ -183,7 +123,6 @@ public class TurmasCriadasFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_turmas_criadas, container, false);
 
         recyclerView = v.findViewById(R.id.rv_turmas_criadas);
