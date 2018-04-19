@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,30 +27,29 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
 
     private Map<String, Integer> diasDaSemana;
 
-    private List<InfoUsuario> professores;
+    private InfoUsuario professor;
     private List<InfoUsuario> alunos;
 
     public Turma() {}
 
-    public Turma(String nome, String pin, String capaUrl, List<InfoUsuario> professores, Map<String, Integer> diasDaSemana)
+    public Turma(String nome, String pin, String capaUrl, InfoUsuario professor, Map<String, Integer> diasDaSemana)
     {
         this.capaUrl = capaUrl;
         this.nome = nome;
         this.pin  = pin;
         this.diasDaSemana = diasDaSemana;
 
-        this.professores = professores;
+        this.professor = professor;
     }
 
-    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, Map<String, Integer> diasDaSemana)
+    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, String uidProf, Map<String, Integer> diasDaSemana)
     {
         this.capaUrl = capaUrl;
         this.nome = nome;
         this.pin  = pin;
         this.diasDaSemana = diasDaSemana;
 
-        this.professores = new ArrayList<>();
-        professores.add(new InfoUsuario(nomeProf, imagemProf));
+        this.professor = new InfoUsuario(nomeProf, imagemProf, uidProf);
     }
 
 
@@ -83,13 +81,13 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return this.capaUrl;
     }
 
-    public List<InfoUsuario> getProfessores() {
-        return professores;
+    public InfoUsuario getProfessor() {
+        return professor;
     }
 
-    public void setProfessores(List<InfoUsuario> professores)
+    public void setProfessor(InfoUsuario professor)
     {
-        this.professores = professores;
+        this.professor = professor;
     }
 
     public List<InfoUsuario> getAlunos() {
@@ -100,13 +98,13 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return this.diasDaSemana;
     }
 
-    @Exclude
+    /*@Exclude
     public String getQtdProfessores(){
-        if (professores == null)
+        if (professor == null)
             return "0";
         else
-            return Integer.toString(professores.size());
-    }
+            return Integer.toString(professor.size());
+    }*/
 
     @Exclude
     public String getQtdAlunos(){
@@ -133,8 +131,8 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             dest.writeString(entry.getKey());
             dest.writeValue(entry.getValue());
         }
-        dest.writeList(this.professores);
         dest.writeList(this.alunos);
+        dest.writeParcelable(this.professor, flags);
     }
 
     protected Turma(Parcel in)
@@ -151,8 +149,9 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
             this.diasDaSemana.put(key, value);
         }
-        this.professores = new ArrayList<InfoUsuario>();
-        in.readList(this.professores, InfoUsuario.class.getClassLoader());
+
+        this.professor = new InfoUsuario();
+        this.professor = in.readParcelable(InfoUsuario.class.getClassLoader());
         this.alunos = new ArrayList<InfoUsuario>();
         in.readList(this.alunos, InfoUsuario.class.getClassLoader());
     }

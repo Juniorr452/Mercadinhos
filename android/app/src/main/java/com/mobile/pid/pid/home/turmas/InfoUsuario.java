@@ -11,13 +11,15 @@ import android.os.Parcelable;
 public class InfoUsuario implements Parcelable {
     private String nome;
     private String fotoUrl;
+    private String uid;
 
     public InfoUsuario() {}
 
-    public InfoUsuario(String nome, String fotoUrl)
+    public InfoUsuario(String nome, String fotoUrl, String uid)
     {
         this.nome = nome;
         this.fotoUrl = fotoUrl;
+        this.uid = uid;
     }
 
     public String getNome() {
@@ -36,6 +38,14 @@ public class InfoUsuario implements Parcelable {
         this.fotoUrl = fotoUrl;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -45,11 +55,13 @@ public class InfoUsuario implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.nome);
         dest.writeString(this.fotoUrl);
+        dest.writeString(this.uid);
     }
 
     protected InfoUsuario(Parcel in) {
         this.nome = in.readString();
         this.fotoUrl = in.readString();
+        this.uid = in.readString();
     }
 
     public static final Parcelable.Creator<InfoUsuario> CREATOR = new Parcelable.Creator<InfoUsuario>() {

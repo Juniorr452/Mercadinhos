@@ -45,7 +45,7 @@ public class BuscarFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         turmasCriadas = new ArrayList<>();
-        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 0);
+        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 2);
 
         turmasRef = FirebaseDatabase.getInstance().getReference().child("turmas");
         turmasChildEventListener = new ChildEventListener() {
