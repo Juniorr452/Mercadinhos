@@ -91,20 +91,20 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                             // Deletar turma.
                             rootRef.child("turmas")
                                 .child(tuid)
-                                .setValue(null);
+                                .removeValue();
 
                             // Deletar no turmas_criadas do professor.
                             usuariosRef.child(t.getProfessor().getUid())
                                 .child("turmas_criadas")
                                 .child(tuid)
-                                .setValue(null);
+                                .removeValue();
 
                             // Deletar no turmas_matriculadas dos alunos.
-                            for(InfoUsuario a : t.getAlunos())
+                            /*for(InfoUsuario a : t.getAlunos())
                                 usuariosRef.child(a.getUid())
                                     .child("turmas_matriculadas")
                                     .child(tuid)
-                                    .setValue(null);
+                                    .removeValue();*/
                         }
                     })
                     .setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -165,39 +165,23 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 {
 
                     Turma  t = listaTurmas.get(getPosition());
+                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
 
-                    FirebaseDatabase.getInstance().getReference("turmas").child(t.getUid())
-                        .addListenerForSingleValueEvent(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                Turma t_db = dataSnapshot.getValue(Turma.class);
+                    i.putExtra("turma", t);
 
-                                Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+                    switch(COD_CONTEXT)
+                    {
+                        case COD_TURMAS_CRIADAS:
+                            i.putExtra("usuario", PROFESSOR);
+                            break;
+                        case COD_TURMAS_MATRICULADAS:
+                            i.putExtra("usuario", ALUNO);
+                            break;
+                        default:
+                            break;
+                    }
 
-                                i.putExtra("turma", t_db);
-
-                                switch(COD_CONTEXT)
-                                {
-                                    case COD_TURMAS_CRIADAS:
-                                        i.putExtra("usuario", PROFESSOR);
-                                        break;
-                                    case COD_TURMAS_MATRICULADAS:
-                                        i.putExtra("usuario", ALUNO);
-                                        break;
-                                    default:
-                                        break;
-                                }
-
-                                layoutInflater.getContext().startActivity(i);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+                    layoutInflater.getContext().startActivity(i);
                 }
             });
         }

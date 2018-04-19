@@ -48,10 +48,10 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     // Displaying images
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     // Floating Action Menu
-    compile 'com.github.clans:fab:1.6.2'
+    implementation 'com.github.clans:fab:1.6.2'
 }
 
 

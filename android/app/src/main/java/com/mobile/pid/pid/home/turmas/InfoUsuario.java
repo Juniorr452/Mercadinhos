@@ -25,7 +25,6 @@ public class InfoUsuario implements Parcelable
         this.fotoUrl = fotoUrl;
     }
 
-    @Exclude
     public String getUid(){
         return uid;
     }
@@ -46,6 +45,10 @@ public class InfoUsuario implements Parcelable
         this.fotoUrl = fotoUrl;
     }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -55,11 +58,13 @@ public class InfoUsuario implements Parcelable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.nome);
         dest.writeString(this.fotoUrl);
+        dest.writeString(this.uid);
     }
 
     protected InfoUsuario(Parcel in) {
         this.nome = in.readString();
         this.fotoUrl = in.readString();
+        this.uid = in.readString();
     }
 
     public static final Parcelable.Creator<InfoUsuario> CREATOR = new Parcelable.Creator<InfoUsuario>() {

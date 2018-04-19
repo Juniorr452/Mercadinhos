@@ -90,27 +90,24 @@ public class TurmasCriadasFragment extends Fragment
                         String tuid = dataTurma.getKey();
                         FirebaseDatabase.getInstance().getReference()
                             .child("turmas")
-                            .equalTo(tuid)
-                        .addListenerForSingleValueEvent(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshotTurma)
+                            .child(tuid)
+                            .addListenerForSingleValueEvent(new ValueEventListener()
                             {
-                                if (dataSnapshotTurma.exists())
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshotTurma)
                                 {
                                     Turma t = dataSnapshotTurma.getValue(Turma.class);
                                     t.setUid(dataSnapshotTurma.getKey());
 
                                     turmaAdapter.add(t);
-                                    Log.d(TAG, t.getNome());
+                                    turmaAdapter.notifyDataSetChanged();
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
                     }
 
                     sadFace.setVisibility(View.GONE);
@@ -124,8 +121,6 @@ public class TurmasCriadasFragment extends Fragment
 
                 progressBar.setVisibility(View.GONE);
                 conteudo.setVisibility(View.VISIBLE);
-
-                turmaAdapter.notifyDataSetChanged();
             }
 
             @Override

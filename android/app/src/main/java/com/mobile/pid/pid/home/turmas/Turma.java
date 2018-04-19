@@ -39,7 +39,6 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         this.nome = nome;
         this.pin  = pin;
         this.diasDaSemana = diasDaSemana;
-
         this.professor = professor;
     }
 
