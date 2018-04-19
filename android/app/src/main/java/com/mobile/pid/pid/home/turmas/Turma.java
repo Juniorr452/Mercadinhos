@@ -28,32 +28,20 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
 
     private Map<String, Integer> diasDaSemana;
 
-    private List<InfoUsuario> professores;
+    private InfoUsuario professor;
     private List<InfoUsuario> alunos;
 
     public Turma() {}
 
-    public Turma(String nome, String pin, String capaUrl, List<InfoUsuario> professores, Map<String, Integer> diasDaSemana)
+    public Turma(String nome, String pin, String capaUrl, InfoUsuario professor, Map<String, Integer> diasDaSemana)
     {
         this.capaUrl = capaUrl;
         this.nome = nome;
         this.pin  = pin;
         this.diasDaSemana = diasDaSemana;
 
-        this.professores = professores;
+        this.professor = professor;
     }
-
-    public Turma(String nome, String pin, String capaUrl, String imagemProf, String nomeProf, Map<String, Integer> diasDaSemana)
-    {
-        this.capaUrl = capaUrl;
-        this.nome = nome;
-        this.pin  = pin;
-        this.diasDaSemana = diasDaSemana;
-
-        this.professores = new ArrayList<>();
-        professores.add(new InfoUsuario(nomeProf, imagemProf));
-    }
-
 
     public String getUid(){
         return uid;
@@ -83,13 +71,13 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return this.capaUrl;
     }
 
-    public List<InfoUsuario> getProfessores() {
-        return professores;
+    public InfoUsuario getProfessor() {
+        return professor;
     }
 
-    public void setProfessores(List<InfoUsuario> professores)
+    public void setProfessor(InfoUsuario professor)
     {
-        this.professores = professores;
+        this.professor = professor;
     }
 
     public List<InfoUsuario> getAlunos() {
@@ -98,14 +86,6 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
 
     public Map<String, Integer> getDiasDaSemana() {
         return this.diasDaSemana;
-    }
-
-    @Exclude
-    public String getQtdProfessores(){
-        if (professores == null)
-            return "0";
-        else
-            return Integer.toString(professores.size());
     }
 
     @Exclude
@@ -122,8 +102,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.uid);
         dest.writeString(this.capaUrl);
         dest.writeString(this.nome);
@@ -133,32 +112,27 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             dest.writeString(entry.getKey());
             dest.writeValue(entry.getValue());
         }
-        dest.writeList(this.professores);
-        dest.writeList(this.alunos);
+        dest.writeParcelable(this.professor, flags);
+        dest.writeTypedList(this.alunos);
     }
 
-    protected Turma(Parcel in)
-    {
+    protected Turma(Parcel in) {
         this.uid = in.readString();
         this.capaUrl = in.readString();
         this.nome = in.readString();
         this.pin = in.readString();
         int diasDaSemanaSize = in.readInt();
         this.diasDaSemana = new HashMap<String, Integer>(diasDaSemanaSize);
-        for (int i = 0; i < diasDaSemanaSize; i++)
-        {
+        for (int i = 0; i < diasDaSemanaSize; i++) {
             String key = in.readString();
             Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
             this.diasDaSemana.put(key, value);
         }
-        this.professores = new ArrayList<InfoUsuario>();
-        in.readList(this.professores, InfoUsuario.class.getClassLoader());
-        this.alunos = new ArrayList<InfoUsuario>();
-        in.readList(this.alunos, InfoUsuario.class.getClassLoader());
+        this.professor = in.readParcelable(InfoUsuario.class.getClassLoader());
+        this.alunos = in.createTypedArrayList(InfoUsuario.CREATOR);
     }
 
-    public static final Creator<Turma> CREATOR = new Creator<Turma>()
-    {
+    public static final Creator<Turma> CREATOR = new Creator<Turma>() {
         @Override
         public Turma createFromParcel(Parcel source) {
             return new Turma(source);

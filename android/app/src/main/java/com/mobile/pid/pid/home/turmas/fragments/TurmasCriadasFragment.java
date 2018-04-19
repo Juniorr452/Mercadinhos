@@ -71,7 +71,7 @@ public class TurmasCriadasFragment extends Fragment
         turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 1);
 
         // Pegar os dados de turmas criadas pelo usuário no db
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
 
@@ -87,10 +87,30 @@ public class TurmasCriadasFragment extends Fragment
 
                     for(DataSnapshot dataTurma : dataSnapshot.getChildren())
                     {
-                        Turma t = dataTurma.getValue(Turma.class);
-                        t.setUid(dataTurma.getKey());
+                        String tuid = dataTurma.getKey();
+                        FirebaseDatabase.getInstance().getReference()
+                            .child("turmas")
+                            .equalTo(tuid)
+                        .addListenerForSingleValueEvent(new ValueEventListener()
+                        {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshotTurma)
+                            {
+                                if (dataSnapshotTurma.exists())
+                                {
+                                    Turma t = dataSnapshotTurma.getValue(Turma.class);
+                                    t.setUid(dataSnapshotTurma.getKey());
 
-                        turmaAdapter.add(t);
+                                    turmaAdapter.add(t);
+                                    Log.d(TAG, t.getNome());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
 
                     sadFace.setVisibility(View.GONE);
