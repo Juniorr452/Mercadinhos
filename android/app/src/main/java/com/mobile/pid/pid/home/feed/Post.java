@@ -8,9 +8,16 @@ public class Post {
 
     private String user;
     private String text;
+    private String uid;
 
-    public Post(String user, String text) {
+    public Post(String uid, String user, String text) {
+        this.uid = uid;
         this.user = user;
+        this.text = text;
+    }
+
+    public Post(String uid, String text) {
+        this.uid = uid;
         this.text = text;
     }
 
@@ -19,4 +26,21 @@ public class Post {
     }
 
     public String getText() { return text; }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }
