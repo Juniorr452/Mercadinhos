@@ -14,11 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
@@ -60,16 +59,13 @@ public class DetalhesTurma extends AppCompatActivity
         // Pegar os dados
         turma = i.getParcelableExtra("turma");
         USUARIO = (int) i.getExtras().get("usuario");
-        FirebaseUser usuarioLogado = FirebaseAuth.getInstance().getCurrentUser();
 
         switch (USUARIO) {
             case PROFESSOR:
                 editarTurma.setVisibility(View.VISIBLE);
-                //Glide.with(this).load(usuarioLogado.getPhotoUrl()).into(imgProfessor);
                 break;
             case ALUNO:
                 editarTurma.setVisibility(View.GONE);
-                //Glide.with(this).load(turma.getProfessor().getFotoUrl()).into(imgProfessor);
                 break;
             default:
                 break;
@@ -91,10 +87,10 @@ public class DetalhesTurma extends AppCompatActivity
 
 
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
-
+        Glide.with(this).load(turma.getProfessores().get(0).getFotoUrl()).into(imgProfessor);
 
         nomeTurma.setText(turma.getNome());
-        //qtdProfessores.setText(turma.getQtdProfessores());
+        qtdProfessores.setText(turma.getQtdProfessores());
         qtdAlunos.setText(turma.getQtdAlunos());
 
         detalhesViewPager.setAdapter(detalhesPageAdapter);
