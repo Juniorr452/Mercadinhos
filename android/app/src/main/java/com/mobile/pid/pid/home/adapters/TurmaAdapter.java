@@ -135,6 +135,12 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         listaTurmas.add(0, t);
     }
 
+    public void clear()
+    {
+        listaTurmas.clear();
+        notifyDataSetChanged();
+    }
+
     public List<Turma> getLista() { return listaTurmas; }
 
     @Override

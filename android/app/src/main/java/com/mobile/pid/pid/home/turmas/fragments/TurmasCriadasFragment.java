@@ -83,7 +83,7 @@ public class TurmasCriadasFragment extends Fragment
                 if (dataSnapshot.exists())
                 {
                     recyclerView.getRecycledViewPool().clear();
-                    turmaAdapter.notifyDataSetChanged();
+                    turmaAdapter.clear();
 
                     for(DataSnapshot dataTurma : dataSnapshot.getChildren())
                     {
