@@ -64,13 +64,11 @@ public class PostsFragment extends Fragment {
                 Post post = dataSnapshot.getValue(Post.class);
                 post.setUid(dataSnapshot.getKey());
                 postAdapter.add(post);
-
-                postAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                postAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -98,11 +96,14 @@ public class PostsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_perfil);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView = view.findViewById(R.id.recycler_view_perfil);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setReverseLayout(true);
+        recyclerView.setLayoutManager(mLayoutManager);
+        mLayoutManager.setStackFromEnd(true);
 
         recyclerView.setAdapter(postAdapter);
-
 
         return view;
     }

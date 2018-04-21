@@ -34,13 +34,9 @@ public class CurtidasPerfilFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_curtidas_perfil, container, false);
 
-        posts = new ArrayList<Post>();
-
-        posts.add(new Post("jonas", "teste"));
-
-        recyclerView_turmas_perfil = (RecyclerView) view.findViewById(R.id.recyclerView_turmas_perfil);
-        recyclerView_turmas_perfil.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView_turmas_perfil.setAdapter(new PostAdapter(getActivity(), posts));
+        //recyclerView_turmas_perfil = (RecyclerView) view.findViewById(R.id.recyclerView_turmas_perfil);
+        //recyclerView_turmas_perfil.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //recyclerView_turmas_perfil.setAdapter(new PostAdapter(getActivity(), posts));
 
         return view;
     }

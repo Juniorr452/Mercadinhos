@@ -95,4 +95,5 @@
     <string name="limit_chars_post">200</string>
     <string name="_0_limit">0/200</string>
     <string name="postar">Postar</string>
+    <string name="postTime">Hora da postagem</string>
 </resources>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -27,10 +28,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -65,11 +73,13 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        postsRef = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
-        postsChildListener = new ChildEventListener() {
+        Query query = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey();
+
+        query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 recyclerView.getRecycledViewPool().clear();
+                recyclerView.setItemViewCacheSize(0);
                 postAdapter.notifyDataSetChanged();
 
                 Post post = dataSnapshot.getValue(Post.class);
@@ -79,7 +89,7 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                postAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -96,9 +106,7 @@ public class FeedFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
-
-        postsRef.addChildEventListener(postsChildListener);
+        });
     }
 
     @Override
@@ -108,6 +116,7 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         criarPost = view.findViewById(R.id.fab_add_post);
+
         criarPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,8 +124,12 @@ public class FeedFragment extends Fragment {
             }
         });
 
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
         recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(mLayoutManager);
 
         recyclerView.setAdapter(postAdapter);
 
@@ -141,12 +154,29 @@ public class FeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid());
-                Post post = new Post(usuario.getUid(), usuario.getDisplayName(), usuario.getPhotoUrl().toString(),edit_post.getText().toString());
-                String postUid = db.child("posts").push().getKey();
-                db.child("posts").child(postUid).setValue(post);
+                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
+                final Post post = new Post(usuario.getUid(),
+                                     usuario.getDisplayName(),
+                                     usuario.getPhotoUrl().toString(),
+                                     edit_post.getText().toString(),
+                                    calcularData());
 
-                dialog.dismiss();
+                db.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        post.setUid(String.valueOf(dataSnapshot.getChildrenCount()));
+                        db.child(post.getUid()).setValue(post);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
         });
 
@@ -181,5 +211,13 @@ public class FeedFragment extends Fragment {
         };
 
         edit_post.addTextChangedListener(textWatcher);
+    }
+
+    private String calcularData() {
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        return sdf.format(c.getTime());
     }
 }
