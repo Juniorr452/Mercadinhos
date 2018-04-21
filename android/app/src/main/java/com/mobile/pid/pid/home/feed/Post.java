@@ -9,6 +9,8 @@ public class Post {
     private String user;
     private String text;
     private String uid;
+    
+    public Post() {}
 
     public Post(String uid, String user, String text) {
         this.uid = uid;
