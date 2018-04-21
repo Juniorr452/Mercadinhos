@@ -51,7 +51,9 @@ public class BuscarFragment extends Fragment
         turmasChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                turmaAdapter.add(dataSnapshot.getValue(Turma.class));
+                Turma t = dataSnapshot.getValue(Turma.class);
+                t.setUid(dataSnapshot.getKey());
+                turmaAdapter.add(t);
                 turmaAdapter.notifyDataSetChanged();
             }
 

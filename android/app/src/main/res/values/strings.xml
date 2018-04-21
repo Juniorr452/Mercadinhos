@@ -90,4 +90,9 @@
     <string name="Ok">Ok</string>
     <string name="preencha_nome_turma">Preencha o nome da turma</string>
     <string name="Preencha_dia_semana">Selecione pelo menos um dia da semana</string>
+    <string name="novo_post">Novo Post</string>
+    <string name="caracteres">Caracteres:</string>
+    <string name="limit_chars_post">200</string>
+    <string name="_0_limit">0/200</string>
+    <string name="postar">Postar</string>
 </resources>
