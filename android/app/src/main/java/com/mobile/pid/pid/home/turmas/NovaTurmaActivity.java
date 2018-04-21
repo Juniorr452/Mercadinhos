@@ -118,19 +118,25 @@ public class NovaTurmaActivity extends AppCompatActivity
             {
                 String nomeImagem = imagemUri.getLastPathSegment();
                 StorageReference capaReference = turmasStorageReference.child(turmaId).child(nomeImagem);
-                capaReference.putFile(imagemUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                capaReference.putFile(imagemUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>()
+                {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                     {
                         String capaUrl = taskSnapshot.getDownloadUrl().toString();
-                        Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getPhotoUrl().toString(), user.getDisplayName(), diasDaSemana);
+
+                        InfoUsuario professor = new InfoUsuario(user.getUid() ,user.getDisplayName(), user.getPhotoUrl().toString());
+                        Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, professor, diasDaSemana);
+
                         cadastrarTurma(novaTurma, turmaId);
                     }
                 });
             }
             else // Se não tiver imagem, já pega a URL de capa padrão
             {
-                Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, user.getPhotoUrl().toString(), user.getDisplayName(), diasDaSemana);
+                InfoUsuario professor = new InfoUsuario(user.getUid() ,user.getDisplayName(), user.getPhotoUrl().toString());
+                Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, professor, diasDaSemana);
+
                 cadastrarTurma(novaTurma, turmaId);
             }
         }
@@ -156,15 +162,17 @@ public class NovaTurmaActivity extends AppCompatActivity
         // Cadastrar a turma
         turmasDatabaseReference.child(turmaId).setValue(t);
 
-        // Cadastrar a turma criada dentro do usuário
-        DatabaseReference usuarioTurmaDbRef = usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId);
+        // Cadastrar referência da turma criada no professor
+        usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId).setValue(true);
+
+        /*DatabaseReference usuarioTurmaDbRef = usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId);
 
         String nomeTurma   = t.getNome();
         String fotoCapaUrl = t.getCapaUrl();
 
         usuarioTurmaDbRef.child("nome").setValue(nomeTurma);
         usuarioTurmaDbRef.child("capaUrl").setValue(fotoCapaUrl);
-        usuarioTurmaDbRef.child("diasDaSemana").setValue(diasDaSemana);
+        usuarioTurmaDbRef.child("diasDaSemana").setValue(diasDaSemana);*/
 
         Toast.makeText(this, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
         finish();
@@ -218,7 +226,6 @@ public class NovaTurmaActivity extends AppCompatActivity
             diasDaSemana.remove(nomeDia);
     }
 
-    // TODO: Validação
     private void validarCampos(String nomeTurma) throws NoSuchFieldException
     {
         if (nomeTurma == null || nomeTurma.equals(""))

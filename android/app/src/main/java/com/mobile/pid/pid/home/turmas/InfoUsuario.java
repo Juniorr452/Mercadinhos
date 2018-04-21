@@ -3,21 +3,30 @@ package com.mobile.pid.pid.home.turmas;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by junio on 07/03/2018.
  */
 
 // Informação do usuário (Nome e Foto) nesse tipo: https://qph.fs.quoracdn.net/main-qimg-c4c82ebf15b46df728e39f2a0149b9ad
-public class InfoUsuario implements Parcelable {
+public class InfoUsuario implements Parcelable
+{
+    private String uid;
     private String nome;
     private String fotoUrl;
 
     public InfoUsuario() {}
 
-    public InfoUsuario(String nome, String fotoUrl)
+    public InfoUsuario(String uid, String nome, String fotoUrl)
     {
-        this.nome = nome;
+        this.uid     = uid;
+        this.nome    = nome;
         this.fotoUrl = fotoUrl;
+    }
+
+    public String getUid(){
+        return uid;
     }
 
     public String getNome() {
@@ -36,6 +45,10 @@ public class InfoUsuario implements Parcelable {
         this.fotoUrl = fotoUrl;
     }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -45,11 +58,13 @@ public class InfoUsuario implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.nome);
         dest.writeString(this.fotoUrl);
+        dest.writeString(this.uid);
     }
 
     protected InfoUsuario(Parcel in) {
         this.nome = in.readString();
         this.fotoUrl = in.readString();
+        this.uid = in.readString();
     }
 
     public static final Parcelable.Creator<InfoUsuario> CREATOR = new Parcelable.Creator<InfoUsuario>() {

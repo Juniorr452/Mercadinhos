@@ -1,7 +1,9 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.turmas.InfoUsuario;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 
@@ -30,6 +33,7 @@ import java.util.Map;
 // TODO: Estudar essa p**** direito
 public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHolder>
 {
+
     private static final int COD_TURMAS_MATRICULADAS = 0;
     private static final int COD_TURMAS_CRIADAS = 1;
     private static final int PROFESSOR = 0;
@@ -62,13 +66,56 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     @Override
     public void onBindViewHolder(TurmaViewHolder holder, final int position)
     {
-        Turma t = listaTurmas.get(position);
+        final Turma t = listaTurmas.get(position);
 
         Glide.with(holder.capa.getContext())
                 .load(t.getCapaUrl())
                 .into(holder.capa);
 
         holder.nome.setText(t.getNome());
+
+        holder.opcoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(layoutInflater.getContext())
+                    .setTitle("Excluir a turma?")
+                    .setMessage("Deseja realmente excluir a turma?")
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i)
+                        {
+                            DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
+                            DatabaseReference usuariosRef = rootRef.child("usuarios");
+                            String tuid = t.getUid();
+
+                            // Deletar turma.
+                            rootRef.child("turmas")
+                                .child(tuid)
+                                .removeValue();
+
+                            // Deletar no turmas_criadas do professor.
+                            usuariosRef.child(t.getProfessor().getUid())
+                                .child("turmas_criadas")
+                                .child(tuid)
+                                .removeValue();
+
+                            // Deletar no turmas_matriculadas dos alunos.
+                            /*for(InfoUsuario a : t.getAlunos())
+                                usuariosRef.child(a.getUid())
+                                    .child("turmas_matriculadas")
+                                    .child(tuid)
+                                    .removeValue();*/
+                        }
+                    })
+                    .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .show();
+            }
+        });
 
         // DIAS DA SEMANA
         Map<String, Integer> dias = t.getDiasDaSemana();
@@ -88,6 +135,12 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         listaTurmas.add(0, t);
     }
 
+    public void clear()
+    {
+        listaTurmas.clear();
+        notifyDataSetChanged();
+    }
+
     public List<Turma> getLista() { return listaTurmas; }
 
     @Override
@@ -98,6 +151,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     public class TurmaViewHolder extends RecyclerView.ViewHolder //implements View.OnClickListener, View.OnLongClickListener
     {
         public ImageView capa;
+        public ImageView opcoes;
         public TextView  nome;
         public TextView  dia;
 
@@ -105,9 +159,10 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         {
             super(itemView);
 
-            capa = itemView.findViewById(R.id.turma_capa);
-            nome = itemView.findViewById(R.id.turma_nome);
-            dia  = itemView.findViewById(R.id.turma_dia);
+            capa   = itemView.findViewById(R.id.turma_capa);
+            opcoes = itemView.findViewById(R.id.turma_opcoes);
+            nome   = itemView.findViewById(R.id.turma_nome);
+            dia    = itemView.findViewById(R.id.turma_dia);
 
             itemView.setOnClickListener(new View.OnClickListener()
             {
@@ -116,36 +171,23 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 {
 
                     Turma  t = listaTurmas.get(getPosition());
+                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
 
-                    FirebaseDatabase.getInstance().getReference("turmas").child(t.getUid())
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Turma t_db = dataSnapshot.getValue(Turma.class);
+                    i.putExtra("turma", t);
 
-                                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+                    switch(COD_CONTEXT)
+                    {
+                        case COD_TURMAS_CRIADAS:
+                            i.putExtra("usuario", PROFESSOR);
+                            break;
+                        case COD_TURMAS_MATRICULADAS:
+                            i.putExtra("usuario", ALUNO);
+                            break;
+                        default:
+                            break;
+                    }
 
-                                    i.putExtra("turma", t_db);
-
-                                    switch(COD_CONTEXT) {
-                                        case COD_TURMAS_CRIADAS:
-                                            i.putExtra("usuario", PROFESSOR);
-                                            break;
-                                        case COD_TURMAS_MATRICULADAS:
-                                            i.putExtra("usuario", ALUNO);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-
-                                    layoutInflater.getContext().startActivity(i);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
+                    layoutInflater.getContext().startActivity(i);
                 }
             });
         }

@@ -85,18 +85,16 @@ public class DetalhesTurma extends AppCompatActivity
         qtdProfessores = findViewById(R.id.qtd_professor);
         qtdAlunos      = findViewById(R.id.qtd_aluno);
 
-
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
-        Glide.with(this).load(turma.getProfessores().get(0).getFotoUrl()).into(imgProfessor);
+        Glide.with(this).load(turma.getProfessor().getFotoUrl()).into(imgProfessor);
 
         nomeTurma.setText(turma.getNome());
-        qtdProfessores.setText(turma.getQtdProfessores());
         qtdAlunos.setText(turma.getQtdAlunos());
 
         detalhesViewPager.setAdapter(detalhesPageAdapter);
         turmasTabLayout.setupWithViewPager(detalhesViewPager);
-    }/*
-
+    }
+    /*
     private class DetalheTurmasPagerAdapter extends PagerAdapter {
 
         @Override
