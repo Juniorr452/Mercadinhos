@@ -44,7 +44,9 @@
         android:layout_height="545dp"
         android:layout_below="@+id/toolbar2"
         android:layout_gravity="bottom"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false">
 
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

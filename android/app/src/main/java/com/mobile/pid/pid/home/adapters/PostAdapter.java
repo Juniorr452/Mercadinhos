@@ -1,6 +1,7 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,9 +11,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.Post;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -39,9 +42,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
 
         Post p = posts.get(position);
-
         holder.usuario.setText(p.getUser());
-        holder.texto.setText(p.getText());
+        holder.texto.setText(p.getTexto());
+        Glide.with(holder.foto.getContext())
+                .load(p.getPhotoUrl())
+                .into(holder.foto);
     }
 
     @Override
@@ -51,7 +56,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     public void add(Post post) {
         this.posts.add(post);
+        notifyDataSetChanged();
     }
+
+    public void clear() {this.posts.clear();}
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -68,7 +76,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
             foto       = itemView.findViewById(R.id.icon_user_feed);
             usuario    = itemView.findViewById(R.id.tv_user_feed);
-            texto = itemView.findViewById(R.id.tv_message_feed);
+            texto      = itemView.findViewById(R.id.tv_message_feed);
 
         }
     }

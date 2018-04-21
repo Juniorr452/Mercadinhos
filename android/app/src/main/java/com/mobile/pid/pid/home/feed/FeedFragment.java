@@ -44,7 +44,13 @@ public class FeedFragment extends Fragment {
     private FloatingActionButton criarPost;
     private TextView countChars;
     private EditText edit_post;
+    private RecyclerView recyclerView;
+
     private FirebaseUser usuario;
+    private DatabaseReference postsRef;
+    private ChildEventListener postsChildListener;
+
+    private PostAdapter postAdapter;
 
 
     public FeedFragment() {
@@ -54,6 +60,45 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        posts = new ArrayList<>();
+        postAdapter = new PostAdapter(getActivity(), posts);
+        usuario = FirebaseAuth.getInstance().getCurrentUser();
+
+        postsRef = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
+        postsChildListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                recyclerView.getRecycledViewPool().clear();
+                postAdapter.notifyDataSetChanged();
+
+                Post post = dataSnapshot.getValue(Post.class);
+                post.setUid(dataSnapshot.getKey());
+                postAdapter.add(post);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                postAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        postsRef.addChildEventListener(postsChildListener);
     }
 
     @Override
@@ -61,12 +106,6 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-
-        // Firebase
-        usuario = FirebaseAuth.getInstance().getCurrentUser();
-
-        posts = new ArrayList<>();
-        final PostAdapter postAdapter = new PostAdapter(getActivity(), posts);
 
         criarPost = view.findViewById(R.id.fab_add_post);
         criarPost.setOnClickListener(new View.OnClickListener() {
@@ -76,49 +115,10 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        final RecyclerView recycler_view = view.findViewById(R.id.recycler_view);
-        recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts")
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        if(dataSnapshot.exists()) {
-                            recycler_view.getRecycledViewPool().clear();
-                            postAdapter.notifyDataSetChanged();
-
-                            for(DataSnapshot snap : dataSnapshot.getChildren()) {
-                                Post post = snap.getValue(Post.class);
-                                post.setUid(snap.getKey());
-                                postAdapter.add(post);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        postAdapter.notifyDataSetChanged();
-
-        recycler_view.setAdapter(postAdapter);
+        recyclerView.setAdapter(postAdapter);
 
         return view;
 
@@ -142,10 +142,9 @@ public class FeedFragment extends Fragment {
             public void onClick(View view) {
 
                 DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid());
-                Post post = new Post(usuario.getUid(), usuario.getDisplayName() ,edit_post.getText().toString());
+                Post post = new Post(usuario.getUid(), usuario.getDisplayName(), usuario.getPhotoUrl().toString(),edit_post.getText().toString());
                 String postUid = db.child("posts").push().getKey();
-                db.child("posts").child(postUid).child("texto").setValue(post.getText());
-                db.child("posts").child(postUid).child("user").setValue(post.getUser());
+                db.child("posts").child(postUid).setValue(post);
 
                 dialog.dismiss();
             }

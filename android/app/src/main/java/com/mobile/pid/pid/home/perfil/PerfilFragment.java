@@ -26,8 +26,13 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.Post;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
@@ -68,10 +73,20 @@ public class PerfilFragment extends Fragment
 
     private TextView count_followers;
     private TextView count_following;
+    private TextView count_posts;
 
 
     public PerfilFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        user_id = user.getUid();
     }
 
     @Override
@@ -92,9 +107,6 @@ public class PerfilFragment extends Fragment
         view = inflater.inflate(R.layout.fragment_perfil, container ,false);
 
         // FIREBASEEEE
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        user_id = user.getUid();
 
         pageAdapter_perfil   = new PerfilPageAdapter(getChildFragmentManager());
         viewPager_perfil     = (ViewPager) view.findViewById(R.id.viewpager_perfil);
@@ -104,6 +116,23 @@ public class PerfilFragment extends Fragment
         fab_menu             = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
         fab_menu_edit        = (FloatingActionButton) view.findViewById(R.id.fab_menu_edit);
         fab_menu_signout     = (FloatingActionButton) view.findViewById(R.id.fab_menu_signout);
+        count_followers      = view.findViewById(R.id.count_followers);
+        count_following      = view.findViewById(R.id.count_following);
+        count_posts          = view.findViewById(R.id.count_posts);
+
+        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("posts")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                            count_posts.setText(formatNumber(dataSnapshot.getChildrenCount()));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
         viewPager_perfil.setAdapter(pageAdapter_perfil);
         tabLayout_perfil.setupWithViewPager(viewPager_perfil);
@@ -155,6 +184,19 @@ public class PerfilFragment extends Fragment
         });
 
         return view;
+    }
+
+    private String formatNumber(long number) {
+
+        String numberString = "";
+        if (Math.abs(number / 1000000) > 1)
+            numberString = String.valueOf(number / 1000000).toString() + "M";
+        else if (Math.abs(number / 1000) > 1)
+            numberString = String.valueOf(number / 1000).toString() + "K";
+        else
+            numberString = String.valueOf(number);
+
+        return numberString;
     }
 
     private class PerfilPageAdapter extends FragmentPagerAdapter
