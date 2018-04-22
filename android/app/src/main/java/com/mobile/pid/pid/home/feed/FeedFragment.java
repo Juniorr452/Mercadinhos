@@ -150,20 +150,22 @@ public class FeedFragment extends Fragment {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#737373"));
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View view)
+            {
                 final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
                 final Post post = new Post(usuario.getUid(),
-                                     usuario.getDisplayName(),
-                                     usuario.getPhotoUrl().toString(),
-                                     edit_post.getText().toString(),
-                                    calcularData());
+                     usuario.getDisplayName(),
+                     usuario.getPhotoUrl().toString(),
+                     edit_post.getText().toString());
 
-                db.addListenerForSingleValueEvent(new ValueEventListener() {
+                db.addListenerForSingleValueEvent(new ValueEventListener()
+                {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
 
                         post.setUid(String.valueOf(dataSnapshot.getChildrenCount()));
                         db.child(post.getUid()).setValue(post);
@@ -175,22 +177,22 @@ public class FeedFragment extends Fragment {
 
                     }
                 });
-
-
             }
         });
 
         countChars = mView.findViewById(R.id.count_chars);
         edit_post = mView.findViewById(R.id.edit_post);
 
-        final TextWatcher textWatcher = new TextWatcher() {
+        final TextWatcher textWatcher = new TextWatcher()
+        {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int i, int i1, int i2)
+            {
                 if(s.length() <= 200 && s.length() > 0) {
                     countChars.setTextColor(getResources().getColor(R.color.gray_font));
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);

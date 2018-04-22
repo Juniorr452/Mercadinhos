@@ -51,7 +51,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         Post p = posts.get(position);
         holder.usuario.setText(p.getUser());
 
-        holder.postTime.setText(calcularTempo(p.getPostData()));
+        //holder.postTime.setText(calcularTempo(p.getPostData()));
+        holder.postTime.setText(p.getPostDataFormatado());
 
         holder.texto.setText(p.getTexto());
         Glide.with(holder.foto.getContext())
