@@ -36,7 +36,6 @@
             android:text="Mensagem"/>
     </LinearLayout>
 
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/chat_msg_usuario_imagem"
         android:layout_width="48dp"
