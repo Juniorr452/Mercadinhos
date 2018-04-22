@@ -1,5 +1,9 @@
 package com.mobile.pid.pid.home.feed;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 /**
@@ -12,18 +16,25 @@ public class Post {
     private String user;
     private String texto;
     private String uid;
-    private String postData;
+    private Long postData;
 
     public Post() {
 
     }
 
-    public Post(String uid, String user, String photoUrl, String text, String postData) {
+    /*public Post(String uid, String user, String photoUrl, String text, Map<String, String> postData) {
         this.uid = uid;
         this.user = user;
         this.photoUrl = photoUrl;
         this.texto = text;
         this.postData = postData;
+    }*/
+
+    public Post(String uid, String user, String photoUrl, String text) {
+        this.uid = uid;
+        this.user = user;
+        this.photoUrl = photoUrl;
+        this.texto = text;
     }
 
     public Post(String uid, String text) {
@@ -63,11 +74,21 @@ public class Post {
         this.photoUrl = photoUrl;
     }
 
-    public String getPostData() {
+    @Exclude
+    public String getPostDataFormatado() {
+        return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(postData);
+    }
+
+    @Exclude
+    public Long getPostDataLong() {
         return postData;
     }
 
-    public void setPostData(String postData) {
+    public Map<String, String> getPostData() {
+        return ServerValue.TIMESTAMP;
+    }
+
+    public void setPostData(Long postData) {
         this.postData = postData;
     }
 }
