@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ll_chat_msg"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:padding="8dp">
+
+    <!-- https://stackoverflow.com/questions/47977796/what-is-the-best-way-to-create-a-circular-imageview -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chat_msg_usuario_imagem_outro"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/logo"
+        android:layout_marginRight="8dp"/>
+
+    <LinearLayout
+        android:id="@+id/ll_chat_msg_conteudo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:backgroundTint="@color/white"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/border_chat_mensagem"
+        android:layout_gravity="center">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/chat_msg_texto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Mensagem"/>
+    </LinearLayout>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chat_msg_usuario_imagem"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/logo"
+        android:layout_marginLeft="8dp"/>
+</LinearLayout>
