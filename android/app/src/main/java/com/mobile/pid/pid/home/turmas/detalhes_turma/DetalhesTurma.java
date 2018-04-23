@@ -133,7 +133,14 @@ public class DetalhesTurma extends AppCompatActivity
             switch(position)
             {
                 case 0:
-                    return new ChatsFragment();
+                    Bundle b = new Bundle();
+                    b.putString("tid", turma.getUid());
+
+                    Fragment chatsFragment = new ChatsFragment();
+                    chatsFragment.setArguments(b);
+
+                    return chatsFragment;
+
                 case 1:
                     return new TrabalhosFragment();
                 case 2:

@@ -60,13 +60,13 @@ public class FeedFragment extends Fragment {
 
     private PostAdapter postAdapter;
 
-
     public FeedFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         posts = new ArrayList<>();

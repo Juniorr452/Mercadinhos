@@ -96,4 +96,6 @@
     <string name="_0_limit">0/200</string>
     <string name="postar">Postar</string>
     <string name="postTime">Hora da postagem</string>
+    <string name="sad_message_chats">Não encontramos nenhum chat</string>
+    <string name="new_chat">Criar Chat</string>
 </resources>
