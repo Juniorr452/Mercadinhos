@@ -1,15 +1,12 @@
 package com.mobile.pid.pid.home.feed;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -19,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,16 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -83,7 +75,7 @@ public class FeedFragment extends Fragment {
                 postAdapter.notifyDataSetChanged();
 
                 Post post = dataSnapshot.getValue(Post.class);
-                post.setUid(dataSnapshot.getKey());
+                post.setId(dataSnapshot.getKey());
                 postAdapter.add(post);
             }
 
@@ -156,27 +148,14 @@ public class FeedFragment extends Fragment {
             public void onClick(View view)
             {
                 final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
-                final Post post = new Post(usuario.getUid(),
-                     usuario.getDisplayName(),
-                     usuario.getPhotoUrl().toString(),
-                     edit_post.getText().toString());
+                final Post post = new Post(null,
+                                           usuario.getDisplayName(),
+                                           usuario.getPhotoUrl().toString(),
+                                           edit_post.getText().toString());
 
-                db.addListenerForSingleValueEvent(new ValueEventListener()
-                {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-
-                        post.setUid(String.valueOf(dataSnapshot.getChildrenCount()));
-                        db.child(post.getUid()).setValue(post);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                post.setId(db.push().getKey());
+                db.child(post.getId()).setValue(post);
+                dialog.dismiss();
             }
         });
 

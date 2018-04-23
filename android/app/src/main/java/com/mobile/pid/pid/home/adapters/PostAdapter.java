@@ -1,6 +1,8 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -14,6 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.Post;
 
@@ -46,10 +54,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position)
+    public void onBindViewHolder(final RecyclerViewHolder holder, int position)
     {
 
-        Post p = posts.get(position);
+        final Post p = posts.get(position);
+        final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         holder.usuario.setText(p.getUser());
 
         try
@@ -61,12 +70,69 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             e.printStackTrace();
         }
 
-        //holder.postTime.setText(p.getPostDataFormatado());
-
         holder.texto.setText(p.getTexto());
         Glide.with(holder.foto.getContext())
                 .load(p.getPhotoUrl())
                 .into(holder.foto);
+
+        // QUANDO CLICAR NO BOTÃO DE CURTIR
+        holder.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.like.getTag().equals("unlike")) {
+
+                    holder.like.setBackgroundResource(R.drawable.icon_like);
+                    holder.like.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
+                    holder.like.setTag("like");
+
+                    // SALVA NOS POSTS DO BANCO, ADICIONANDO UMA CURTIDA
+                    FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
+                            .child("likes").child(usuario).setValue(true);
+
+                    // SALVAR NOS POSTS CURTIDOS DO USUARIO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                            .child(p.getId()).setValue(p);
+                } else {
+                    holder.like.setBackgroundResource(R.drawable.icon_unlike);
+                    holder.like.setBackgroundTintList(context.getResources().getColorStateList(R.color.gray_font));
+                    holder.like.setTag("unlike");
+
+                    FirebaseDatabase.getInstance().getReference("posts").child(p.getId())
+                            .child("likes").child(usuario).removeValue();
+
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                            .child(p.getId()).removeValue();
+                }
+
+            }
+        });
+
+        FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
+                .child("likes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // CASO O CONTADOR DE CURTIDAS DO POST SEJA ZERO, ELE NAO MOSTRA O CONTADOR
+                if(dataSnapshot.getChildrenCount() == 0)
+                    holder.countLike.setVisibility(View.INVISIBLE);
+                else {
+                    holder.countLike.setVisibility(View.VISIBLE);
+                    holder.countLike.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                }
+
+                // MOSTRA NO FEED O POST CURTIDO CASO O USUARIO TENHA CURTIDO ANTERIORMENTE
+                if(dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    holder.like.setBackgroundResource(R.drawable.icon_like);
+                    holder.like.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
+                    holder.like.setTag("like");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public String calcularTempo(String data) throws ParseException
@@ -114,6 +180,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         private TextView usuario;
         private TextView texto;
         private TextView postTime;
+        private ImageView like;
+        private TextView countLike;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -126,6 +194,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             usuario    = itemView.findViewById(R.id.tv_user_feed);
             texto      = itemView.findViewById(R.id.tv_message_feed);
             postTime   = itemView.findViewById(R.id.postTime);
+            like       = itemView.findViewById(R.id.btn_like);
+            countLike  = itemView.findViewById(R.id.count_like);
 
         }
     }

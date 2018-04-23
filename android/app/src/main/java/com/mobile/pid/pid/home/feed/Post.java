@@ -15,30 +15,30 @@ public class Post {
     private String photoUrl;
     private String user;
     private String texto;
-    private String uid;
+    private String id;
     private Long postData;
 
     public Post() {
 
     }
 
-    /*public Post(String uid, String user, String photoUrl, String text, Map<String, String> postData) {
-        this.uid = uid;
+    /*public Post(String id, String user, String photoUrl, String text, Map<String, String> postData) {
+        this.id = id;
         this.user = user;
         this.photoUrl = photoUrl;
         this.texto = text;
         this.postData = postData;
     }*/
 
-    public Post(String uid, String user, String photoUrl, String text) {
-        this.uid = uid;
+    public Post(String id, String user, String photoUrl, String text) {
+        this.id = id;
         this.user = user;
         this.photoUrl = photoUrl;
         this.texto = text;
     }
 
-    public Post(String uid, String text) {
-        this.uid = uid;
+    public Post(String id, String text) {
+        this.id = id;
         this.texto = text;
     }
 
@@ -58,12 +58,14 @@ public class Post {
         this.texto = text;
     }
 
-    public String getUid() {
-        return uid;
+    @Exclude
+    public String getId() {
+        return id;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    @Exclude
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPhotoUrl() {

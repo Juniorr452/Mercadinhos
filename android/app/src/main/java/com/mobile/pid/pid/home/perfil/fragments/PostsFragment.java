@@ -3,15 +3,12 @@ package com.mobile.pid.pid.home.perfil.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,7 +59,7 @@ public class PostsFragment extends Fragment {
                 postAdapter.notifyDataSetChanged();
 
                 Post post = dataSnapshot.getValue(Post.class);
-                post.setUid(dataSnapshot.getKey());
+                post.setId(dataSnapshot.getKey());
                 postAdapter.add(post);
             }
 
