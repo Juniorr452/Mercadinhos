@@ -26,7 +26,6 @@ import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment
 
 public class DetalhesTurma extends AppCompatActivity
 {
-
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
@@ -134,7 +133,8 @@ public class DetalhesTurma extends AppCompatActivity
             {
                 case 0:
                     Bundle b = new Bundle();
-                    b.putString("tid", turma.getUid());
+                    b.putParcelable("turma", turma);
+                    b.putInt("usuario", USUARIO);
 
                     Fragment chatsFragment = new ChatsFragment();
                     chatsFragment.setArguments(b);

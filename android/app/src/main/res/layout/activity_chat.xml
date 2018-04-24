@@ -29,15 +29,6 @@
             app:titleTextColor="@color/white"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimaryDark">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nome do chat"
-                android:textSize="18dp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:layout_marginRight="70dp"/>
         </android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.RecyclerView
@@ -55,8 +46,11 @@
             android:background="@color/white"
             android:padding="16dp">
             <ImageButton
+                android:id="@+id/chat_adicionar_arquivo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 android:background="@drawable/ic_add_black"
                 android:layout_gravity="center"
                 android:layout_marginRight="16dp"/>
@@ -68,11 +62,15 @@
                 android:textSize="16sp"
                 android:layout_weight="1"/>
             <ImageButton
+                android:id="@+id/chat_enviar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 android:background="@drawable/ic_enviar"
                 android:layout_gravity="center"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:onClick="enviar"/>
         </LinearLayout>
     </LinearLayout>
 

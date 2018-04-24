@@ -27,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -109,9 +110,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
         usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
 
-        usuarioDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        usuarioDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 Usuario user_logado = dataSnapshot.getValue(Usuario.class);
                 sexo = user_logado.getSexo();
                 dataNasc = user_logado.getDataNascimento();
@@ -141,7 +144,12 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         });
 
         // adiciona a foto com efeito embaçado
-        Glide.with(this).load(user.getPhotoUrl()).override(20,20).error(android.R.drawable.dark_header).into(imageView_user_blur);
+        Glide.with(this).load(user.getPhotoUrl())
+                .apply(new RequestOptions()
+                        .override(20,20)
+                        .error(android.R.drawable.dark_header))
+                .into(imageView_user_blur);
+
         Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
 
         imageView_user.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +201,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                     imagemUri = data.getData();
 
                     Glide.with(this).load(imagemUri).into(imageView_user);
-                    Glide.with(this).load(imagemUri).override(20,20).error(android.R.drawable.dark_header).into(imageView_user_blur);
+                    Glide.with(this).load(imagemUri)
+                            .apply(new RequestOptions()
+                                    .override(20, 20)
+                                    .error(android.R.drawable.dark_header))
+                            .into(imageView_user_blur);
                     break;
             }
         }
@@ -277,7 +289,6 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
         if (imagemUri != null)
             dadosPAtt = dadosPAtt.setPhotoUri(imagemUri);
-
 
         user.updateProfile(dadosPAtt.build()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

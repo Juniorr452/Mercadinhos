@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.Chat;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.ChatActivity;
+import com.mobile.pid.pid.login.Usuario;
 
 import java.util.List;
 
@@ -19,11 +21,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
     private Context ctx;
     private LayoutInflater layoutInflater;
     private List<Chat> chats;
+    private Turma t;
+    private int usuario;
 
-    public ChatsAdapter(Context c, List<Chat> chats)
+    public ChatsAdapter(Context c, List<Chat> chats, Turma t, int usuario)
     {
-        this.ctx   = c;
-        this.chats = chats;
+        this.ctx       = c;
+        this.chats     = chats;
+        this.usuario   = usuario;
         layoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -49,7 +54,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
             {
                 // TODO: Intent chat
                 Intent i = new Intent(ctx, ChatActivity.class);
-                i.putExtra("chat", c);
+                i.putExtra("turma",   t);
+                i.putExtra("chat",    c);
+                i.putExtra("usuario", usuario);
+
                 ctx.startActivity(i);
             }
         });

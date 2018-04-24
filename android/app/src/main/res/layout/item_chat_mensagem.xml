@@ -7,7 +7,7 @@
     android:padding="8dp">
 
     <!-- https://stackoverflow.com/questions/47977796/what-is-the-best-way-to-create-a-circular-imageview -->
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/chat_msg_usuario_imagem_outro"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -25,6 +25,7 @@
         android:background="@drawable/border_chat_mensagem"
         android:layout_gravity="center">
         <ImageView
+            android:id="@+id/chat_msg_imagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -36,7 +37,7 @@
             android:text="Mensagem"/>
     </LinearLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/chat_msg_usuario_imagem"
         android:layout_width="48dp"
         android:layout_height="48dp"

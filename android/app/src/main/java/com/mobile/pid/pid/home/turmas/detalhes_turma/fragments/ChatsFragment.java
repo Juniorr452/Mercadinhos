@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.ChatsAdapter;
+import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.Chat;
 
 import java.util.ArrayList;
@@ -35,8 +36,7 @@ public class ChatsFragment extends Fragment
 {
     private static final String TAG = "ChatsFragment";
 
-    // ID da turma
-    String tid;
+    private Turma turma;
 
     private ProgressBar progressBar;
     private FrameLayout conteudo;
@@ -114,11 +114,12 @@ public class ChatsFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        tid          = getArguments().getString("tid");
-        chatsAdapter = new ChatsAdapter(getActivity(), new ArrayList<Chat>());
+        turma        = getArguments().getParcelable("turma");
+        int usuario  = getArguments().getInt("usuario");
+        chatsAdapter = new ChatsAdapter(getActivity(), new ArrayList<Chat>(), turma, usuario);
         chatsRef     = FirebaseDatabase.getInstance().getReference()
                         .child("turmas")
-                        .child(tid)
+                        .child(turma.getUid())
                         .child("chats");
 
         chatsRef.addValueEventListener(new ValueEventListener()

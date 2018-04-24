@@ -1,14 +1,152 @@
 package com.mobile.pid.pid.home.turmas.detalhes_turma.chat;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.adapters.ChatMensagemAdapter;
+import com.mobile.pid.pid.home.turmas.Turma;
+
+import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity
 {
-    protected void onCreate(Bundle savedInstanceState) {
+    private static final int PROFESSOR = 0;
+    private static final int ALUNO = 1;
+
+    private Turma turma;
+    private Chat chat;
+    private FirebaseUser user;
+    private boolean professor;
+
+    private Toolbar      toolbar;
+    private ImageButton adicionarArquivo;
+    private EditText    etMensagem;
+    private ImageButton enviar;
+
+    private DatabaseReference chatRef;
+
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private ChatMensagemAdapter chatMensagemAdapter;
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Intent i = getIntent();
+
+        user      = FirebaseAuth.getInstance().getCurrentUser();
+        chat      = i.getParcelableExtra("chat");
+        turma     = i.getParcelableExtra("turma");
+        professor = i.getIntExtra("usuario", 1) == PROFESSOR;
+
+        toolbar = findViewById(R.id.toolbar_chat);
+        recyclerView = findViewById(R.id.recycler_view_chat);
+        adicionarArquivo = findViewById(R.id.chat_adicionar_arquivo);
+        etMensagem       = findViewById(R.id.et_chat);
+        enviar           = findViewById(R.id.chat_enviar);
+
+        chatRef = FirebaseDatabase.getInstance().getReference().child("chats").child(chat.getId());
+
+        layoutManager = new LinearLayoutManager(this);
+        chatMensagemAdapter = new ChatMensagemAdapter(this, new ArrayList<ChatMensagem>());
+
+        toolbar.setTitle(chat.getNome());
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(chatMensagemAdapter);
+
+        chatRef.addChildEventListener(new ChildEventListener()
+        {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+                ChatMensagem cm = dataSnapshot.getValue(ChatMensagem.class);
+
+                chatMensagemAdapter.add(cm);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void enviar(View v)
+    {
+        try
+        {
+            String uid  = user.getUid();
+            String foto = user.getPhotoUrl().toString();
+            String msg  = validarMensagem();
+
+            ChatMensagem cm = new ChatMensagem(uid, foto, msg, professor);
+
+            chatRef.push().setValue(cm);
+        }
+        catch(NoSuchFieldException e)
+        {
+            // Nada
+            /*new AlertDialog.Builder(this)
+                    .setTitle("Erro")
+                    .setMessage(e.getMessage())
+                    .setPositiveButton("Ok", null)
+                    .show();*/
+        }
+    }
+
+    public String validarMensagem() throws NoSuchFieldException
+    {
+        String m = etMensagem.getText().toString();
+        m.trim();
+
+        if (m.equals(""))
+            throw new NoSuchFieldException("Digite alguma coisa");
+
+        etMensagem.setText("");
+
+        return m;
     }
 }
