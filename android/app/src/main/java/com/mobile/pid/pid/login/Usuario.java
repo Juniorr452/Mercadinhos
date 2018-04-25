@@ -13,7 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class Usuario implements Parcelable {
-    private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/fotos_perfil%2Fpadrao.png?alt=media&token=2b50ce6b-9556-41ec-beb7-160ab3f371f7";
+    private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/usuarios%2Ffoto_padrao.png?alt=media&token=b7e19e92-04fa-49ba-a4bd-8b8cfd8c79df";
 
     @Exclude
     private String uid;
