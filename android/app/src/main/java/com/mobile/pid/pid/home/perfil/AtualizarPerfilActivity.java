@@ -304,21 +304,24 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
         // Upar e atualizar foto, se existir.
         if (imagemUri != null)
-            usuarioStorageRef.putFile(imagemUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            usuarioStorageRef.putFile(imagemUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
+            {
                 @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
+                {
                     if (task.isSuccessful())
                     {
                         String fotoUrl = task.getResult().getDownloadUrl().toString();
                         usuarioDatabaseRef.child("fotoUrl").setValue(fotoUrl);
 
-                        dadosPAtt.setPhotoUri(imagemUri);
+                        dadosPAtt.setPhotoUri(Uri.parse(fotoUrl));
                     }
                 }
             });
 
         // Atualizar no Auth
-        user.updateProfile(dadosPAtt.build()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        user.updateProfile(dadosPAtt.build()).addOnCompleteListener(new OnCompleteListener<Void>()
+        {
             @Override
             public void onComplete(@NonNull Task<Void> task)
             {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -61,7 +62,7 @@ public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapte
         {
             holder.ll.setGravity(Gravity.RIGHT);
 
-            holder.imagemUsuarioOutro.setVisibility(View.GONE);
+            ((CardView) holder.imagemUsuarioOutro.getParent()).setVisibility(View.GONE);
             Glide.with(ctx)
                     .load(m.getFotoUrl())
                     .apply(RequestOptions.circleCropTransform())
@@ -69,7 +70,7 @@ public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapte
         }
         else
         {
-            holder.imagemUsuario.setVisibility(View.GONE);
+            ((CardView) holder.imagemUsuario.getParent()).setVisibility(View.GONE);
             Glide.with(ctx)
                     .load(m.getFotoUrl())
                     .apply(RequestOptions.circleCropTransform())
