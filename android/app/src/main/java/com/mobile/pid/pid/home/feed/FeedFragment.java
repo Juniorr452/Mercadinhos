@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,10 +48,14 @@ public class FeedFragment extends Fragment {
     private TextView countChars;
     private EditText edit_post;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private FrameLayout conteudo;
 
     private FirebaseUser usuario;
     private DatabaseReference postsRef;
     private ChildEventListener postsChildListener;
+    private ImageView sadFace;
+    private TextView sadMessage;
 
     private PostAdapter postAdapter;
 
@@ -70,13 +77,25 @@ public class FeedFragment extends Fragment {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                recyclerView.getRecycledViewPool().clear();
-                recyclerView.setItemViewCacheSize(0);
-                postAdapter.notifyDataSetChanged();
 
-                Post post = dataSnapshot.getValue(Post.class);
-                post.setId(dataSnapshot.getKey());
-                postAdapter.add(post);
+                if(dataSnapshot.exists()) {
+                    recyclerView.getRecycledViewPool().clear();
+                    recyclerView.setItemViewCacheSize(0);
+                    postAdapter.notifyDataSetChanged();
+
+                    Post post = dataSnapshot.getValue(Post.class);
+                    post.setId(dataSnapshot.getKey());
+                    postAdapter.add(post);
+
+                    sadFace.setVisibility(View.GONE);
+                    sadMessage.setVisibility(View.GONE);
+                } else {
+                    sadFace.setVisibility(View.VISIBLE);
+                    sadMessage.setVisibility(View.VISIBLE);
+                }
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -107,22 +126,19 @@ public class FeedFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        criarPost = view.findViewById(R.id.fab_add_post);
-
-        criarPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                criarPost(view);
-            }
-        });
+        sadFace      = view.findViewById(R.id.sad_face);
+        sadMessage   = view.findViewById(R.id.sad_message);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        criarPost    = view.findViewById(R.id.fab_add_post);
+        progressBar  = view.findViewById(R.id.pb_feed);
+        conteudo     = view.findViewById(R.id.fl_feed);
+        conteudo.setVisibility(View.GONE);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
 
-        recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(mLayoutManager);
-
         recyclerView.setAdapter(postAdapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -140,6 +156,13 @@ public class FeedFragment extends Fragment {
                     criarPost.show();
                 else if(dy > 0 && criarPost.isShown())
                     criarPost.hide();
+            }
+        });
+
+        criarPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                criarPost(view);
             }
         });
 

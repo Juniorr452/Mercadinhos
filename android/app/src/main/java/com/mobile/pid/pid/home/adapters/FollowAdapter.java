@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.perfil.FollowItem;
@@ -42,8 +43,9 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        return new RecyclerViewHolder(inflater, parent);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.follow_layout, parent, false);
+        return new RecyclerViewHolder(view);
     }
 
     @Override
@@ -59,39 +61,38 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView icon_user_follow;
-        private TextView textView_user_name;
-        private TextView textView_user;
-        private Button btn_follow;
+        private ImageView foto;
+        private TextView usuario;
+        private Button botaoSeguir;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
-        }
 
-        public RecyclerViewHolder(LayoutInflater inflater, ViewGroup container) {
-            super(inflater.inflate(R.layout.follow_layout, container, false));
-
-            icon_user_follow   = (ImageView) itemView.findViewById(R.id.icon_user_follow);
-            textView_user_name = (TextView) itemView.findViewById(R.id.textView_user_name);
-            textView_user      = (TextView) itemView.findViewById(R.id.textView_user);
-            btn_follow         = (Button) itemView.findViewById(R.id.btn_follow);
+            foto        = itemView.findViewById(R.id.icon_user_follow);
+            usuario     = itemView.findViewById(R.id.textView_user_name);
+            botaoSeguir = itemView.findViewById(R.id.btn_follow);
 
             if(context_cod == SEGUINDO_CONTEXT) { // SE TIVER NO FRAGMENT DE SEGUINDO
-                setFollowStateButton(btn_follow);
+                setFollowStateButton(botaoSeguir);
             } else { // SE TIVER NO FRAGMENT DE SEGUIDORES
 
             }
 
-            btn_follow.setOnClickListener(new View.OnClickListener() {
+            botaoSeguir.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
-                    changeStateButton(btn_follow);
+                    changeStateButton(botaoSeguir);
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "ALO", Toast.LENGTH_SHORT).show();
                 }
             });
         }
-
-
     }
 
     private void changeStateButton(Button btn_follow) {

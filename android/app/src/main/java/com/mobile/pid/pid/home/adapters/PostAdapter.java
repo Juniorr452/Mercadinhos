@@ -1,7 +1,10 @@
 package com.mobile.pid.pid.home.adapters;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.feed.Post;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 
@@ -37,7 +41,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     private Context context;
     private List<Post> posts;
-    private LayoutInflater inflater;
 
     public PostAdapter(Context context, List<Post> posts) {
         this.context = context;
@@ -46,14 +49,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        inflater = LayoutInflater.from(context);
-        return new RecyclerViewHolder(inflater, parent);
+        View view = LayoutInflater.from(context).inflate(R.layout.post_layout, parent, false);
+        return new RecyclerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position)
     {
-
         final Post p = posts.get(position);
         final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         holder.usuario.setText(p.getUser());
@@ -73,15 +75,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                 .load(p.getPhotoUrl())
                 .into(holder.foto);
 
-        // SE CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
+        //TODO SE CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
         holder.foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //PerfilFragment fragment = new PerfilFragment();
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                Fragment myFragment = new PerfilFragment();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.home_frame, myFragment).addToBackStack(null).commit();
+
                 //Intent i = new Intent(context.getApplicationContext(), PerfilFragment.class);
                 //i.putExtra("post", p);
                 //i.putExtra("contexto", 0);
                 //inflater.getContext().startActivity(i);
-                //TODO QUANDO CLICAR NA FOTO DO USUARIO, IR PARA O PERFIL DELE
                 Toast.makeText(context, "Ir para o perfil do usuario " + p.getUser(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -136,8 +143,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
             }
         });
-
-
     }
 
     public String calcularTempo(String data) throws ParseException
@@ -175,7 +180,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     public void add(Post post) {
         this.posts.add(post);
-
         notifyDataSetChanged();
     }
 
@@ -188,12 +192,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         private TextView countLike;
         private CheckBox like;
 
-        public RecyclerViewHolder(View itemView) {
+        public RecyclerViewHolder(final View itemView) {
             super(itemView);
-        }
 
-        public RecyclerViewHolder(LayoutInflater inflater, ViewGroup container) {
-            super(inflater.inflate(R.layout.post_layout, container, false));
+            final Post p = posts.get(getPosition());
 
             foto       = itemView.findViewById(R.id.icon_user_feed);
             usuario    = itemView.findViewById(R.id.tv_user_feed);
@@ -202,6 +204,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             countLike  = itemView.findViewById(R.id.count_like);
             like = itemView.findViewById(R.id.cb_like);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, "Ir para a pagina do post " + p.getUser(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
