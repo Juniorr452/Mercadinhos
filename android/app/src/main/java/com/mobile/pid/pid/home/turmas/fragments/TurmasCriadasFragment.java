@@ -195,6 +195,23 @@ public class TurmasCriadasFragment extends Fragment
             }
         });
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if(dy < 0 && !fabAdicionarTurma.isShown())
+                    fabAdicionarTurma.show();
+                else if(dy > 0 && fabAdicionarTurma.isShown())
+                    fabAdicionarTurma.hide();
+            }
+        });
+
         // FAB
         fabAdicionarTurma = v.findViewById(R.id.fab_adicionar_turma);
         fabAdicionarTurma.setOnClickListener(new View.OnClickListener() {

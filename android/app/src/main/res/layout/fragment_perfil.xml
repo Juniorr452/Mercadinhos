@@ -105,16 +105,6 @@
 
                 </LinearLayout>
 
-
-
-
-
-
-
-
-
-
-
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar_perfil"
                     android:layout_width="match_parent"

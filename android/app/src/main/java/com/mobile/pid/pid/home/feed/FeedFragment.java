@@ -125,6 +125,24 @@ public class FeedFragment extends Fragment {
 
         recyclerView.setAdapter(postAdapter);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if(dy < 0 && !criarPost.isShown())
+                    criarPost.show();
+                else if(dy > 0 && criarPost.isShown())
+                    criarPost.hide();
+            }
+        });
+
         return view;
 
     }
@@ -149,6 +167,7 @@ public class FeedFragment extends Fragment {
             {
                 final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
                 final Post post = new Post(null,
+                                           usuario.getUid(),
                                            usuario.getDisplayName(),
                                            usuario.getPhotoUrl().toString(),
                                            edit_post.getText().toString());

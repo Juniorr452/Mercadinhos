@@ -70,14 +70,14 @@
                     android:text="0"
                     android:paddingRight="8dp"/>
 
-                <ImageView
-                    android:id="@+id/btn_like"
-                    android:tag="unlike"
+                <CheckBox
+                    android:id="@+id/cb_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/icon_unlike"
-                    android:backgroundTint="@color/gray_font"
-                    android:layout_gravity="center" />
+                    android:button="@drawable/custom_like_checkbox"
+                    android:theme="@style/LikeBox"
+                    android:layout_gravity="center"
+                    android:buttonTint="@color/gray_font"/>
 
             </LinearLayout>
 

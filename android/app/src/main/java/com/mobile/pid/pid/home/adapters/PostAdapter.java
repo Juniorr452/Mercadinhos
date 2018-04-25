@@ -1,37 +1,33 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.CardView;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.Post;
+import com.mobile.pid.pid.home.perfil.PerfilFragment;
 
-import java.io.File;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.time.Duration;
 
 /**
  * Created by jonasramos on 13/03/18.
@@ -41,6 +37,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     private Context context;
     private List<Post> posts;
+    private LayoutInflater inflater;
 
     public PostAdapter(Context context, List<Post> posts) {
         this.context = context;
@@ -49,7 +46,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater = LayoutInflater.from(context);
         return new RecyclerViewHolder(inflater, parent);
     }
 
@@ -71,21 +68,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         }
 
         holder.texto.setText(p.getTexto());
+
         Glide.with(holder.foto.getContext())
                 .load(p.getPhotoUrl())
                 .into(holder.foto);
 
-        // QUANDO CLICAR NO BOTÃO DE CURTIR
-        holder.like.setOnClickListener(new View.OnClickListener() {
+        // SE CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
+        holder.foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(holder.like.getTag().equals("unlike")) {
+                //Intent i = new Intent(context.getApplicationContext(), PerfilFragment.class);
+                //i.putExtra("post", p);
+                //i.putExtra("contexto", 0);
+                //inflater.getContext().startActivity(i);
+                //TODO QUANDO CLICAR NA FOTO DO USUARIO, IR PARA O PERFIL DELE
+                Toast.makeText(context, "Ir para o perfil do usuario " + p.getUser(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
-                    holder.like.setBackgroundResource(R.drawable.icon_like);
-                    holder.like.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
-                    holder.like.setTag("like");
+        holder.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()){
+                    compoundButton.setButtonTintList(context.getResources().getColorStateList(R.color.red));
 
-                    // SALVA NOS POSTS DO BANCO, ADICIONANDO UMA CURTIDA
                     FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
                             .child("likes").child(usuario).setValue(true);
 
@@ -93,9 +99,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
                             .child(p.getId()).setValue(p);
                 } else {
-                    holder.like.setBackgroundResource(R.drawable.icon_unlike);
-                    holder.like.setBackgroundTintList(context.getResources().getColorStateList(R.color.gray_font));
-                    holder.like.setTag("unlike");
+                    compoundButton.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
 
                     FirebaseDatabase.getInstance().getReference("posts").child(p.getId())
                             .child("likes").child(usuario).removeValue();
@@ -103,10 +107,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
                             .child(p.getId()).removeValue();
                 }
-
             }
         });
 
+        // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
         FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
                 .child("likes").addValueEventListener(new ValueEventListener() {
             @Override
@@ -122,9 +126,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
                 // MOSTRA NO FEED O POST CURTIDO CASO O USUARIO TENHA CURTIDO ANTERIORMENTE
                 if(dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    holder.like.setBackgroundResource(R.drawable.icon_like);
-                    holder.like.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
-                    holder.like.setTag("like");
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
+                    holder.like.setChecked(true);
                 }
             }
 
@@ -133,6 +136,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
             }
         });
+
+
     }
 
     public String calcularTempo(String data) throws ParseException
@@ -180,8 +185,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         private TextView usuario;
         private TextView texto;
         private TextView postTime;
-        private ImageView like;
         private TextView countLike;
+        private CheckBox like;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -194,8 +199,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             usuario    = itemView.findViewById(R.id.tv_user_feed);
             texto      = itemView.findViewById(R.id.tv_message_feed);
             postTime   = itemView.findViewById(R.id.postTime);
-            like       = itemView.findViewById(R.id.btn_like);
             countLike  = itemView.findViewById(R.id.count_like);
+            like = itemView.findViewById(R.id.cb_like);
 
         }
     }
