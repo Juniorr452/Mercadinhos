@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
 
@@ -72,9 +73,8 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        Query query = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey();
-
-        query.addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts")
+                .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -118,6 +118,7 @@ public class FeedFragment extends Fragment {
 
             }
         });
+
     }
 
     @Override
@@ -132,6 +133,7 @@ public class FeedFragment extends Fragment {
         criarPost    = view.findViewById(R.id.fab_add_post);
         progressBar  = view.findViewById(R.id.pb_feed);
         conteudo     = view.findViewById(R.id.fl_feed);
+        //progressBar.setVisibility(View.GONE);
         conteudo.setVisibility(View.GONE);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

@@ -114,8 +114,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
                             .child(p.getId()).removeValue();
                 }
+
+                //notifyDataSetChanged();
             }
         });
+
+
 
         // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
         FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
@@ -132,9 +136,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                 }
 
                 // MOSTRA NO FEED O POST CURTIDO CASO O USUARIO TENHA CURTIDO ANTERIORMENTE
-                if(dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                if(dataSnapshot.hasChild(usuario)) {
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
                     holder.like.setChecked(true);
+                } else {
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
+                    holder.like.setChecked(false);
                 }
             }
 
@@ -195,7 +202,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         public RecyclerViewHolder(final View itemView) {
             super(itemView);
 
-            final Post p = posts.get(getPosition());
+            //final Post p = posts.get(getPosition());
 
             foto       = itemView.findViewById(R.id.icon_user_feed);
             usuario    = itemView.findViewById(R.id.tv_user_feed);
@@ -207,9 +214,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Post p = posts.get(getPosition());
                     Toast.makeText(context, "Ir para a pagina do post " + p.getUser(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
+    }
+
+    public void removePost(Post p) {
+        posts.remove(p);
+    }
+
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
     }
 }

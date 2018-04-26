@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
 import com.mobile.pid.pid.home.feed.Post;
@@ -47,9 +48,8 @@ public class CurtidasPerfilFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        Query query = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts_like").orderByKey();
-
-        query.addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts_like")
+            .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 recyclerView.getRecycledViewPool().clear();
@@ -66,9 +66,14 @@ public class CurtidasPerfilFragment extends Fragment {
 
             }
 
+            //TODO LIMPAR O CACHE DO FRAGMENT DE CURTIDAS
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                recyclerView.getRecycledViewPool().clear();
 
+                Post p = dataSnapshot.getValue(Post.class);
+                postAdapter.removePost(p);
+                postAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -81,6 +86,29 @@ public class CurtidasPerfilFragment extends Fragment {
 
             }
         });
+
+        /*FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts_like")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    recyclerView.getRecycledViewPool().clear();
+                    postAdapter.clear();
+
+                    for (DataSnapshot data: dataSnapshot.getChildren()) {
+                        Post post = data.getValue(Post.class);
+                        post.setId(dataSnapshot.getKey());
+                        postAdapter.add(post);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
     }
 
     @Override
