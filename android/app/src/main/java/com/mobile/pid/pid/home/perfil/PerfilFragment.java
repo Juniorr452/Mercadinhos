@@ -184,6 +184,8 @@ public class PerfilFragment extends Fragment
             }
         });
 
+        viewPager_perfil.setOffscreenPageLimit(1);
+
         return view;
     }
 

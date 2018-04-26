@@ -41,6 +41,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     private Context context;
     private List<Post> posts;
+    private int COD_CONTEXTO;
 
     public PostAdapter(Context context, List<Post> posts) {
         this.context = context;
@@ -83,7 +84,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                 //PerfilFragment fragment = new PerfilFragment();
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 Fragment myFragment = new PerfilFragment();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.home_frame, myFragment).addToBackStack(null).commit();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.home_frame, myFragment)
+                        .addToBackStack(null).commit();
 
                 //Intent i = new Intent(context.getApplicationContext(), PerfilFragment.class);
                 //i.putExtra("post", p);
@@ -93,11 +95,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             }
         });
 
+
         holder.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton.isChecked()){
-                    compoundButton.setButtonTintList(context.getResources().getColorStateList(R.color.red));
+
+                if(holder.like.isChecked()){
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
 
                     FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
                             .child("likes").child(usuario).setValue(true);
@@ -106,7 +110,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
                             .child(p.getId()).setValue(p);
                 } else {
-                    compoundButton.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
 
                     FirebaseDatabase.getInstance().getReference("posts").child(p.getId())
                             .child("likes").child(usuario).removeValue();
@@ -114,8 +118,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
                             .child(p.getId()).removeValue();
                 }
-
-                //notifyDataSetChanged();
             }
         });
 
@@ -210,19 +212,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             postTime   = itemView.findViewById(R.id.postTime);
             countLike  = itemView.findViewById(R.id.count_like);
             like = itemView.findViewById(R.id.cb_like);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Post p = posts.get(getPosition());
-                    Toast.makeText(context, "Ir para a pagina do post " + p.getUser(), Toast.LENGTH_SHORT).show();
-                }
-            });
         }
     }
 
     public void removePost(Post p) {
-        posts.remove(p);
+        for (Post post: posts) {
+            if(post.getId().equals(p.getId())) {
+                posts.remove(post);
+                notifyDataSetChanged();
+            }
+        }
     }
 
     public void clear() {

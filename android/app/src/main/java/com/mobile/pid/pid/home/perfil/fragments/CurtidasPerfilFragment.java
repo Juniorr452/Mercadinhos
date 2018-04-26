@@ -4,6 +4,7 @@ package com.mobile.pid.pid.home.perfil.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -72,8 +73,10 @@ public class CurtidasPerfilFragment extends Fragment {
                 recyclerView.getRecycledViewPool().clear();
 
                 Post p = dataSnapshot.getValue(Post.class);
+                p.setId(dataSnapshot.getKey());
                 postAdapter.removePost(p);
-                postAdapter.notifyDataSetChanged();
+                //postAdapter.clear();
+                //postAdapter.notifyDataSetChanged();
             }
 
             @Override

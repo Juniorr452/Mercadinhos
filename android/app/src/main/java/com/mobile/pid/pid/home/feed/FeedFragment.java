@@ -168,6 +168,8 @@ public class FeedFragment extends Fragment {
             }
         });
 
+        //FeedFragment.this.getClass().getName();
+
         return view;
 
     }
