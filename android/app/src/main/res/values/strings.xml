@@ -97,4 +97,7 @@
     <string name="postar">Postar</string>
     <string name="postTime">Hora da postagem</string>
     <string name="sad_message_feed">Não encontramos nenhum post</string>
+    <string name="ir_perfil">Perfil</string>
+    <string name="confirmacao">Confirmação</string>
+    <string name="unfollow_message">Tem certeza que deseja deixar de seguir</string>
 </resources>

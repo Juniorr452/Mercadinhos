@@ -75,8 +75,6 @@ public class CurtidasPerfilFragment extends Fragment {
                 Post p = dataSnapshot.getValue(Post.class);
                 p.setId(dataSnapshot.getKey());
                 postAdapter.removePost(p);
-                //postAdapter.clear();
-                //postAdapter.notifyDataSetChanged();
             }
 
             @Override

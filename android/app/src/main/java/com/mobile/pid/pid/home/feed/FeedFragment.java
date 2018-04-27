@@ -73,8 +73,9 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts")
-                .addChildEventListener(new ChildEventListener() {
+        Query query = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey();
+
+        query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -105,7 +106,11 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                recyclerView.getRecycledViewPool().clear();
 
+                Post p = dataSnapshot.getValue(Post.class);
+                p.setId(dataSnapshot.getKey());
+                postAdapter.removePost(p);
             }
 
             @Override
@@ -184,7 +189,7 @@ public class FeedFragment extends Fragment {
                 .create();
 
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#737373"));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.gray_font));
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()

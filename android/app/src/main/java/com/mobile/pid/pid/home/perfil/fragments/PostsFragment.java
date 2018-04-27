@@ -70,7 +70,11 @@ public class PostsFragment extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                recyclerView.getRecycledViewPool().clear();
 
+                Post p = dataSnapshot.getValue(Post.class);
+                p.setId(dataSnapshot.getKey());
+                postAdapter.removePost(p);
             }
 
             @Override
