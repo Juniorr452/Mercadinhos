@@ -1,15 +1,12 @@
 package com.mobile.pid.pid.home.feed;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -18,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
@@ -37,8 +35,6 @@ import com.mobile.pid.pid.home.adapters.PostAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -53,10 +49,14 @@ public class FeedFragment extends Fragment {
     private TextView countChars;
     private EditText edit_post;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private FrameLayout conteudo;
 
     private FirebaseUser usuario;
     private DatabaseReference postsRef;
     private ChildEventListener postsChildListener;
+    private ImageView sadFace;
+    private TextView sadMessage;
 
     private PostAdapter postAdapter;
 
@@ -78,13 +78,25 @@ public class FeedFragment extends Fragment {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                recyclerView.getRecycledViewPool().clear();
-                recyclerView.setItemViewCacheSize(0);
-                postAdapter.notifyDataSetChanged();
 
-                Post post = dataSnapshot.getValue(Post.class);
-                post.setUid(dataSnapshot.getKey());
-                postAdapter.add(post);
+                if(dataSnapshot.exists()) {
+                    recyclerView.getRecycledViewPool().clear();
+                    recyclerView.setItemViewCacheSize(0);
+                    postAdapter.notifyDataSetChanged();
+
+                    Post post = dataSnapshot.getValue(Post.class);
+                    post.setId(dataSnapshot.getKey());
+                    postAdapter.add(post);
+
+                    sadFace.setVisibility(View.GONE);
+                    sadMessage.setVisibility(View.GONE);
+                } else {
+                    sadFace.setVisibility(View.VISIBLE);
+                    sadMessage.setVisibility(View.VISIBLE);
+                }
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -94,7 +106,11 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                recyclerView.getRecycledViewPool().clear();
 
+                Post p = dataSnapshot.getValue(Post.class);
+                p.setId(dataSnapshot.getKey());
+                postAdapter.removePost(p);
             }
 
             @Override
@@ -107,6 +123,7 @@ public class FeedFragment extends Fragment {
 
             }
         });
+
     }
 
     @Override
@@ -115,7 +132,39 @@ public class FeedFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        criarPost = view.findViewById(R.id.fab_add_post);
+        sadFace      = view.findViewById(R.id.sad_face);
+        sadMessage   = view.findViewById(R.id.sad_message);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        criarPost    = view.findViewById(R.id.fab_add_post);
+        progressBar  = view.findViewById(R.id.pb_feed);
+        conteudo     = view.findViewById(R.id.fl_feed);
+        //progressBar.setVisibility(View.GONE);
+        conteudo.setVisibility(View.GONE);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(postAdapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if(dy < 0 && !criarPost.isShown())
+                    criarPost.show();
+                else if(dy > 0 && criarPost.isShown())
+                    criarPost.hide();
+            }
+        });
 
         criarPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,14 +173,7 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setReverseLayout(true);
-        mLayoutManager.setStackFromEnd(true);
-
-        recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        recyclerView.setAdapter(postAdapter);
+        //FeedFragment.this.getClass().getName();
 
         return view;
 
@@ -147,7 +189,7 @@ public class FeedFragment extends Fragment {
                 .create();
 
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#737373"));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.gray_font));
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
@@ -156,27 +198,15 @@ public class FeedFragment extends Fragment {
             public void onClick(View view)
             {
                 final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
-                final Post post = new Post(usuario.getUid(),
-                     usuario.getDisplayName(),
-                     usuario.getPhotoUrl().toString(),
-                     edit_post.getText().toString());
+                final Post post = new Post(null,
+                                           usuario.getUid(),
+                                           usuario.getDisplayName(),
+                                           usuario.getPhotoUrl().toString(),
+                                           edit_post.getText().toString());
 
-                db.addListenerForSingleValueEvent(new ValueEventListener()
-                {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-
-                        post.setUid(String.valueOf(dataSnapshot.getChildrenCount()));
-                        db.child(post.getUid()).setValue(post);
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                post.setId(db.push().getKey());
+                db.child(post.getId()).setValue(post);
+                dialog.dismiss();
             }
         });
 

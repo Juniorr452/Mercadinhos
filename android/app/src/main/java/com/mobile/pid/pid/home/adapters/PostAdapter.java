@@ -1,29 +1,43 @@
 package com.mobile.pid.pid.home.adapters;
 
+import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.CardView;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.feed.Post;
+import com.mobile.pid.pid.home.perfil.PerfilFragment;
+import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
 
-import java.io.File;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.time.Duration;
 
 /**
  * Created by jonasramos on 13/03/18.
@@ -41,15 +55,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        return new RecyclerViewHolder(inflater, parent);
+        View view = LayoutInflater.from(context).inflate(R.layout.post_layout, parent, false);
+        return new RecyclerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position)
+    public void onBindViewHolder(final RecyclerViewHolder holder, int position)
     {
-
-        Post p = posts.get(position);
+        final Post p = posts.get(position);
+        final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         holder.usuario.setText(p.getUser());
 
         try
@@ -61,12 +75,77 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             e.printStackTrace();
         }
 
-        //holder.postTime.setText(p.getPostDataFormatado());
-
         holder.texto.setText(p.getTexto());
+
         Glide.with(holder.foto.getContext())
                 .load(p.getPhotoUrl())
                 .into(holder.foto);
+
+        //TODO SE CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
+        holder.foto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogPerfilUsuario(p);
+            }
+        });
+
+
+        holder.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(holder.like.isChecked()){
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
+
+                    FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
+                            .child("likes").child(usuario).setValue(true);
+
+                    // SALVAR NOS POSTS CURTIDOS DO USUARIO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                            .child(p.getId()).setValue(p);
+                } else {
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
+
+                    FirebaseDatabase.getInstance().getReference("posts").child(p.getId())
+                            .child("likes").child(usuario).removeValue();
+
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                            .child(p.getId()).removeValue();
+                }
+            }
+        });
+
+
+
+        // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
+        FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
+                .child("likes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // CASO O CONTADOR DE CURTIDAS DO POST SEJA ZERO, ELE NAO MOSTRA O CONTADOR
+                if(dataSnapshot.getChildrenCount() == 0)
+                    holder.countLike.setVisibility(View.INVISIBLE);
+                else {
+                    holder.countLike.setVisibility(View.VISIBLE);
+                    holder.countLike.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                }
+
+                // MOSTRA NO FEED O POST CURTIDO CASO O USUARIO TENHA CURTIDO ANTERIORMENTE
+                if(dataSnapshot.hasChild(usuario)) {
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
+                    holder.like.setChecked(true);
+                } else {
+                    holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
+                    holder.like.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public String calcularTempo(String data) throws ParseException
@@ -97,6 +176,66 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             return String.valueOf(dataPost.getDay()) + "/" + String.valueOf(dataPost.getMonth()) + "/" + String.valueOf(dataPost.getYear());
     }
 
+    public void dialogPerfilUsuario(final Post p) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_perfil_usuario, null);
+
+        final AlertDialog.Builder mBuilderUsuario = new AlertDialog.Builder(context);
+        mBuilderUsuario.setView(view);
+
+        final Button seguir = view.findViewById(R.id.seguir);
+        final Button irPerfil = view.findViewById(R.id.irPerfil);
+        final TextView nome = view.findViewById(R.id.nome);
+        final ImageView foto = view.findViewById(R.id.foto);
+        final ImageView capa = view.findViewById(R.id.capa);
+
+        final AlertDialog dialogUsuario = mBuilderUsuario.create();
+        dialogUsuario.show();
+
+        nome.setText(p.getUser());
+        Glide.with(context).load(p.getPhotoUrl()).into(foto);
+        Glide.with(context).load(p.getPhotoUrl()).override(20,20).error(android.R.drawable.dark_header).into(capa);
+
+        seguir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialogUsuario.dismiss();
+
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+                mBuilder.setTitle(R.string.confirmacao)
+                        .setMessage(context.getText(R.string.unfollow_message) + " "+ p.getUser() + "?")
+                        .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogUsuario.show();
+                                seguir.setText(R.string.follow);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogUsuario.show();
+                            }
+                        });
+
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.gray_font));
+            }
+        });
+
+        irPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, UsuarioPerfilActivity.class);
+                i.putExtra("usuario", p.getUserId());
+                context.startActivity(i);
+            }
+        });
+
+
+    }
+
     @Override
     public int getItemCount() {
         return posts.size();
@@ -104,7 +243,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     public void add(Post post) {
         this.posts.add(post);
-
         notifyDataSetChanged();
     }
 
@@ -114,19 +252,65 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         private TextView usuario;
         private TextView texto;
         private TextView postTime;
+        private TextView countLike;
+        private CheckBox like;
 
-        public RecyclerViewHolder(View itemView) {
+        public RecyclerViewHolder(final View itemView) {
             super(itemView);
-        }
-
-        public RecyclerViewHolder(LayoutInflater inflater, ViewGroup container) {
-            super(inflater.inflate(R.layout.post_layout, container, false));
 
             foto       = itemView.findViewById(R.id.icon_user_feed);
             usuario    = itemView.findViewById(R.id.tv_user_feed);
             texto      = itemView.findViewById(R.id.tv_message_feed);
             postTime   = itemView.findViewById(R.id.postTime);
+            countLike  = itemView.findViewById(R.id.count_like);
+            like = itemView.findViewById(R.id.cb_like);
+            
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    final Post p = posts.get(getPosition());
 
+                    if(p.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+                        AlertDialog dialog = new AlertDialog.Builder(context)
+                                .setTitle(R.string.confirmacao)
+                                .setMessage("Deseja excluir o post selecionado?")
+                                .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        /*FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId())
+                                               .child("posts").child(p.getId()).removeValue();
+                                        FirebaseDatabase.getInstance().getReference("posts").child(p.getId()).removeValue();*/
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .create();
+
+                        dialog.show();
+
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.gray_font));
+
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
         }
+    }
+
+    public void removePost(Post p) {
+        for (Post post: posts) {
+            if(post.getId().equals(p.getId())) {
+                posts.remove(post);
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
     }
 }

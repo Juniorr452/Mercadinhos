@@ -35,15 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jonas Ramos"
-                android:textColor="@color/dark_gray"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="jonasramos"
-                android:textColor="@color/dark_gray" />
+                android:textColor="@color/gray_font"
+                android:textSize="16dp"/>
 
         </LinearLayout>
 

@@ -3,10 +3,21 @@ package com.mobile.pid.pid.login;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
 
 /**
  * Created by junio on 04/03/2018.
@@ -45,8 +56,13 @@ public class Usuario implements Parcelable {
 
     void cadastrar()
     {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         DatabaseReference usuarioDatabaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(getUid());
         usuarioDatabaseReference.setValue(this);
+
+        UserProfileChangeRequest.Builder dadosPAtt = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(fotoUrl));
+        user.updateProfile(dadosPAtt.build());
     }
 
     @Exclude

@@ -95,8 +95,10 @@ public class HomeActivity extends AppCompatActivity
         user_database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Usuario user = dataSnapshot.getValue(Usuario.class);
-                checarUsuarioNovo(user);
+                if(dataSnapshot.exists()) {
+                    Usuario user = dataSnapshot.getValue(Usuario.class);
+                    checarUsuarioNovo(user);
+                }
             }
 
             @Override

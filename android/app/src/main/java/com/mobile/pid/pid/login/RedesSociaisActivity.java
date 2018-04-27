@@ -237,7 +237,7 @@ public class RedesSociaisActivity extends AppCompatActivity
 
         AlertDialog dialog = mBuilder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#737373"));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.gray_font));
 
     }
 

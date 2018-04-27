@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 //import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +59,6 @@ public class PerfilFragment extends Fragment
     private ViewPager viewPager_perfil;
     private PagerAdapter pageAdapter_perfil;
     private ImageView imageView_user;
-    //private FloatingActionButton fabConfiguracoes;
     private FloatingActionMenu fab_menu;
     private FloatingActionButton fab_menu_edit;
     private FloatingActionButton fab_menu_signout;
@@ -182,6 +183,8 @@ public class PerfilFragment extends Fragment
                 getActivity().finish();
             }
         });
+
+        viewPager_perfil.setOffscreenPageLimit(1);
 
         return view;
     }

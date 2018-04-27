@@ -165,7 +165,7 @@ public class NovaTurmaActivity extends AppCompatActivity
         // Cadastrar referência da turma criada no professor
         usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId).setValue(true);
 
-        /*DatabaseReference usuarioTurmaDbRef = usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId);
+        /*DatabaseReference usuarioTurmaDbRef = usuariosDatabaseReference.child(user.getId()).child("turmas_criadas").child(turmaId);
 
         String nomeTurma   = t.getNome();
         String fotoCapaUrl = t.getCapaUrl();

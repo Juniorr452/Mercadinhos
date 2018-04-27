@@ -1,5 +1,8 @@
 package com.mobile.pid.pid.home.feed;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
@@ -10,35 +13,37 @@ import java.util.Map;
  * Created by jonasramos on 13/03/18.
  */
 
-public class Post {
+public class Post implements Parcelable{
 
     private String photoUrl;
     private String user;
+    private String userId;
     private String texto;
-    private String uid;
+    private String id;
     private Long postData;
 
     public Post() {
 
     }
 
-    /*public Post(String uid, String user, String photoUrl, String text, Map<String, String> postData) {
-        this.uid = uid;
+    /*public Post(String id, String user, String photoUrl, String text, Map<String, String> postData) {
+        this.id = id;
         this.user = user;
         this.photoUrl = photoUrl;
         this.texto = text;
         this.postData = postData;
     }*/
 
-    public Post(String uid, String user, String photoUrl, String text) {
-        this.uid = uid;
+    public Post(String id, String userId, String user, String photoUrl, String text) {
+        this.id = id;
+        this.userId = userId;
         this.user = user;
         this.photoUrl = photoUrl;
         this.texto = text;
     }
 
-    public Post(String uid, String text) {
-        this.uid = uid;
+    public Post(String id, String text) {
+        this.id = id;
         this.texto = text;
     }
 
@@ -58,12 +63,14 @@ public class Post {
         this.texto = text;
     }
 
-    public String getUid() {
-        return uid;
+    @Exclude
+    public String getId() {
+        return id;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    @Exclude
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPhotoUrl() {
@@ -72,6 +79,14 @@ public class Post {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Exclude
@@ -90,5 +105,29 @@ public class Post {
 
     public void setPostData(Long postData) {
         this.postData = postData;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int i) {
+        dest.writeString(this.photoUrl);
+        dest.writeString(this.user);
+        dest.writeString(this.userId);
+        dest.writeString(this.texto);
+        dest.writeString(this.id);
+        dest.writeLong(this.postData);
+    }
+
+    protected Post(Parcel in) {
+        this.photoUrl = in.readString();
+        this.user = in.readString();
+        this.userId = in.readString();
+        this.texto = in.readString();
+        this.id = in.readString();
+        this.postData = in.readLong();
     }
 }

@@ -55,6 +55,33 @@
                 android:layout_height="wrap_content"
                 android:text="@string/postTime"
                 android:layout_marginLeft="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="right|center"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:id="@+id/count_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:paddingRight="8dp"/>
+
+                <CheckBox
+                    android:id="@+id/cb_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/custom_like_checkbox"
+                    android:theme="@style/LikeBox"
+                    android:layout_gravity="center"
+                    android:buttonTint="@color/gray_font"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
 

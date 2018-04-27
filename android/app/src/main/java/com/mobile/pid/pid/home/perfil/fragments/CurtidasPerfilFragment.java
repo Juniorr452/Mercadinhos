@@ -2,13 +2,23 @@ package com.mobile.pid.pid.home.perfil.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
 import com.mobile.pid.pid.home.feed.Post;
@@ -21,11 +31,85 @@ import java.util.List;
  */
 public class CurtidasPerfilFragment extends Fragment {
 
-    private RecyclerView recyclerView_turmas_perfil;
+    private PostAdapter postAdapter;
+    private FirebaseUser usuario;
+
+    private RecyclerView recyclerView;
     private List<Post> posts;
 
     public CurtidasPerfilFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        posts = new ArrayList<>();
+        postAdapter = new PostAdapter(getActivity(), posts);
+        usuario = FirebaseAuth.getInstance().getCurrentUser();
+
+        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts_like")
+            .addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                recyclerView.getRecycledViewPool().clear();
+                recyclerView.setItemViewCacheSize(0);
+                postAdapter.notifyDataSetChanged();
+
+                Post post = dataSnapshot.getValue(Post.class);
+                post.setId(dataSnapshot.getKey());
+                postAdapter.add(post);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            //TODO LIMPAR O CACHE DO FRAGMENT DE CURTIDAS
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                recyclerView.getRecycledViewPool().clear();
+
+                Post p = dataSnapshot.getValue(Post.class);
+                p.setId(dataSnapshot.getKey());
+                postAdapter.removePost(p);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        /*FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts_like")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    recyclerView.getRecycledViewPool().clear();
+                    postAdapter.clear();
+
+                    for (DataSnapshot data: dataSnapshot.getChildren()) {
+                        Post post = data.getValue(Post.class);
+                        post.setId(dataSnapshot.getKey());
+                        postAdapter.add(post);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
     }
 
     @Override
@@ -34,9 +118,13 @@ public class CurtidasPerfilFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_curtidas_perfil, container, false);
 
-        //recyclerView_turmas_perfil = (RecyclerView) view.findViewById(R.id.recyclerView_turmas_perfil);
-        //recyclerView_turmas_perfil.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //recyclerView_turmas_perfil.setAdapter(new PostAdapter(getActivity(), posts));
+        recyclerView = view.findViewById(R.id.recyclerView_turmas_perfil);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(postAdapter);
 
         return view;
     }

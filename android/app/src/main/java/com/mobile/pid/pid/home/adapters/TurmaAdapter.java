@@ -101,7 +101,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
                             // Deletar no turmas_matriculadas dos alunos.
                             /*for(InfoUsuario a : t.getAlunos())
-                                usuariosRef.child(a.getUid())
+                                usuariosRef.child(a.getId())
                                     .child("turmas_matriculadas")
                                     .child(tuid)
                                     .removeValue();*/

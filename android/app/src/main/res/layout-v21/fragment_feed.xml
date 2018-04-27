@@ -1,11 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragment_feed"
-    tools:context="com.mobile.pid.pid.home.feed.FeedFragment">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Toolbar
         android:layout_width="match_parent"
@@ -25,6 +22,14 @@
 
     </Toolbar>
 
+    <ProgressBar
+        android:id="@+id/pb_feed"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_post"
         android:layout_width="wrap_content"
@@ -38,15 +43,49 @@
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
+        android:id="@+id/fl_feed"
+        android:layout_below="@id/toolbar2"
         android:layout_width="match_parent"
-        android:layout_height="545dp"
-        android:layout_below="@+id/toolbar2"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.mobile.pid.pid.home.feed.FeedFragment"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
-    </android.support.v7.widget.RecyclerView>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="545dp"
+            android:background="@color/white"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false">
+
+            </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/sad_face"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/sad_face"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/sad_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sad_message_feed"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="16dp"/>
+        </LinearLayout>
+    </FrameLayout>
 </RelativeLayout>
