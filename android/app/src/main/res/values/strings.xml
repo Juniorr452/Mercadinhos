@@ -102,4 +102,6 @@
     <string name="ir_perfil">Perfil</string>
     <string name="confirmacao">Confirmação</string>
     <string name="unfollow_message">Tem certeza que deseja deixar de seguir?</string>
+    <string name="recusar">Recusar</string>
+    <string name="aceitar">Aceitar</string>
 </resources>
