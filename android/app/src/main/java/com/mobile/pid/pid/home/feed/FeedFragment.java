@@ -73,56 +73,55 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        Query query = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey();
+        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey()
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        if(dataSnapshot.exists()) {
+                            recyclerView.getRecycledViewPool().clear();
+                            recyclerView.setItemViewCacheSize(0);
+                            postAdapter.notifyDataSetChanged();
 
-                if(dataSnapshot.exists()) {
-                    recyclerView.getRecycledViewPool().clear();
-                    recyclerView.setItemViewCacheSize(0);
-                    postAdapter.notifyDataSetChanged();
+                            Post post = dataSnapshot.getValue(Post.class);
+                            post.setId(dataSnapshot.getKey());
+                            postAdapter.add(post);
 
-                    Post post = dataSnapshot.getValue(Post.class);
-                    post.setId(dataSnapshot.getKey());
-                    postAdapter.add(post);
+                            sadFace.setVisibility(View.GONE);
+                            sadMessage.setVisibility(View.GONE);
+                        } else {
+                            sadFace.setVisibility(View.VISIBLE);
+                            sadMessage.setVisibility(View.VISIBLE);
+                        }
 
-                    sadFace.setVisibility(View.GONE);
-                    sadMessage.setVisibility(View.GONE);
-                } else {
-                    sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.VISIBLE);
-                }
+                        progressBar.setVisibility(View.GONE);
+                        conteudo.setVisibility(View.VISIBLE);
+                    }
 
-                progressBar.setVisibility(View.GONE);
-                conteudo.setVisibility(View.VISIBLE);
-            }
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    }
 
-            }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        recyclerView.getRecycledViewPool().clear();
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                recyclerView.getRecycledViewPool().clear();
+                        Post p = dataSnapshot.getValue(Post.class);
+                        p.setId(dataSnapshot.getKey());
+                        postAdapter.removePost(p);
+                    }
 
-                Post p = dataSnapshot.getValue(Post.class);
-                p.setId(dataSnapshot.getKey());
-                postAdapter.removePost(p);
-            }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
 
-            }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                    }
+                });
 
     }
 
@@ -138,7 +137,7 @@ public class FeedFragment extends Fragment {
         criarPost    = view.findViewById(R.id.fab_add_post);
         progressBar  = view.findViewById(R.id.pb_feed);
         conteudo     = view.findViewById(R.id.fl_feed);
-        //progressBar.setVisibility(View.GONE);
+
         conteudo.setVisibility(View.GONE);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -173,8 +172,6 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        //FeedFragment.this.getClass().getName();
-
         return view;
 
     }
@@ -200,8 +197,6 @@ public class FeedFragment extends Fragment {
                 final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
                 final Post post = new Post(null,
                                            usuario.getUid(),
-                                           usuario.getDisplayName(),
-                                           usuario.getPhotoUrl().toString(),
                                            edit_post.getText().toString());
 
                 post.setId(db.push().getKey());

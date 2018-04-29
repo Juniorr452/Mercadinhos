@@ -69,7 +69,7 @@ public class PerfilFragment extends Fragment
 
     DatabaseReference db;
     String user_id;
-    FirebaseUser user;
+    Usuario user;
     FirebaseAuth auth;
 
     private TextView count_followers;
@@ -86,19 +86,27 @@ public class PerfilFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        user_id = user.getUid();
+        user_id = auth.getCurrentUser().getUid();
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        collapsing_perfil.setTitle(user.getDisplayName());
-        Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
-        //Glide.with(this).load(user.getPhotoUrl()).override(10,10).error(R.drawable.logo).into(imageView_user);
-        // TODO COLOCAR GLIDE PARA SETAR IMAGEM DO USUARIO
+        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        user = dataSnapshot.getValue(Usuario.class);
+                        collapsing_perfil.setTitle(user.getNome());
+                        Glide.with(PerfilFragment.this).load(user.getFotoUrl()).into(imageView_user);
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @Override
@@ -149,7 +157,7 @@ public class PerfilFragment extends Fragment
 
                 ImageView image_user_fullsize = (ImageView) dialog.findViewById(R.id.image_user_fullsize);
 
-                Glide.with(getActivity()).load(user.getPhotoUrl()).into(image_user_fullsize);
+                Glide.with(getActivity()).load(user.getFotoUrl()).into(image_user_fullsize);
                 dialog.show();
 
                 image_user_fullsize.setOnClickListener(new View.OnClickListener() {

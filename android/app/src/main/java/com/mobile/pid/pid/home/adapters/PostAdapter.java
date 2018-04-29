@@ -32,6 +32,7 @@ import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.feed.Post;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
+import com.mobile.pid.pid.login.Usuario;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -65,7 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
     {
         final Post p = posts.get(position);
         final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        holder.usuario.setText(p.getUser());
+
 
         try
         {
@@ -78,11 +79,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
         holder.texto.setText(p.getTexto());
 
-        Glide.with(holder.foto.getContext())
-                .load(p.getPhotoUrl())
-                .into(holder.foto);
+        FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Usuario user = dataSnapshot.getValue(Usuario.class);
 
-        //TODO SE CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
+                        Glide.with(holder.foto.getContext())
+                                .load(user.getFotoUrl())
+                                .into(holder.foto);
+
+                        holder.usuario.setText(user.getNome());
+
+                        p.setPhotoUrl(user.getFotoUrl());
+                        p.setUser(user.getNome());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        // CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
         holder.foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,7 +206,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         final Button irPerfil = view.findViewById(R.id.irPerfil);
         final TextView nome = view.findViewById(R.id.nome);
         final ImageView foto = view.findViewById(R.id.foto);
-        final ImageView capa = view.findViewById(R.id.capa);
 
         final AlertDialog dialogUsuario = mBuilderUsuario.create();
         dialogUsuario.show();
@@ -196,10 +214,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         Glide.with(context)
                 .load(p.getPhotoUrl())
                 .into(foto);
-        Glide.with(context)
-                .load(p.getPhotoUrl())
-                .apply(RequestOptions.overrideOf(20,20).error(android.R.drawable.dark_header))
-                .into(capa);
 
         seguir.setOnClickListener(new View.OnClickListener() {
             @Override
