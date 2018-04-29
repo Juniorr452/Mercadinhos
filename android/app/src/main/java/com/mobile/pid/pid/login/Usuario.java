@@ -1,5 +1,8 @@
 package com.mobile.pid.pid.login;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -20,9 +23,8 @@ import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
  * Created by junio on 04/03/2018.
  */
 
-public class Usuario
-{
-    private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/fotos_perfil%2Fpadrao.png?alt=media&token=2b50ce6b-9556-41ec-beb7-160ab3f371f7";
+public class Usuario implements Parcelable {
+    private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/usuarios%2Ffoto_padrao.png?alt=media&token=b7e19e92-04fa-49ba-a4bd-8b8cfd8c79df";
 
     @Exclude
     private String uid;
@@ -107,4 +109,41 @@ public class Usuario
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uid);
+        dest.writeString(this.nome);
+        dest.writeString(this.email);
+        dest.writeString(this.fotoUrl);
+        dest.writeString(this.sexo);
+        dest.writeString(this.dataNascimento);
+    }
+
+    protected Usuario(Parcel in) {
+        this.uid = in.readString();
+        this.nome = in.readString();
+        this.email = in.readString();
+        this.fotoUrl = in.readString();
+        this.sexo = in.readString();
+        this.dataNascimento = in.readString();
+    }
+
+    public static final Parcelable.Creator<Usuario> CREATOR = new Parcelable.Creator<Usuario>() {
+        @Override
+        public Usuario createFromParcel(Parcel source) {
+            return new Usuario(source);
+        }
+
+        @Override
+        public Usuario[] newArray(int size) {
+            return new Usuario[size];
+        }
+    };
 }

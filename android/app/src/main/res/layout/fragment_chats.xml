@@ -1,11 +1,62 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment">
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    android:layout_width="match_parent">
+
+    <ProgressBar
+        android:id="@+id/pb_chats"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fl_chats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-</FrameLayout>
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_chats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_criar_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="25dp"
+            android:tint="@android:color/white"
+            android:src="@android:drawable/ic_input_add"
+            app:fabSize="normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/sad_face_chats"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/sad_face"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/sad_message_chats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sad_message_chats"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="16dp"/>
+        </LinearLayout>
+
+    </FrameLayout>
+</RelativeLayout>

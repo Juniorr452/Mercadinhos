@@ -2,6 +2,7 @@ package com.mobile.pid.pid.home.perfil;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +40,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.login.Usuario;
 
@@ -73,7 +78,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     FirebaseUser user;
     FirebaseAuth auth;
     String user_id;
+
     DatabaseReference usuarioDatabaseRef;
+    StorageReference usuarioStorageRef;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -93,6 +102,10 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         imageView_user_blur = findViewById(R.id.imageView_user_blur);
         imageView_user = findViewById(R.id.imageView_user);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Atualizando...");
+        progressDialog.setMessage("Atualizando seu perfil...");
+
         conteudo.setVisibility(View.GONE);
 
         atualizarPerfilToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -108,10 +121,14 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         user_id = user.getUid();
 
         usuarioDatabaseRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(user_id);
+        usuarioStorageRef  = FirebaseStorage.getInstance().getReference().child("usuarios").child(user_id).child("fotoPerfil");
 
-        usuarioDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Pegar os dados do usuário
+        usuarioDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 Usuario user_logado = dataSnapshot.getValue(Usuario.class);
                 sexo = user_logado.getSexo();
                 dataNasc = user_logado.getDataNascimento();
@@ -141,7 +158,12 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         });
 
         // adiciona a foto com efeito embaçado
-        Glide.with(this).load(user.getPhotoUrl()).override(20,20).error(android.R.drawable.dark_header).into(imageView_user_blur);
+        Glide.with(this).load(user.getPhotoUrl())
+                .apply(new RequestOptions()
+                        .override(20,20)
+                        .error(android.R.drawable.dark_header))
+                .into(imageView_user_blur);
+
         Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
 
         imageView_user.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +215,11 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                     imagemUri = data.getData();
 
                     Glide.with(this).load(imagemUri).into(imageView_user);
-                    Glide.with(this).load(imagemUri).override(20,20).error(android.R.drawable.dark_header).into(imageView_user_blur);
+                    Glide.with(this).load(imagemUri)
+                            .apply(new RequestOptions()
+                                    .override(20, 20)
+                                    .error(android.R.drawable.dark_header))
+                            .into(imageView_user_blur);
                     break;
             }
         }
@@ -218,7 +244,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
     public boolean validarCampos(String nome, String data)
     {
-        if(nome == null || data == null)
+        if(nome.equals("") || data.equals(""))
             return false;
 
         return true;
@@ -267,21 +293,40 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
     public void atualizarPerfil(String nome, String sexo, String dataNasc)
     {
+        progressDialog.show();
+
         // TODO: Atualizar nome em outros lugares
         usuarioDatabaseRef.child("nome").setValue(nome);
         usuarioDatabaseRef.child("sexo").setValue(sexo);
         usuarioDatabaseRef.child("dataNascimento").setValue(dataNasc);
 
-        // Atualizar no Auth
-        UserProfileChangeRequest.Builder dadosPAtt = new UserProfileChangeRequest.Builder().setDisplayName(nome);
+        final UserProfileChangeRequest.Builder dadosPAtt = new UserProfileChangeRequest.Builder().setDisplayName(nome);
 
+        // Upar e atualizar foto, se existir.
         if (imagemUri != null)
-            dadosPAtt = dadosPAtt.setPhotoUri(imagemUri);
+            usuarioStorageRef.putFile(imagemUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
+                {
+                    if (task.isSuccessful())
+                    {
+                        String fotoUrl = task.getResult().getDownloadUrl().toString();
+                        usuarioDatabaseRef.child("fotoUrl").setValue(fotoUrl);
 
+                        dadosPAtt.setPhotoUri(Uri.parse(fotoUrl));
+                    }
+                }
+            });
 
-        user.updateProfile(dadosPAtt.build()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        // Atualizar no Auth
+        user.updateProfile(dadosPAtt.build()).addOnCompleteListener(new OnCompleteListener<Void>()
+        {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onComplete(@NonNull Task<Void> task)
+            {
+                progressDialog.dismiss();
+
                 if (task.isSuccessful())
                 {
                     Toast.makeText(AtualizarPerfilActivity.this

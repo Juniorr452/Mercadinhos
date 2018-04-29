@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -192,8 +193,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         dialogUsuario.show();
 
         nome.setText(p.getUser());
-        Glide.with(context).load(p.getPhotoUrl()).into(foto);
-        Glide.with(context).load(p.getPhotoUrl()).override(20,20).error(android.R.drawable.dark_header).into(capa);
+        Glide.with(context)
+                .load(p.getPhotoUrl())
+                .into(foto);
+        Glide.with(context)
+                .load(p.getPhotoUrl())
+                .apply(RequestOptions.overrideOf(20,20).error(android.R.drawable.dark_header))
+                .into(capa);
 
         seguir.setOnClickListener(new View.OnClickListener() {
             @Override
