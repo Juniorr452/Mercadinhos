@@ -116,8 +116,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             }
         });
 
-
-
         // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
         FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
                 .child("likes").addValueEventListener(new ValueEventListener() {
@@ -158,7 +156,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         Date dataPost  = sdf.parse(data);
 
         long duracao     = dataAtual.getTime() - dataPost.getTime();
-        long horas       = duracao / (60 * 60 * 1000) % 24;
+        long horas       = duracao / (60 * 60 * 1000);
         long minutos     = duracao / (60 * 1000) % 60;
         long segundos    = duracao / 1000 % 60;
 
@@ -174,7 +172,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             else
                 return String.valueOf(horas) + "h";
         else
-            return String.valueOf(dataPost.getDay()) + "/" + String.valueOf(dataPost.getMonth()) + "/" + String.valueOf(dataPost.getYear());
+        {
+            c.setTime(dataPost);
+            return  String.format("%02d", c.get(Calendar.DAY_OF_MONTH)) + "/" +
+                    String.format("%02d", (c.get(Calendar.MONTH) + 1)) + "/" +
+                    c.get(Calendar.YEAR);
+        }
+
     }
 
     public void dialogPerfilUsuario(final Post p) {
@@ -209,7 +213,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
                 mBuilder.setTitle(R.string.confirmacao)
-                        .setMessage(context.getText(R.string.unfollow_message) + " "+ p.getUser() + "?")
+                        .setMessage(context.getText(R.string.unfollow_message) + " " + p.getUser() + "?")
                         .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
