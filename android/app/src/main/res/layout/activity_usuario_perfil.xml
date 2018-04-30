@@ -129,7 +129,6 @@
                 app:tabSelectedTextColor="@android:color/white"
                 app:tabIndicatorColor="@android:color/white"
                 android:gravity="bottom"/>
-
         </android.support.design.widget.AppBarLayout>
 
         <android.support.design.widget.FloatingActionButton

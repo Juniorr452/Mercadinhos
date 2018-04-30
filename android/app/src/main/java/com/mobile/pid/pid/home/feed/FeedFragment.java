@@ -35,6 +35,7 @@ import com.mobile.pid.pid.home.adapters.PostAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -73,7 +74,33 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey()
+        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("seguindo")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        recyclerView.getRecycledViewPool().clear();
+                        postAdapter.clear();
+
+                        getPosts(usuario.getUid());
+
+                        if(dataSnapshot.exists()) {
+                            for(DataSnapshot data : dataSnapshot.getChildren()) {
+                                getPosts(data.getKey());
+                            }
+                        }
+
+                        progressBar.setVisibility(View.GONE);
+                        conteudo.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        /*FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey()
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -121,7 +148,7 @@ public class FeedFragment extends Fragment {
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
-                });
+                });*/
 
     }
 
@@ -246,5 +273,34 @@ public class FeedFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
         return sdf.format(c.getTime());
+    }
+
+    private void getPosts(String uid) {
+
+        FirebaseDatabase.getInstance().getReference("usuarios").child(uid).child("posts")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot db : dataSnapshot.getChildren()) {
+                            Post post = db.getValue(Post.class);
+                            post.setId(db.getKey());
+                            postAdapter.add(post);
+                        }
+
+                        if(postAdapter.getItemCount() == 0) {
+                            sadFace.setVisibility(View.VISIBLE);
+                            sadMessage.setVisibility(View.VISIBLE);
+                        } else {
+                            sadFace.setVisibility(View.GONE);
+                            sadMessage.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 }
