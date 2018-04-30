@@ -34,11 +34,9 @@ public class Post implements Parcelable{
         this.postData = postData;
     }*/
 
-    public Post(String id, String userId, String user, String photoUrl, String text) {
+    public Post(String id, String userId, String text) {
         this.id = id;
         this.userId = userId;
-        this.user = user;
-        this.photoUrl = photoUrl;
         this.texto = text;
     }
 
@@ -130,4 +128,16 @@ public class Post implements Parcelable{
         this.id = in.readString();
         this.postData = in.readLong();
     }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 }

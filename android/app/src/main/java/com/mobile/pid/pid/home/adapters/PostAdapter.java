@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
@@ -32,6 +33,7 @@ import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.feed.Post;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
+import com.mobile.pid.pid.login.Usuario;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -65,7 +67,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
     {
         final Post p = posts.get(position);
         final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        holder.usuario.setText(p.getUser());
+
 
         try
         {
@@ -78,15 +80,38 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
         holder.texto.setText(p.getTexto());
 
-        Glide.with(holder.foto.getContext())
-                .load(p.getPhotoUrl())
-                .into(holder.foto);
+        FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Usuario user = dataSnapshot.getValue(Usuario.class);
 
-        //TODO SE CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
+                        Glide.with(holder.foto.getContext())
+                                .load(user.getFotoUrl())
+                                .into(holder.foto);
+
+                        holder.usuario.setText(user.getNome());
+
+                        p.setPhotoUrl(user.getFotoUrl());
+                        p.setUser(user.getNome());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        // CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
         holder.foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogPerfilUsuario(p);
+
+                if(p.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    //TODO MANDA PRA ABA DE PERFIL DO USUARIO
+                } else {
+                    dialogPerfilUsuario(p);
+                }
             }
         });
 
@@ -191,7 +216,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         final Button irPerfil = view.findViewById(R.id.irPerfil);
         final TextView nome = view.findViewById(R.id.nome);
         final ImageView foto = view.findViewById(R.id.foto);
-        final ImageView capa = view.findViewById(R.id.capa);
 
         final AlertDialog dialogUsuario = mBuilderUsuario.create();
         dialogUsuario.show();
@@ -200,37 +224,51 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         Glide.with(context)
                 .load(p.getPhotoUrl())
                 .into(foto);
-        Glide.with(context)
-                .load(p.getPhotoUrl())
-                .apply(RequestOptions.overrideOf(20,20).error(android.R.drawable.dark_header))
-                .into(capa);
 
         seguir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                dialogUsuario.dismiss();
+                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios");
 
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-                mBuilder.setTitle(R.string.confirmacao)
-                        .setMessage(context.getText(R.string.unfollow_message) + " " + p.getUser() + "?")
-                        .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogUsuario.show();
-                                seguir.setText(R.string.follow);
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogUsuario.show();
-                            }
-                        });
+                if(seguir.getText().toString().equals(context.getText(R.string.following))) {
+                    dialogUsuario.dismiss();
 
-                AlertDialog dialog = mBuilder.create();
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.gray_font));
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+                    mBuilder.setTitle(R.string.confirmacao)
+                            .setMessage(context.getText(R.string.unfollow_message) + " "+ p.getUser() + "?")
+                            .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogUsuario.show();
+                                    seguir.setText(R.string.follow);
+
+                                    // EXCLUI NOS "SEGUINDO" DO USUARIO LOGADO
+                                    db.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("seguindo").child(p.getUserId()).removeValue();
+                                    // EXCLUI NOS "SEGUIDORES" DO USUARIO
+                                    db.child(p.getUserId()).child("seguidores").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogUsuario.show();
+                                }
+                            });
+
+                    AlertDialog dialog = mBuilder.create();
+                    dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.gray_font));
+                } else {
+                    seguir.setText(context.getText(R.string.following));
+
+                    // ADICIONA NOS "SEGUINDO" DO USUARIO LOGADO
+                    db.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("seguindo").child(p.getUserId()).setValue(true);
+                    // ADICIONA NOS "SEGUIDORES" DO USUARIO
+                    db.child(p.getUserId()).child("seguidores").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true);
+                }
+
+
             }
         });
 
@@ -284,7 +322,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
                         AlertDialog dialog = new AlertDialog.Builder(context)
                                 .setTitle(R.string.confirmacao)
-                                .setMessage("Deseja excluir o post selecionado?")
+                                .setMessage(R.string.excluir_post)
                                 .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
