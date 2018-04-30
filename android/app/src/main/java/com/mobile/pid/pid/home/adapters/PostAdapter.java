@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.nfc.Tag;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.FeedFragment;
@@ -327,9 +330,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        /*FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId())
-                                               .child("posts").child(p.getId()).removeValue();
-                                        FirebaseDatabase.getInstance().getReference("posts").child(p.getId()).removeValue();*/
+                                        FirebaseDatabase.getInstance().getReference("posts").child(p.getId()).child("likes")
+                                                .addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                        // REMOVE O POST CURTIDO DE TODOS OS USUARIOS QUE CURTIRAM
+                                                        if(dataSnapshot.exists()) {
+                                                            for(DataSnapshot data : dataSnapshot.getChildren()) {
+                                                                FirebaseDatabase.getInstance().getReference("usuarios").child(data.getKey())
+                                                                        .child("posts_like").child(p.getId()).removeValue();
+
+                                                                data.getRef().removeValue();
+                                                            }
+                                                        }
+
+                                                        // REMOVE O POST DO USUARIO QUE CRIOU
+                                                        FirebaseDatabase.getInstance().getReference("usuarios")
+                                                                .child(p.getUserId()).child("posts").child(p.getId()).removeValue();
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)

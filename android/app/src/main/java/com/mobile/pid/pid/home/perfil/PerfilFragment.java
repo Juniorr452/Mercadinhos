@@ -129,6 +129,40 @@ public class PerfilFragment extends Fragment
         count_following      = view.findViewById(R.id.count_following);
         count_posts          = view.findViewById(R.id.count_posts);
 
+        // SETAR OS SEGUIDORES
+        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("seguidores")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                            count_followers.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        else
+                            count_followers.setText("0");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        // SETAR OS SEGUINDO
+        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("seguindo")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                            count_following.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        else
+                            count_following.setText("0");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
         FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("posts")
                 .addValueEventListener(new ValueEventListener() {
                     @Override

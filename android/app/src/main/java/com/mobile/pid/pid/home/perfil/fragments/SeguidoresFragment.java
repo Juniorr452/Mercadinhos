@@ -38,13 +38,8 @@ public class SeguidoresFragment extends Fragment {
 
         recyclerView_seguidores = (RecyclerView) view.findViewById(R.id.recycler_view_perfil_seguidores);
 
-        follow = new ArrayList<FollowItem>();
-
-        follow.add(new FollowItem(null, "Jonas Ramos", "jonasramos"));
-
-
         recyclerView_seguidores.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView_seguidores.setAdapter(new FollowAdapter(getActivity(), follow, 2));
+        recyclerView_seguidores.setAdapter(new FollowAdapter(getActivity(), 2));
 
         return view;
     }

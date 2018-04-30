@@ -1,20 +1,25 @@
 package com.mobile.pid.pid.home.perfil.fragments;
 
-
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
+
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.FollowAdapter;
 import com.mobile.pid.pid.home.perfil.FollowItem;
+import com.mobile.pid.pid.login.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,36 +29,74 @@ import java.util.List;
  */
 public class SeguindoFragment extends Fragment {
 
-    private RecyclerView recyclerView_seguindo;
-    private List<FollowItem> follow;
-    private Button btn_follow;
+    private RecyclerView recyclerView;
+    private FollowAdapter followAdapter;
+    private FollowItem item;
+
+
+    private DatabaseReference db;
+    private String usuario;
 
 
     public SeguindoFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        followAdapter = new FollowAdapter(getActivity(), 1);
+
+        db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("seguindo");
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot data : dataSnapshot.getChildren()) {
+
+                        String user = data.getKey();
+
+                        FirebaseDatabase.getInstance().getReference("usuarios").child(user)
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        item = new FollowItem();
+                                        Usuario user = dataSnapshot.getValue(Usuario.class);
+                                        item.setFoto(user.getFotoUrl());
+                                        item.setNome(user.getNome());
+                                        followAdapter.add(item);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seguindo, container, false);
 
-        recyclerView_seguindo = (RecyclerView) view.findViewById(R.id.recycler_view_perfil_seguindo);
-        btn_follow = (Button) view.findViewById(R.id.btn_follow);
+        recyclerView = view.findViewById(R.id.recycler_view_perfil_seguindo);
 
-        follow = new ArrayList<FollowItem>();
-
-        follow.add(new FollowItem(null, "Jonas Ramos", "jonasramos"));
-
-
-        recyclerView_seguindo.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView_seguindo.setAdapter(new FollowAdapter(getActivity(), follow, 1));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(followAdapter);
 
         return view;
-    }
-
-    public List<FollowItem> getFollow() {
-        return follow;
     }
 }

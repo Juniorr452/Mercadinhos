@@ -74,7 +74,7 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("seguindo")
+        /*FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("seguindo")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,7 +98,7 @@ public class FeedFragment extends Fragment {
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
-                });
+                });*/
 
         /*FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey()
                 .addChildEventListener(new ChildEventListener() {
@@ -275,7 +275,7 @@ public class FeedFragment extends Fragment {
         return sdf.format(c.getTime());
     }
 
-    private void getPosts(String uid) {
+    private void getPosts(final String uid) {
 
         FirebaseDatabase.getInstance().getReference("usuarios").child(uid).child("posts")
                 .addValueEventListener(new ValueEventListener() {

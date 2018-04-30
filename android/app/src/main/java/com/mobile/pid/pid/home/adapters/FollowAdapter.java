@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.perfil.FollowItem;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,9 +35,9 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     private final String FOLLOW_STRING;
     private final String FOLLOWING_STRING;
 
-    public FollowAdapter(Context context, List<FollowItem> follow, int context_cod) {
+    public FollowAdapter(Context context, int context_cod) {
         this.context = context;
-        this.follow = follow;
+        this.follow = new ArrayList<>();
         this.context_cod = context_cod;
         FOLLOW_STRING = context.getResources().getString(R.string.follow);
         FOLLOWING_STRING = context.getResources().getString(R.string.following);
@@ -50,12 +52,20 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+        FollowItem item = follow.get(position);
 
+        holder.usuario.setText(item.getNome());
+        Glide.with(context).load(item.getFoto()).into(holder.foto);
     }
 
     @Override
     public int getItemCount() {
-        return follow.size() + 10;
+        return follow.size();
+    }
+
+    public void add(FollowItem item) {
+        follow.add(item);
+        notifyDataSetChanged();
     }
 
 
@@ -71,6 +81,15 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
             foto        = itemView.findViewById(R.id.icon_user_follow);
             usuario     = itemView.findViewById(R.id.textView_user_name);
             botaoSeguir = itemView.findViewById(R.id.btn_follow);
+
+            switch (context_cod) {
+                case SEGUIDORES_CONTEXT:
+                    break;
+                case SEGUINDO_CONTEXT:
+                    break;
+                default:
+                    break;
+            }
 
             if(context_cod == SEGUINDO_CONTEXT) { // SE TIVER NO FRAGMENT DE SEGUINDO
                 setFollowStateButton(botaoSeguir);
