@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="25dp">
+
+            <ImageView
+                android:id="@+id/solicitacao_foto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/logo" />
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/solicitacao_nome"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:text="Nomeeee"
+                android:textColor="@color/gray_font"
+                android:textSize="16dp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/solicitacao_btn_recursar"
+            android:layout_weight="1"
+            android:layout_height="24dp"
+            android:text="@string/recusar"
+            android:textSize="12dp"
+            android:layout_gravity="center"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/solicitacao_btn_aceitar"
+            android:layout_weight="1"
+            android:layout_height="24dp"
+            android:layout_marginLeft="8dp"
+            android:text="@string/aceitar"
+            android:textSize="12dp"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+</LinearLayout>
