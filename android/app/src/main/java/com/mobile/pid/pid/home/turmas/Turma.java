@@ -20,7 +20,7 @@ import java.util.Map;
 public class Turma implements Parcelable // Parcelable Necessário pra passar ele pra outra activity https://youtu.be/ROQ4T47nMhI?t=619
 {
     @Exclude
-    private String uid;
+    private String id;
 
     private String capaUrl;
     private String nome;
@@ -42,12 +42,12 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         this.professor = professor;
     }
 
-    public String getUid(){
-        return uid;
+    public String getId() {
+        return id;
     }
 
-    public void setUid(String uid){
-        this.uid = uid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -95,6 +95,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             return Integer.toString(alunos.size());
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -102,7 +103,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.uid);
+        dest.writeString(this.id);
         dest.writeString(this.capaUrl);
         dest.writeString(this.nome);
         dest.writeString(this.pin);
@@ -116,7 +117,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
     }
 
     protected Turma(Parcel in) {
-        this.uid = in.readString();
+        this.id = in.readString();
         this.capaUrl = in.readString();
         this.nome = in.readString();
         this.pin = in.readString();
