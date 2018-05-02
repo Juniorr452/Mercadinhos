@@ -99,7 +99,7 @@ public class PerfilFragment extends Fragment
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         user = dataSnapshot.getValue(Usuario.class);
                         collapsing_perfil.setTitle(user.getNome());
-                        Glide.with(PerfilFragment.this).load(user.getFotoUrl()).into(imageView_user);
+                        Glide.with(imageView_user).load(user.getFotoUrl()).into(imageView_user);
                     }
 
                     @Override
