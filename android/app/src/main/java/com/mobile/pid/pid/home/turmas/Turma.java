@@ -31,6 +31,8 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
     private String professorUid;
     private List<String> alunosUid;
 
+    private Map<String, Boolean> solicitacoes;
+
     public Turma() {}
 
     public Turma(String nome, String pin, String capaUrl, String professorUid, Map<String, Integer> diasDaSemana)
@@ -90,6 +92,14 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return this.diasDaSemana;
     }
 
+    public Map<String, Boolean> getSolicitacoes() {
+        return solicitacoes;
+    }
+
+    public void setSolicitacoes(Map<String, Boolean> solicitacoes) {
+        this.solicitacoes = solicitacoes;
+    }
+
     @Exclude
     public String getQtdAlunos(){
         if (alunosUid == null)
@@ -129,6 +139,15 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         }
         dest.writeString(this.professorUid);
         dest.writeStringList(this.alunosUid);
+
+        if(solicitacoes != null)
+        {
+            dest.writeInt(this.solicitacoes.size());
+            for (Map.Entry<String, Boolean> entry : this.solicitacoes.entrySet()) {
+                dest.writeString(entry.getKey());
+                dest.writeValue(entry.getValue());
+            }
+        }
     }
 
     protected Turma(Parcel in) {
@@ -145,6 +164,13 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         }
         this.professorUid = in.readString();
         this.alunosUid = in.createStringArrayList();
+        int solicitacoesSize = in.readInt();
+        this.solicitacoes = new HashMap<String, Boolean>(solicitacoesSize);
+        for (int i = 0; i < solicitacoesSize; i++) {
+            String key = in.readString();
+            Boolean value = (Boolean) in.readValue(Boolean.class.getClassLoader());
+            this.solicitacoes.put(key, value);
+        }
     }
 
     public static final Creator<Turma> CREATOR = new Creator<Turma>() {

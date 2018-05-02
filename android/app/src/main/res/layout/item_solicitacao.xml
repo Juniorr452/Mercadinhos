@@ -41,9 +41,10 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/solicitacao_btn_recursar"
-            android:layout_weight="1"
+            android:id="@+id/solicitacao_btn_recusar"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
+            android:layout_weight="1"
             android:text="@string/recusar"
             android:textSize="12dp"
             android:layout_gravity="center"
@@ -52,8 +53,9 @@
 
         <Button
             android:id="@+id/solicitacao_btn_aceitar"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
+            android:layout_weight="1"
             android:layout_marginLeft="8dp"
             android:text="@string/aceitar"
             android:textSize="12dp"

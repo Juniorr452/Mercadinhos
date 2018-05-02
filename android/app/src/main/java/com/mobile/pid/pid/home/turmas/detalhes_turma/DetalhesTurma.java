@@ -150,10 +150,11 @@ public class DetalhesTurma extends AppCompatActivity
         @Override
         public Fragment getItem(int position)
         {
+            Bundle b = new Bundle();
+
             switch(position)
             {
                 case 0:
-                    Bundle b = new Bundle();
                     b.putParcelable("turma", turma);
                     b.putInt("usuario", USUARIO);
 
@@ -165,7 +166,13 @@ public class DetalhesTurma extends AppCompatActivity
                 case 1:
                     return new TrabalhosFragment();
                 case 2:
-                    return new SolicitacoesFragment();
+
+                    b.putParcelable("turma", turma);
+
+                    Fragment solicitacoesFragment = new SolicitacoesFragment();
+                    solicitacoesFragment.setArguments(b);
+
+                    return solicitacoesFragment;
                 default:
                     return null;
             }

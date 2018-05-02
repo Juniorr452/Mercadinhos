@@ -23,10 +23,10 @@ import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
  * Created by junio on 04/03/2018.
  */
 
-public class Usuario implements Parcelable {
+public class Usuario implements Parcelable
+{
     private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/usuarios%2Ffoto_padrao.png?alt=media&token=b7e19e92-04fa-49ba-a4bd-8b8cfd8c79df";
 
-    @Exclude
     private String uid;
 
     private String nome;
@@ -68,6 +68,11 @@ public class Usuario implements Parcelable {
     @Exclude
     public String getUid(){
         return this.uid;
+    }
+
+    @Exclude
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getFotoUrl() {
