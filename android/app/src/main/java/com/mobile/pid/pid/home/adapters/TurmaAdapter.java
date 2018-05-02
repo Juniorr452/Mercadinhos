@@ -8,17 +8,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.HomeActivity;
+import com.mobile.pid.pid.home.feed.Post;
+import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
 import com.mobile.pid.pid.home.turmas.InfoUsuario;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
@@ -33,7 +38,6 @@ import java.util.Map;
 // TODO: Estudar essa p**** direito
 public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHolder>
 {
-
     private static final int COD_TURMAS_MATRICULADAS = 0;
     private static final int COD_TURMAS_CRIADAS = 1;
     private static final int PROFESSOR = 0;
@@ -43,7 +47,6 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     private LayoutInflater layoutInflater;
     private int COD_CONTEXT;
     private String Uid;
-
 
     public TurmaAdapter(Context c, List<Turma> l, int COD_CONTEXT)
     {
@@ -86,7 +89,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                         {
                             DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
                             DatabaseReference usuariosRef = rootRef.child("usuarios");
-                            String tuid = t.getUid();
+                            String tuid = t.getId();
 
                             // Deletar turma.
                             rootRef.child("turmas")
@@ -94,7 +97,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                                 .removeValue();
 
                             // Deletar no turmas_criadas do professor.
-                            usuariosRef.child(t.getProfessor().getUid())
+                            usuariosRef.child(t.getProfessorUid())
                                 .child("turmas_criadas")
                                 .child(tuid)
                                 .removeValue();
@@ -169,28 +172,103 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 @Override
                 public void onClick(View view)
                 {
+                    final Context c   = itemView.getContext();
+                    final Turma   t   = listaTurmas.get(getPosition());
+                    final String  uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                    Turma  t = listaTurmas.get(getPosition());
-                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
-
-                    i.putExtra("turma", t);
-
-                    switch(COD_CONTEXT)
+                    // Se o usuário está na turma.
+                    if (t.estaNaTurma(uid))
                     {
-                        case COD_TURMAS_CRIADAS:
-                            i.putExtra("usuario", PROFESSOR);
-                            break;
-                        case COD_TURMAS_MATRICULADAS:
-                            i.putExtra("usuario", ALUNO);
-                            break;
-                        default:
-                            break;
-                    }
+                        Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
 
-                    layoutInflater.getContext().startActivity(i);
+                        i.putExtra("turma", t);
+
+                        switch(COD_CONTEXT)
+                        {
+                            case COD_TURMAS_CRIADAS:
+                                i.putExtra("usuario", PROFESSOR);
+                                break;
+                            case COD_TURMAS_MATRICULADAS:
+                                i.putExtra("usuario", ALUNO);
+                                break;
+                        }
+
+                        layoutInflater.getContext().startActivity(i);
+                    }
+                    else
+                    {
+                        // Se a turma não tiver PIN
+                        if(t.getPin().equals(""))
+                        {
+                            new AlertDialog.Builder(c)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.deseja_solicitacao)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i)
+                                    {
+                                        enviarSolicitacaoTurma(t, uid);
+
+                                        new AlertDialog.Builder(c)
+                                            .setMessage(R.string.solicitacao_sucesso)
+                                            .setPositiveButton(R.string.Ok, null)
+                                            .show();
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                        }
+                        else
+                        {
+                            final View v         = layoutInflater.inflate(R.layout.dialog_pin, null);
+                            final EditText pinEt = v.findViewById(R.id.dialog_pin);
+
+                            final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(c)
+                                    .setView(v)
+                                    .setPositiveButton(R.string.Ok, null)
+                                    .setNegativeButton(R.string.cancel, null)
+                                    .create();
+
+                            dialog.show();
+
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    String pin = pinEt.getText().toString();
+
+                                    AlertDialog.Builder alerta = new AlertDialog.Builder(c)
+                                        .setTitle(R.string.warning)
+                                        .setPositiveButton(R.string.Ok, null);
+
+                                    if(pin.equals(t.getPin()))
+                                    {
+                                        enviarSolicitacaoTurma(t, uid);
+                                        alerta.setMessage(R.string.solicitacao_sucesso);
+                                        dialog.dismiss();
+                                    }
+                                    else
+                                        alerta.setMessage(R.string.wrong_pin);
+
+                                    alerta.show();
+                                }
+                            });
+                        }
+                    }
                 }
             });
         }
+    }
+
+    private void enviarSolicitacaoTurma(Turma t, String uid)
+    {
+        FirebaseDatabase.getInstance().getReference()
+            .child("turmas")
+            .child(t.getId())
+            .child("solicitacoes")
+            .child(uid).setValue(true);
     }
 
     public void setUid(String uid) {

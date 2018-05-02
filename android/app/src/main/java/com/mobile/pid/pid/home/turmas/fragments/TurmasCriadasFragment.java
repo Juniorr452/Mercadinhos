@@ -97,7 +97,7 @@ public class TurmasCriadasFragment extends Fragment
                                 public void onDataChange(DataSnapshot dataSnapshotTurma)
                                 {
                                     Turma t = dataSnapshotTurma.getValue(Turma.class);
-                                    t.setUid(dataSnapshotTurma.getKey());
+                                    t.setId(dataSnapshotTurma.getKey());
 
                                     turmaAdapter.add(t);
                                     turmaAdapter.notifyDataSetChanged();

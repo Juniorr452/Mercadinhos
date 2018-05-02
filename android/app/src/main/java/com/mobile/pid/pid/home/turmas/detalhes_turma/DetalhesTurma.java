@@ -18,11 +18,17 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.SolicitacoesFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment;
+import com.mobile.pid.pid.login.Usuario;
 
 public class DetalhesTurma extends AppCompatActivity
 {
@@ -46,6 +52,8 @@ public class DetalhesTurma extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_turma);
+
+        DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference().child("usuarios");
 
         PagerAdapter detalhesPageAdapter  = new DetalheTurmasPageAdapter(this.getSupportFragmentManager());
         ViewPager detalhesViewPager       = findViewById(R.id.viewpager_turma);
@@ -85,7 +93,20 @@ public class DetalhesTurma extends AppCompatActivity
         qtdAlunos      = findViewById(R.id.qtd_aluno);
 
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
-        Glide.with(this).load(turma.getProfessor().getFotoUrl()).into(imgProfessor);
+
+        usuariosRef.child(turma.getProfessorUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                Usuario professor = dataSnapshot.getValue(Usuario.class);
+                Glide.with(DetalhesTurma.this).load(professor.getFotoUrl()).into(imgProfessor);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         nomeTurma.setText(turma.getNome());
         qtdAlunos.setText(turma.getQtdAlunos());
