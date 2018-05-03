@@ -74,7 +74,6 @@ public class PerfilFragment extends Fragment
 
     private TextView count_followers;
     private TextView count_following;
-    private TextView count_posts;
 
 
     public PerfilFragment() {
@@ -127,7 +126,6 @@ public class PerfilFragment extends Fragment
         fab_menu_signout     = (FloatingActionButton) view.findViewById(R.id.fab_menu_signout);
         count_followers      = view.findViewById(R.id.count_followers);
         count_following      = view.findViewById(R.id.count_following);
-        count_posts          = view.findViewById(R.id.count_posts);
 
         // SETAR OS SEGUIDORES
         FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("seguidores")
@@ -155,20 +153,6 @@ public class PerfilFragment extends Fragment
                             count_following.setText(String.valueOf(dataSnapshot.getChildrenCount()));
                         else
                             count_following.setText("0");
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("posts")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists())
-                            count_posts.setText(formatNumber(dataSnapshot.getChildrenCount()));
                     }
 
                     @Override

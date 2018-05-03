@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,7 +75,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
 
         private ImageView foto;
         private TextView usuario;
-        private Button botaoSeguir;
+        private CheckBox botaoSeguir;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -92,12 +94,23 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
             }
 
             if(context_cod == SEGUINDO_CONTEXT) { // SE TIVER NO FRAGMENT DE SEGUINDO
-                setFollowStateButton(botaoSeguir);
+                botaoSeguir.setChecked(true);
             } else { // SE TIVER NO FRAGMENT DE SEGUIDORES
-
+                
             }
 
-            botaoSeguir.setOnClickListener(new View.OnClickListener() {
+            botaoSeguir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(botaoSeguir.isChecked()) {
+                        Toast.makeText(context, "seguindo", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "nao estou mais seguindo", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            /*botaoSeguir.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
@@ -110,7 +123,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                 public void onClick(View view) {
                     Toast.makeText(view.getContext(), "ALO", Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
         }
     }
 

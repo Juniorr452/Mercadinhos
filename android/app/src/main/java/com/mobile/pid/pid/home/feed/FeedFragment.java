@@ -74,10 +74,7 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-
-        getPosts(); // CARREGAR TODOS OS POSTS DO USUARIO
-
-        /*FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByKey()
+        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByChild("postData")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -85,21 +82,21 @@ public class FeedFragment extends Fragment {
                         if(dataSnapshot.exists()) {
                             recyclerView.getRecycledViewPool().clear();
                             recyclerView.setItemViewCacheSize(0);
-                            postAdapter.notifyDataSetChanged();
 
-                            Post post = dataSnapshot.getValue(Post.class);
-                            post.setId(dataSnapshot.getKey());
-                            postAdapter.add(post);
+                            Post p = dataSnapshot.getValue(Post.class);
+                            p.setId(dataSnapshot.getKey());
+                            postAdapter.add(p);
 
                             sadFace.setVisibility(View.GONE);
                             sadMessage.setVisibility(View.GONE);
                         } else {
                             sadFace.setVisibility(View.VISIBLE);
-                            sadMessage.setVisibility(View.VISIBLE);
+                            sadMessage.setVisibility(View.GONE);
                         }
 
                         progressBar.setVisibility(View.GONE);
                         conteudo.setVisibility(View.VISIBLE);
+
                     }
 
                     @Override
@@ -109,8 +106,6 @@ public class FeedFragment extends Fragment {
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        recyclerView.getRecycledViewPool().clear();
-
                         Post p = dataSnapshot.getValue(Post.class);
                         p.setId(dataSnapshot.getKey());
                         postAdapter.removePost(p);
@@ -125,7 +120,7 @@ public class FeedFragment extends Fragment {
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
-                });*/
+                });
 
     }
 
@@ -145,6 +140,8 @@ public class FeedFragment extends Fragment {
         conteudo.setVisibility(View.GONE);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(postAdapter);
@@ -203,8 +200,26 @@ public class FeedFragment extends Fragment {
 
                 post.setId(db.push().getKey());
                 db.child(post.getId()).setValue(post);
+
+                FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("seguidores")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()) {
+                                    for(DataSnapshot data : dataSnapshot.getChildren()) {
+                                        FirebaseDatabase.getInstance().getReference("usuarios").child(data.getKey()).child("posts")
+                                                .child(post.getId()).setValue(post);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                 dialog.dismiss();
-                getPosts();
             }
         });
 

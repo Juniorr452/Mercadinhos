@@ -48,25 +48,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <CheckBox
                 android:id="@+id/btn_follow"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:text="@string/follow"
+                android:layout_height="wrap_content"
+                android:button="@drawable/custom_follow_checkbox"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center|center_vertical"
-                android:background="@color/colorPrimaryDark"
-                android:textSize="12dp"
-                android:textColor="@color/white" />
+                android:checked="true"
+                android:theme="@style/FollowBox"
+                android:layout_gravity="center|center_vertical"/>
 
         </RelativeLayout>
-
-
-
-
-
     </LinearLayout>
 
 </LinearLayout>

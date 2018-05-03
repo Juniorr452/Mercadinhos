@@ -105,4 +105,7 @@
     <string name="recusar">Recusar</string>
     <string name="aceitar">Aceitar</string>
     <string name="excluir_post">Deseja excluir o post selecionado?</string>
+    <string name="followers_upper">SEGUIDORES</string>
+    <string name="posts_upper">POSTS</string>
+    <string name="seguindo_upper">SEGUINDO</string>
 </resources>

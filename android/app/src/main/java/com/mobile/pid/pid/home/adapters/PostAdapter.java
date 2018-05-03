@@ -112,8 +112,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
                 if(p.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     //TODO MANDA PRA ABA DE PERFIL DO USUARIO
+                    dialogPerfilUsuario(p, usuario);
                 } else {
-                    dialogPerfilUsuario(p);
+                    dialogPerfilUsuario(p, usuario);
                 }
             }
         });
@@ -209,16 +210,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
     }
 
-    public void dialogPerfilUsuario(final Post p) {
+    public void dialogPerfilUsuario(final Post p, final String usuario) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_perfil_usuario, null);
 
         final AlertDialog.Builder mBuilderUsuario = new AlertDialog.Builder(context);
         mBuilderUsuario.setView(view);
 
         final Button seguir = view.findViewById(R.id.seguir);
-        final Button irPerfil = view.findViewById(R.id.irPerfil);
         final TextView nome = view.findViewById(R.id.nome);
         final ImageView foto = view.findViewById(R.id.foto);
+        final TextView count_seguindo = view.findViewById(R.id.seguindo);
+        final TextView count_seguidores = view.findViewById(R.id.seguidores);
+
+        if(p.getUserId().equals(usuario)) {
+            seguir.setVisibility(View.GONE);
+        }
 
         final AlertDialog dialogUsuario = mBuilderUsuario.create();
         dialogUsuario.show();
@@ -227,6 +233,40 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         Glide.with(context)
                 .load(p.getPhotoUrl())
                 .into(foto);
+
+        FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId()).child("seguindo")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            count_seguindo.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        } else {
+                            count_seguindo.setText("0");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId()).child("seguidores")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            count_seguidores.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        } else {
+                            count_seguidores.setText("0");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
         seguir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,6 +290,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                                     db.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("seguindo").child(p.getUserId()).removeValue();
                                     // EXCLUI NOS "SEGUIDORES" DO USUARIO
                                     db.child(p.getUserId()).child("seguidores").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+
+                                    seguir.setText(context.getText(R.string.follow));
                                 }
                             })
                             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -275,7 +317,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             }
         });
 
-        irPerfil.setOnClickListener(new View.OnClickListener() {
+        foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, UsuarioPerfilActivity.class);
