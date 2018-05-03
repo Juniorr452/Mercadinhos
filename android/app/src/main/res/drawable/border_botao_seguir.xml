@@ -4,7 +4,7 @@
 
     <!-- View background color -->
     <solid
-        android:color="#101728">
+        android:color="@color/dialogFeed">
     </solid>
 
     <!-- View border color and width -->

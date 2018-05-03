@@ -13,7 +13,6 @@ import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.FollowAdapter;
 import com.mobile.pid.pid.home.perfil.FollowItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
  */
 public class SeguidoresFragment extends Fragment {
 
-    private RecyclerView recyclerView_seguidores;
+    private RecyclerView recyclerView;
     private List<FollowItem> follow;
 
 
@@ -36,22 +35,11 @@ public class SeguidoresFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_seguidores, container, false);
 
-        recyclerView_seguidores = (RecyclerView) view.findViewById(R.id.recycler_view_perfil_seguidores);
+        recyclerView = view.findViewById(R.id.recycler_view_perfil_seguidores);
 
-        recyclerView_seguidores.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView_seguidores.setAdapter(new FollowAdapter(getActivity(), 2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new FollowAdapter(getActivity(), 2));
 
         return view;
-    }
-
-    public List<FollowItem> getFollow() {
-        return follow;
-    }
-
-    private List<FollowItem> sort(List<FollowItem> lista) {
-
-
-
-        return lista;
     }
 }

@@ -14,7 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.Post;
 import com.mobile.pid.pid.home.perfil.FollowItem;
 
 
@@ -53,11 +59,67 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        FollowItem item = follow.get(position);
+    public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
+        final FollowItem item = follow.get(position);
+        final String usuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         holder.usuario.setText(item.getNome());
         Glide.with(context).load(item.getFoto()).into(holder.foto);
+
+        holder.botaoSeguir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.botaoSeguir.isChecked()) {
+                    // REMOVE DOS SEGUIDORES DO USUARIO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(item.getUid()).child("seguidores")
+                            .child(usuarioLogado).setValue(item);
+
+                    // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
+                            .child(item.getUid()).setValue(item);
+
+                    follow.add(item);
+                    notifyDataSetChanged();
+
+                    holder.botaoSeguir.setChecked(true);
+                } else {
+                    // REMOVE DOS SEGUIDORES DO USUARIO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(item.getUid()).child("seguidores")
+                            .child(usuarioLogado).removeValue();
+
+                    // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
+                            .child(item.getUid()).removeValue();
+
+                    // REMOVE TODOS OS POSTS DO USUARIO DO MEU FEED
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("posts")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()) {
+                                        for(DataSnapshot post : dataSnapshot.getChildren()) {
+                                            Post p = post.getValue(Post.class);
+
+                                            if(p.getUserId().equals(item.getUid()))
+                                                post.getRef().removeValue();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                    follow.remove(item);
+
+                    notifyDataSetChanged();
+
+                    holder.botaoSeguir.setChecked(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -67,6 +129,20 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
 
     public void add(FollowItem item) {
         follow.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void remove(FollowItem item) {
+        for (FollowItem followItem: follow) {
+            if(followItem.getUid().equals(item.getUid())) {
+                follow.remove(followItem);
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void clear() {
+        follow.clear();
         notifyDataSetChanged();
     }
 
@@ -83,71 +159,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
             foto        = itemView.findViewById(R.id.icon_user_follow);
             usuario     = itemView.findViewById(R.id.textView_user_name);
             botaoSeguir = itemView.findViewById(R.id.btn_follow);
-
-            switch (context_cod) {
-                case SEGUIDORES_CONTEXT:
-                    break;
-                case SEGUINDO_CONTEXT:
-                    break;
-                default:
-                    break;
-            }
-
-            if(context_cod == SEGUINDO_CONTEXT) { // SE TIVER NO FRAGMENT DE SEGUINDO
-                botaoSeguir.setChecked(true);
-            } else { // SE TIVER NO FRAGMENT DE SEGUIDORES
-                
-            }
-
-            botaoSeguir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(botaoSeguir.isChecked()) {
-                        Toast.makeText(context, "seguindo", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "nao estou mais seguindo", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-            /*botaoSeguir.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    changeStateButton(botaoSeguir);
-                }
-            });
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "ALO", Toast.LENGTH_SHORT).show();
-                }
-            });*/
         }
-    }
-
-    private void changeStateButton(Button btn_follow) {
-
-        if(btn_follow.getText().toString().equals(FOLLOW_STRING)) {
-            setFollowStateButton(btn_follow);
-        } else {
-            setUnfollowStateButton(btn_follow);
-        }
-    }
-
-    private void setFollowStateButton(Button btn_follow) {
-
-        btn_follow.setText(FOLLOWING_STRING);
-        btn_follow.setBackgroundResource(R.color.white);
-        btn_follow.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
-    }
-
-    private void setUnfollowStateButton(Button btn_follow) {
-
-        btn_follow.setText(FOLLOW_STRING);
-        btn_follow.setBackgroundResource(R.color.colorPrimaryDark);
-        btn_follow.setTextColor(ContextCompat.getColor(context, R.color.white));
     }
 }
 

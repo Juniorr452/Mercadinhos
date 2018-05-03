@@ -55,18 +55,20 @@ public class SeguindoFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
+
+                    recyclerView.getRecycledViewPool().clear();
+                    followAdapter.clear();
+
                     for(DataSnapshot data : dataSnapshot.getChildren()) {
 
-                        String user = data.getKey();
+                        final String uid = data.getKey();
 
-                        FirebaseDatabase.getInstance().getReference("usuarios").child(user)
+                        FirebaseDatabase.getInstance().getReference("usuarios").child(uid)
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        item = new FollowItem();
                                         Usuario user = dataSnapshot.getValue(Usuario.class);
-                                        item.setFoto(user.getFotoUrl());
-                                        item.setNome(user.getNome());
+                                        item = new FollowItem(uid, user.getFotoUrl(), user.getNome());
                                         followAdapter.add(item);
                                     }
 

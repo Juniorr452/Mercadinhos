@@ -89,7 +89,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Usuario user = dataSnapshot.getValue(Usuario.class);
 
-                        Glide.with(holder.foto.getContext())
+                        Glide.with(context.getApplicationContext())
                                 .load(user.getFotoUrl())
                                 .into(holder.foto);
 
@@ -224,7 +224,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
         if(p.getUserId().equals(usuario)) {
             seguir.setVisibility(View.GONE);
+        } else {
+            FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("seguindo").child(p.getUserId())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()) {
+                                seguir.setText(context.getText(R.string.following));
+                            } else {
+                                seguir.setText(context.getText(R.string.follow));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
         }
+
+
 
         final AlertDialog dialogUsuario = mBuilderUsuario.create();
         dialogUsuario.show();

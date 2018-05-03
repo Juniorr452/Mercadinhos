@@ -3,6 +3,7 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fundoPost"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.mobile.pid.pid.home.perfil.PerfilFragment">
 
@@ -107,7 +108,7 @@
                 app:tabMode="scrollable"
                 app:tabTextColor="@android:color/white"
                 app:tabSelectedTextColor="@android:color/white"
-                app:tabIndicatorColor="@android:color/white"
+                app:tabIndicatorColor="@color/white"
                 android:gravity="bottom"/>
 
         </android.support.design.widget.AppBarLayout>
@@ -149,7 +150,7 @@
             fab:menu_labels_textColor="#f2f1f1"
             fab:menu_labels_textSize="15sp"
             fab:menu_openDirection="up"
-            fab:menu_shadowColor="#b3b3b3"
+            fab:menu_shadowColor="@color/fundoRecycle"
             fab:menu_shadowRadius="3dp"
             fab:menu_shadowXOffset="0dp"
             fab:menu_shadowYOffset="0.7dp"
