@@ -74,7 +74,6 @@ public class PerfilFragment extends Fragment
 
     private TextView count_followers;
     private TextView count_following;
-    private TextView count_posts;
 
 
     public PerfilFragment() {
@@ -99,7 +98,7 @@ public class PerfilFragment extends Fragment
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         user = dataSnapshot.getValue(Usuario.class);
                         collapsing_perfil.setTitle(user.getNome());
-                        Glide.with(PerfilFragment.this).load(user.getFotoUrl()).into(imageView_user);
+                        Glide.with(imageView_user).load(user.getFotoUrl()).into(imageView_user);
                     }
 
                     @Override
@@ -127,14 +126,33 @@ public class PerfilFragment extends Fragment
         fab_menu_signout     = (FloatingActionButton) view.findViewById(R.id.fab_menu_signout);
         count_followers      = view.findViewById(R.id.count_followers);
         count_following      = view.findViewById(R.id.count_following);
-        count_posts          = view.findViewById(R.id.count_posts);
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("posts")
+        // SETAR OS SEGUIDORES
+        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("seguidores")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists())
-                            count_posts.setText(formatNumber(dataSnapshot.getChildrenCount()));
+                            count_followers.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        else
+                            count_followers.setText("0");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        // SETAR OS SEGUINDO
+        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("seguindo")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                            count_following.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        else
+                            count_following.setText("0");
                     }
 
                     @Override

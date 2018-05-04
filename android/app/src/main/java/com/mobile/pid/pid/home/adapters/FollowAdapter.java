@@ -7,14 +7,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.Post;
 import com.mobile.pid.pid.home.perfil.FollowItem;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,9 +43,9 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     private final String FOLLOW_STRING;
     private final String FOLLOWING_STRING;
 
-    public FollowAdapter(Context context, List<FollowItem> follow, int context_cod) {
+    public FollowAdapter(Context context, int context_cod) {
         this.context = context;
-        this.follow = follow;
+        this.follow = new ArrayList<>();
         this.context_cod = context_cod;
         FOLLOW_STRING = context.getResources().getString(R.string.follow);
         FOLLOWING_STRING = context.getResources().getString(R.string.following);
@@ -49,13 +59,91 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
+        final FollowItem item = follow.get(position);
+        final String usuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        holder.usuario.setText(item.getNome());
+        Glide.with(context).load(item.getFoto()).into(holder.foto);
+
+        holder.botaoSeguir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.botaoSeguir.isChecked()) {
+                    // REMOVE DOS SEGUIDORES DO USUARIO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(item.getUid()).child("seguidores")
+                            .child(usuarioLogado).setValue(item);
+
+                    // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
+                            .child(item.getUid()).setValue(item);
+
+                    follow.add(item);
+                    notifyDataSetChanged();
+
+                    holder.botaoSeguir.setChecked(true);
+                } else {
+                    // REMOVE DOS SEGUIDORES DO USUARIO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(item.getUid()).child("seguidores")
+                            .child(usuarioLogado).removeValue();
+
+                    // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
+                            .child(item.getUid()).removeValue();
+
+                    // REMOVE TODOS OS POSTS DO USUARIO DO MEU FEED
+                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("posts")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()) {
+                                        for(DataSnapshot post : dataSnapshot.getChildren()) {
+                                            Post p = post.getValue(Post.class);
+
+                                            if(p.getUserId().equals(item.getUid()))
+                                                post.getRef().removeValue();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                    follow.remove(item);
+
+                    notifyDataSetChanged();
+
+                    holder.botaoSeguir.setChecked(false);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return follow.size() + 10;
+        return follow.size();
+    }
+
+    public void add(FollowItem item) {
+        follow.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void remove(FollowItem item) {
+        for (FollowItem followItem: follow) {
+            if(followItem.getUid().equals(item.getUid())) {
+                follow.remove(followItem);
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void clear() {
+        follow.clear();
+        notifyDataSetChanged();
     }
 
 
@@ -63,7 +151,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
 
         private ImageView foto;
         private TextView usuario;
-        private Button botaoSeguir;
+        private CheckBox botaoSeguir;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -71,51 +159,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
             foto        = itemView.findViewById(R.id.icon_user_follow);
             usuario     = itemView.findViewById(R.id.textView_user_name);
             botaoSeguir = itemView.findViewById(R.id.btn_follow);
-
-            if(context_cod == SEGUINDO_CONTEXT) { // SE TIVER NO FRAGMENT DE SEGUINDO
-                setFollowStateButton(botaoSeguir);
-            } else { // SE TIVER NO FRAGMENT DE SEGUIDORES
-
-            }
-
-            botaoSeguir.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    changeStateButton(botaoSeguir);
-                }
-            });
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "ALO", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
-    }
-
-    private void changeStateButton(Button btn_follow) {
-
-        if(btn_follow.getText().toString().equals(FOLLOW_STRING)) {
-            setFollowStateButton(btn_follow);
-        } else {
-            setUnfollowStateButton(btn_follow);
-        }
-    }
-
-    private void setFollowStateButton(Button btn_follow) {
-
-        btn_follow.setText(FOLLOWING_STRING);
-        btn_follow.setBackgroundResource(R.color.white);
-        btn_follow.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
-    }
-
-    private void setUnfollowStateButton(Button btn_follow) {
-
-        btn_follow.setText(FOLLOW_STRING);
-        btn_follow.setBackgroundResource(R.color.colorPrimaryDark);
-        btn_follow.setTextColor(ContextCompat.getColor(context, R.color.white));
     }
 }
 

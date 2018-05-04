@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_marginTop="3dp"
+    android:layout_height="wrap_content"
+    android:background="@color/fundoPost">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,17 +13,19 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.CardView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:cardCornerRadius="25dp"
-            android:layout_margin="8dp">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="23dp"
+            app:cardPreventCornerOverlap="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
 
             <ImageView
                 android:id="@+id/icon_user_follow"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@color/black"
-                />
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@color/gray_font" />
         </android.support.v7.widget.CardView>
 
         <LinearLayout
@@ -34,9 +38,9 @@
                 android:id="@+id/textView_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Jonas Ramos"
-                android:textColor="@color/gray_font"
-                android:textSize="16dp"/>
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_marginLeft="15dp"/>
 
         </LinearLayout>
 
@@ -44,25 +48,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <CheckBox
                 android:id="@+id/btn_follow"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:text="@string/follow"
+                android:layout_height="wrap_content"
+                android:button="@drawable/custom_follow_checkbox"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
+                android:buttonTint="@color/white"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center|center_vertical"
-                android:background="@color/colorPrimaryDark"
-                android:textSize="12dp"
-                android:textColor="@color/white" />
+                android:checked="true"
+                android:theme="@style/FollowBox"
+                android:layout_gravity="center|center_vertical"/>
 
         </RelativeLayout>
-
-
-
-
-
     </LinearLayout>
 
 </LinearLayout>

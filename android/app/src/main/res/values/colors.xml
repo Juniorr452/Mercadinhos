@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#00BFFF</color>
-    <color name="colorPrimaryDark">#007ac1</color>
+    <!--<color name="colorPrimaryDark">#007ac1</color>-->
+    <!--<color name="colorPrimaryDark">#101728</color>-->
+    <color name="colorPrimaryDark">#2f3343</color>
+    <color name="fundoRecycle">#292b39</color>
+    <color name="fundoPost">#2d303f</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="dialogFeed">#141a2a</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="gray">#737373</color>
     <color name="gray_light">#f2f2f2</color>
     <color name="dark_gray">#333333</color>
-    <color name="red">#DC143C</color>
-    <color name="gray_font">#737373</color>
+    <color name="red">#e73f5a</color>
+    <color name="gray_font">#7c7c7c</color>
 </resources>

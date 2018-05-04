@@ -41,7 +41,6 @@ public class HomeActivity extends AppCompatActivity
     private FirebaseUser user_logged;
     private DatabaseReference user_database;
     private String user_id;
-    //private Usuario user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,8 +48,8 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        home_menu  = (BottomNavigationView) findViewById(R.id.home_menu);
-        home_frame = (FrameLayout) findViewById(R.id.home_frame);
+        home_menu  = findViewById(R.id.home_menu);
+        home_frame = findViewById(R.id.home_frame);
 
         feedFragment   = new FeedFragment();
         buscarFragment = new BuscarFragment();
@@ -115,8 +114,6 @@ public class HomeActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    // Se o usuário for novo, mostrar dialog pedindo pra completar o perfil
-    // https://www.youtube.com/watch?v=eVPSzXxIaW4
     private void checarUsuarioNovo(Usuario user)
     {
         if (user.getSexo() == null)
