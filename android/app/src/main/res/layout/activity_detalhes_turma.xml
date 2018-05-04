@@ -76,26 +76,11 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma">
                     </RelativeLayout>
 
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/qtd_professor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1"
-                            android:textStyle="bold"
-                            android:textColor="@color/white"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/teacher"
-                            android:layout_marginLeft="4dp"/>
 
                         <TextView
                             android:id="@+id/qtd_aluno"
@@ -110,6 +95,7 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma">
                             android:id="@+id/tv_detalhes_turma_alunos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/gray_font"
                             android:text="@string/student"
                             android:layout_marginLeft="4dp"/>
 

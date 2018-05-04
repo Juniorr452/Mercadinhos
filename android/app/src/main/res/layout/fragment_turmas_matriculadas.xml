@@ -1,7 +1,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:background="@color/fundoRecycle">
 
     <ProgressBar
         android:id="@+id/pb_turmas_matriculadas"
@@ -24,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
+            android:background="@color/fundoRecycle"
             android:paddingBottom="16dp"
             android:clipToPadding="false"/>
 
@@ -55,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sad_message"
+                android:textColor="@color/gray_font"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:textSize="16dp"/>

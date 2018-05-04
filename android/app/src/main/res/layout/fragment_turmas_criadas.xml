@@ -1,7 +1,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:background="@color/fundoRecycle">
 
     <ProgressBar
         android:id="@+id/pb_turmas_criadas"
@@ -22,6 +23,7 @@
             android:id="@+id/rv_turmas_criadas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/fundoRecycle"
             android:scrollbars="vertical"
             android:paddingBottom="16dp"
             android:clipToPadding="false"/>
@@ -52,6 +54,7 @@
             <TextView
                 android:id="@+id/sad_message"
                 android:layout_width="wrap_content"
+                android:textColor="@color/gray_font"
                 android:layout_height="wrap_content"
                 android:text="@string/sad_message"
                 android:layout_gravity="center"

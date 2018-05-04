@@ -42,7 +42,6 @@ public class DetalhesTurma extends AppCompatActivity
     ImageView editarTurma;
     ImageView imgProfessor;
 
-    TextView tvQtdProfessores;
     TextView tvQtdAlunos;
     TextView tvAlunos;
 
@@ -90,7 +89,6 @@ public class DetalhesTurma extends AppCompatActivity
         nomeTurma = findViewById(R.id.tv_turma_nome);
         capa      = findViewById(R.id.capa_detail);
 
-        tvQtdProfessores = findViewById(R.id.qtd_professor);
         tvQtdAlunos      = findViewById(R.id.qtd_aluno);
         tvAlunos         = findViewById(R.id.tv_detalhes_turma_alunos);
 
@@ -101,7 +99,7 @@ public class DetalhesTurma extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 Usuario professor = dataSnapshot.getValue(Usuario.class);
-                Glide.with(DetalhesTurma.this).load(professor.getFotoUrl()).into(imgProfessor);
+                Glide.with(getApplicationContext()).load(professor.getFotoUrl()).into(imgProfessor);
             }
 
             @Override

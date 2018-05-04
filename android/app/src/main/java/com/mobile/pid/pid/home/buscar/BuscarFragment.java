@@ -91,7 +91,7 @@ public class BuscarFragment extends Fragment
         recyclerView = v.findViewById(R.id.rv_buscar);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(llm);
 
         recyclerView.setAdapter(turmaAdapter);

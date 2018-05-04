@@ -1,17 +1,13 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,7 +50,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.follow_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_follow, parent, false);
         return new RecyclerViewHolder(view);
     }
 

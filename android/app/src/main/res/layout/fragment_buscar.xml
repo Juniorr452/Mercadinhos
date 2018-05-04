@@ -26,8 +26,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_buscar"
         android:layout_width="match_parent"
+        android:layout_margin="8dp"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
+        android:orientation="horizontal"
         android:paddingBottom="16dp"
         android:clipToPadding="false"/>
 

@@ -49,7 +49,7 @@ import java.util.List;
  * Created by jonasramos on 13/03/18.
  */
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHolder>{
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHolder> {
 
     private Context context;
     private List<Post> posts;
