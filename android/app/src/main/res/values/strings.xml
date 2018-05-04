@@ -113,4 +113,5 @@
     <string name="warning">Aviso</string>
     <string name="wrong_pin">PIN incorreto.</string>
     <string name="deseja_solicitacao">Deseja enviar uma solicitação para entrar na turma?</string>
+    <string name="aluno">Aluno</string>
 </resources>

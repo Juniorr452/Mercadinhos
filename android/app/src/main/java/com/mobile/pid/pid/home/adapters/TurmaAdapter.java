@@ -27,6 +27,7 @@ import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
 import com.mobile.pid.pid.home.turmas.InfoUsuario;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
+import com.mobile.pid.pid.login.Usuario;
 
 import java.util.List;
 import java.util.Map;
@@ -67,13 +68,31 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
     // Setar os dados da lista às views
     @Override
-    public void onBindViewHolder(TurmaViewHolder holder, final int position)
+    public void onBindViewHolder(final TurmaViewHolder holder, final int position)
     {
         final Turma t = listaTurmas.get(position);
 
         Glide.with(holder.capa.getContext())
                 .load(t.getCapaUrl())
                 .into(holder.capa);
+
+        // Carregar imagem do prof
+        FirebaseDatabase.getInstance().getReference()
+            .child("usuarios")
+            .child(t.getProfessorUid())
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Usuario prof = dataSnapshot.getValue(Usuario.class);
+
+                    Glide.with(holder.fotoProf).load(prof.getFotoUrl()).into(holder.fotoProf);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
         holder.nome.setText(t.getNome());
 
@@ -153,6 +172,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
     public class TurmaViewHolder extends RecyclerView.ViewHolder //implements View.OnClickListener, View.OnLongClickListener
     {
+        public ImageView fotoProf;
         public ImageView capa;
         public ImageView opcoes;
         public TextView  nome;
@@ -162,6 +182,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         {
             super(itemView);
 
+            fotoProf = itemView.findViewById(R.id.icon_turma_professor);
             capa   = itemView.findViewById(R.id.turma_capa);
             opcoes = itemView.findViewById(R.id.turma_opcoes);
             nome   = itemView.findViewById(R.id.turma_nome);

@@ -42,8 +42,9 @@ public class DetalhesTurma extends AppCompatActivity
     ImageView editarTurma;
     ImageView imgProfessor;
 
-    TextView qtdProfessores;
-    TextView qtdAlunos;
+    TextView tvQtdProfessores;
+    TextView tvQtdAlunos;
+    TextView tvAlunos;
 
     private int USUARIO;
 
@@ -89,8 +90,9 @@ public class DetalhesTurma extends AppCompatActivity
         nomeTurma = findViewById(R.id.tv_turma_nome);
         capa      = findViewById(R.id.capa_detail);
 
-        qtdProfessores = findViewById(R.id.qtd_professor);
-        qtdAlunos      = findViewById(R.id.qtd_aluno);
+        tvQtdProfessores = findViewById(R.id.qtd_professor);
+        tvQtdAlunos      = findViewById(R.id.qtd_aluno);
+        tvAlunos         = findViewById(R.id.tv_detalhes_turma_alunos);
 
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
 
@@ -109,7 +111,12 @@ public class DetalhesTurma extends AppCompatActivity
         });
 
         nomeTurma.setText(turma.getNome());
-        qtdAlunos.setText(turma.getQtdAlunos());
+
+        int qtdAlunos = turma.getQtdAlunos();
+        if(qtdAlunos < 2)
+            tvAlunos.setText(R.string.aluno);
+
+        tvQtdAlunos.setText(Integer.toString(qtdAlunos));
 
         detalhesViewPager.setAdapter(detalhesPageAdapter);
         turmasTabLayout.setupWithViewPager(detalhesViewPager);
