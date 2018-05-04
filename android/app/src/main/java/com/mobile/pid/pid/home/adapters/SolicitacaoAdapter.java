@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,7 +94,7 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference turmaMatriculadaRef = dbRef.child("usuarios")
                 .child(uid)
-                .child("turmas_matriculadas");
+                .child("turmas_matriculadas").child(t.getId());
 
         // Adicionar como aluno na turma
         dbRef.child("turmas")
@@ -130,8 +131,8 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
     {
         ImageView foto;
         TextView  nome;
-        Button    aceitar;
-        Button    recusar;
+        CheckBox aceitar;
+        CheckBox    recusar;
 
         public SolicitacaoViewHolder(View itemView)
         {
