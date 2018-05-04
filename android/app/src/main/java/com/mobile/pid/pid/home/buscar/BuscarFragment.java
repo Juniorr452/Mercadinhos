@@ -52,7 +52,7 @@ public class BuscarFragment extends Fragment
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Turma t = dataSnapshot.getValue(Turma.class);
-                t.setUid(dataSnapshot.getKey());
+                t.setId(dataSnapshot.getKey());
                 turmaAdapter.add(t);
                 turmaAdapter.notifyDataSetChanged();
             }

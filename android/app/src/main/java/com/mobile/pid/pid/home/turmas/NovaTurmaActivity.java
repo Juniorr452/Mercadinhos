@@ -125,8 +125,7 @@ public class NovaTurmaActivity extends AppCompatActivity
                     {
                         String capaUrl = taskSnapshot.getDownloadUrl().toString();
 
-                        InfoUsuario professor = new InfoUsuario(user.getUid() ,user.getDisplayName(), user.getPhotoUrl().toString());
-                        Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, professor, diasDaSemana);
+                        Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getUid(), diasDaSemana);
 
                         cadastrarTurma(novaTurma, turmaId);
                     }
@@ -134,8 +133,7 @@ public class NovaTurmaActivity extends AppCompatActivity
             }
             else // Se não tiver imagem, já pega a URL de capa padrão
             {
-                InfoUsuario professor = new InfoUsuario(user.getUid() ,user.getDisplayName(), user.getPhotoUrl().toString());
-                Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, professor, diasDaSemana);
+                Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, user.getUid(), diasDaSemana);
 
                 cadastrarTurma(novaTurma, turmaId);
             }

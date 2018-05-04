@@ -107,6 +107,7 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma">
                             android:textColor="@color/white"/>
 
                         <TextView
+                            android:id="@+id/tv_detalhes_turma_alunos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/student"
@@ -126,7 +127,9 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma">
                 <ImageView
                     android:id="@+id/icon_turma_professor"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="100dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.Toolbar

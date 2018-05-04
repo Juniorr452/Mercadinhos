@@ -119,7 +119,7 @@ public class ChatsFragment extends Fragment
         chatsAdapter = new ChatsAdapter(getActivity(), new ArrayList<Chat>(), turma, usuario);
         chatsRef     = FirebaseDatabase.getInstance().getReference()
                         .child("turmas")
-                        .child(turma.getUid())
+                        .child(turma.getId())
                         .child("chats");
 
         chatsRef.addValueEventListener(new ValueEventListener()

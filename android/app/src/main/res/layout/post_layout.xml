@@ -32,7 +32,9 @@
                     android:id="@+id/icon_user_feed"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/icon_user" />
+                    android:background="@drawable/icon_user"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
             </android.support.v7.widget.CardView>
 
             <TextView
