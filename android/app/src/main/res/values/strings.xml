@@ -105,7 +105,6 @@
     <string name="recusar">Recusar</string>
     <string name="aceitar">Aceitar</string>
     <string name="excluir_post">Deseja excluir o post selecionado?</string>
-<<<<<<< HEAD
     <string name="pin_type_msg">O professor colocou um código para acessar a turma. Digite-o para enviar uma solicitação.</string>
     <string name="pin_type">Digite o PIN</string>
     <string name="yes">Sim</string>
@@ -115,9 +114,7 @@
     <string name="wrong_pin">PIN incorreto.</string>
     <string name="deseja_solicitacao">Deseja enviar uma solicitação para entrar na turma?</string>
     <string name="aluno">Aluno</string>
-=======
     <string name="followers_upper">SEGUIDORES</string>
     <string name="posts_upper">POSTS</string>
     <string name="seguindo_upper">SEGUINDO</string>
->>>>>>> Jonas
 </resources>
