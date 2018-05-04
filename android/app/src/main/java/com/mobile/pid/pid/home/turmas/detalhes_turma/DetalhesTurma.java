@@ -101,7 +101,7 @@ public class DetalhesTurma extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 Usuario professor = dataSnapshot.getValue(Usuario.class);
-                Glide.with(DetalhesTurma.this).load(professor.getFotoUrl()).into(imgProfessor);
+                Glide.with(imgProfessor).load(professor.getFotoUrl()).into(imgProfessor);
             }
 
             @Override

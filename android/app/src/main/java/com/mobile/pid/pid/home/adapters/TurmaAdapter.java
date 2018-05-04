@@ -46,14 +46,11 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
     private List<Turma>    listaTurmas;
     private LayoutInflater layoutInflater;
-    private int COD_CONTEXT;
-    private String Uid;
 
-    public TurmaAdapter(Context c, List<Turma> l, int COD_CONTEXT)
+    public TurmaAdapter(Context c, List<Turma> l)
     {
         listaTurmas    = l;
         layoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.COD_CONTEXT = COD_CONTEXT;
     }
 
     @Override
@@ -70,8 +67,11 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     @Override
     public void onBindViewHolder(final TurmaViewHolder holder, final int position)
     {
-        final Turma t = listaTurmas.get(position);
+        final Turma           t = listaTurmas.get(position);
+        final String        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final boolean professor = uid.equals(t.getProfessorUid());
 
+        // Carregar imagem da capa
         Glide.with(holder.capa.getContext())
                 .load(t.getCapaUrl())
                 .into(holder.capa);
@@ -96,48 +96,53 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
         holder.nome.setText(t.getNome());
 
-        holder.opcoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AlertDialog.Builder(layoutInflater.getContext())
-                    .setTitle("Excluir a turma?")
-                    .setMessage("Deseja realmente excluir a turma?")
-                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
-                            DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
-                            DatabaseReference usuariosRef = rootRef.child("usuarios");
-                            String tuid = t.getId();
+        if(!professor)
+            holder.opcoes.setVisibility(View.INVISIBLE);
+        else
+            holder.opcoes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(layoutInflater.getContext())
+                        .setTitle("Excluir a turma?")
+                        .setMessage("Deseja realmente excluir a turma?")
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i)
+                            {
+                                DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
+                                DatabaseReference usuariosRef = rootRef.child("usuarios");
+                                String tuid = t.getId();
 
-                            // Deletar turma.
-                            rootRef.child("turmas")
-                                .child(tuid)
-                                .removeValue();
-
-                            // Deletar no turmas_criadas do professor.
-                            usuariosRef.child(t.getProfessorUid())
-                                .child("turmas_criadas")
-                                .child(tuid)
-                                .removeValue();
-
-                            // Deletar no turmas_matriculadas dos alunos.
-                            /*for(InfoUsuario a : t.getAlunos())
-                                usuariosRef.child(a.getId())
-                                    .child("turmas_matriculadas")
+                                // Deletar turma.
+                                rootRef.child("turmas")
                                     .child(tuid)
-                                    .removeValue();*/
-                        }
-                    })
-                    .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                                    .removeValue();
 
-                        }
-                    })
-                    .show();
-            }
-        });
+                                // Deletar no turmas_criadas do professor.
+                                usuariosRef.child(t.getProfessorUid())
+                                    .child("turmas_criadas")
+                                    .child(tuid)
+                                    .removeValue();
+
+                                // TODO: Verificar se está funcionando
+                                // Deletar no turmas_matriculadas dos alunos.
+                                if(t.getAlunos() != null)
+                                    for(String auid : t.getAlunos().keySet())
+                                        usuariosRef.child(auid)
+                                            .child("turmas_matriculadas")
+                                            .child(tuid)
+                                            .removeValue();
+                            }
+                        })
+                        .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+                }
+            });
 
         // DIAS DA SEMANA
         Map<String, Integer> dias = t.getDiasDaSemana();
@@ -150,6 +155,92 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 dia += " - " + entry.getKey();
 
         holder.dia.setText(dia);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                final Context c = holder.itemView.getContext();
+
+                // Se o usuário está na turma.
+                if (t.estaNaTurma(uid))
+                {
+                    Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+
+                    i.putExtra("turma", t);
+
+                    if(professor)
+                        i.putExtra("usuario", PROFESSOR);
+                    else
+                        i.putExtra("usuario", ALUNO);
+
+                    layoutInflater.getContext().startActivity(i);
+                }
+                else
+                {
+                    // Se a turma não tiver PIN
+                    if(t.getPin().equals(""))
+                    {
+                        new AlertDialog.Builder(c)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.deseja_solicitacao)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i)
+                                    {
+                                        enviarSolicitacaoTurma(t, uid);
+
+                                        new AlertDialog.Builder(c)
+                                                .setMessage(R.string.solicitacao_sucesso)
+                                                .setPositiveButton(R.string.Ok, null)
+                                                .show();
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                    }
+                    else
+                    {
+                        final View v         = layoutInflater.inflate(R.layout.dialog_pin, null);
+                        final EditText pinEt = v.findViewById(R.id.dialog_pin);
+
+                        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(c)
+                                .setView(v)
+                                .setPositiveButton(R.string.Ok, null)
+                                .setNegativeButton(R.string.cancel, null)
+                                .create();
+
+                        dialog.show();
+
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                String pin = pinEt.getText().toString();
+
+                                AlertDialog.Builder alerta = new AlertDialog.Builder(c)
+                                        .setTitle(R.string.warning)
+                                        .setPositiveButton(R.string.Ok, null);
+
+                                if(pin.equals(t.getPin()))
+                                {
+                                    enviarSolicitacaoTurma(t, uid);
+                                    alerta.setMessage(R.string.solicitacao_sucesso);
+                                    dialog.dismiss();
+                                }
+                                else
+                                    alerta.setMessage(R.string.wrong_pin);
+
+                                alerta.show();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     public void add(Turma t)
@@ -187,99 +278,6 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
             opcoes = itemView.findViewById(R.id.turma_opcoes);
             nome   = itemView.findViewById(R.id.turma_nome);
             dia    = itemView.findViewById(R.id.turma_dia);
-
-            itemView.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    final Context c   = itemView.getContext();
-                    final Turma   t   = listaTurmas.get(getPosition());
-                    final String  uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                    // Se o usuário está na turma.
-                    if (t.estaNaTurma(uid))
-                    {
-                        Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
-
-                        i.putExtra("turma", t);
-
-                        switch(COD_CONTEXT)
-                        {
-                            case COD_TURMAS_CRIADAS:
-                                i.putExtra("usuario", PROFESSOR);
-                                break;
-                            case COD_TURMAS_MATRICULADAS:
-                                i.putExtra("usuario", ALUNO);
-                                break;
-                        }
-
-                        layoutInflater.getContext().startActivity(i);
-                    }
-                    else
-                    {
-                        // Se a turma não tiver PIN
-                        if(t.getPin().equals(""))
-                        {
-                            new AlertDialog.Builder(c)
-                                .setTitle(R.string.warning)
-                                .setMessage(R.string.deseja_solicitacao)
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i)
-                                    {
-                                        enviarSolicitacaoTurma(t, uid);
-
-                                        new AlertDialog.Builder(c)
-                                            .setMessage(R.string.solicitacao_sucesso)
-                                            .setPositiveButton(R.string.Ok, null)
-                                            .show();
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, null)
-                                .show();
-                        }
-                        else
-                        {
-                            final View v         = layoutInflater.inflate(R.layout.dialog_pin, null);
-                            final EditText pinEt = v.findViewById(R.id.dialog_pin);
-
-                            final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(c)
-                                    .setView(v)
-                                    .setPositiveButton(R.string.Ok, null)
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .create();
-
-                            dialog.show();
-
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    String pin = pinEt.getText().toString();
-
-                                    AlertDialog.Builder alerta = new AlertDialog.Builder(c)
-                                        .setTitle(R.string.warning)
-                                        .setPositiveButton(R.string.Ok, null);
-
-                                    if(pin.equals(t.getPin()))
-                                    {
-                                        enviarSolicitacaoTurma(t, uid);
-                                        alerta.setMessage(R.string.solicitacao_sucesso);
-                                        dialog.dismiss();
-                                    }
-                                    else
-                                        alerta.setMessage(R.string.wrong_pin);
-
-                                    alerta.show();
-                                }
-                            });
-                        }
-                    }
-                }
-            });
         }
     }
 
@@ -290,9 +288,5 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
             .child(t.getId())
             .child("solicitacoes")
             .child(uid).setValue(true);
-    }
-
-    public void setUid(String uid) {
-        Uid = uid;
     }
 }

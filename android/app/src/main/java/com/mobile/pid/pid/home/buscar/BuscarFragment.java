@@ -45,7 +45,7 @@ public class BuscarFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         turmasCriadas = new ArrayList<>();
-        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas, 0);
+        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas);
 
         turmasRef = FirebaseDatabase.getInstance().getReference().child("turmas");
         turmasChildEventListener = new ChildEventListener() {
@@ -95,8 +95,6 @@ public class BuscarFragment extends Fragment
         recyclerView.setLayoutManager(llm);
 
         recyclerView.setAdapter(turmaAdapter);
-
-        turmaAdapter.setUid("123123");
 
         return v;
     }
