@@ -50,7 +50,6 @@ public class TurmasCriadasFragment extends Fragment
     private TextView sadMessage;
 
     private DatabaseReference turmasCriadasRef;
-    private ChildEventListener turmasCriadasChildEventListener;
 
     private TurmaAdapter turmaAdapter;
     private RecyclerView recyclerView;
@@ -131,11 +130,6 @@ public class TurmasCriadasFragment extends Fragment
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(R.layout.fragment_turmas_criadas, container, false);
@@ -153,47 +147,6 @@ public class TurmasCriadasFragment extends Fragment
         recyclerView.setLayoutManager(llm);
 
         recyclerView.setAdapter(turmaAdapter);
-        recyclerView.setItemAnimator(new SimpleItemAnimator() {
-            @Override
-            public boolean animateRemove(RecyclerView.ViewHolder holder) {
-                return false;
-            }
-
-            @Override
-            public boolean animateAdd(RecyclerView.ViewHolder holder) {
-                return false;
-            }
-
-            @Override
-            public boolean animateMove(RecyclerView.ViewHolder holder, int fromX, int fromY, int toX, int toY) {
-                return false;
-            }
-
-            @Override
-            public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop) {
-                return false;
-            }
-
-            @Override
-            public void runPendingAnimations() {
-
-            }
-
-            @Override
-            public void endAnimation(RecyclerView.ViewHolder item) {
-
-            }
-
-            @Override
-            public void endAnimations() {
-
-            }
-
-            @Override
-            public boolean isRunning() {
-                return false;
-            }
-        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
