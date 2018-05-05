@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,69 +12,78 @@
     android:layout_marginTop="16dp"
     app:cardElevation="4dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:minHeight="240dp">
 
-        <RelativeLayout
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="56dp"
+            android:clipToPadding="true"
+            app:cardCornerRadius="45dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout">
+
+            <ImageView
+                android:id="@+id/icon_turma_professor"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/turma_capa"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:src="@color/gray"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:src="@color/gray" />
 
-            <android.support.v7.widget.CardView
+            <ImageView
+                android:id="@+id/turma_opcoes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="45dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="115dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/settings_dots"
+                android:backgroundTint="@color/white" />
+
+            <TextView
+                android:id="@+id/turma_nome"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:cardElevation="4dp">
+                android:layout_marginTop="24dp"
+                android:text="Nome da matéria"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
 
-                <ImageView
-                    android:id="@+id/icon_turma_professor"
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"/>
-            </android.support.v7.widget.CardView>
-        </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/turma_opcoes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="-90dp"
-            android:background="@drawable/settings_dots"
-            android:backgroundTint="@color/white"/>
-
-        <TextView
-            android:id="@+id/turma_nome"
-            android:layout_width="250dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center"
-            android:textSize="22sp"
-            android:textColor="@color/white"
-            android:textAlignment="center"
-            android:text="Nome da matéria" />
-
-        <TextView
-            android:id="@+id/turma_dia"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:textColor="@color/gray_font"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:text="Dia da semana"/>
-
-    </LinearLayout>
+            <TextView
+                android:id="@+id/turma_dia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="Dia da semana"
+                android:textColor="@color/gray_font" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
