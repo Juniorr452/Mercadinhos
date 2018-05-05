@@ -54,17 +54,18 @@ public class SeguindoFragment extends Fragment {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
 
-                    recyclerView.getRecycledViewPool().clear();
-                    followAdapter.clear();
+                recyclerView.getRecycledViewPool().clear();
+                followAdapter.clear();
+
+                if(dataSnapshot.exists()) {
 
                     for(DataSnapshot data : dataSnapshot.getChildren()) {
 
                         final String uid = data.getKey();
 
                         FirebaseDatabase.getInstance().getReference("usuarios").child(uid)
-                                .addValueEventListener(new ValueEventListener() {
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Usuario user = dataSnapshot.getValue(Usuario.class);

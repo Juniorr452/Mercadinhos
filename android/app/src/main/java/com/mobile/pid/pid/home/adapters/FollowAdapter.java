@@ -62,20 +62,41 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
         holder.usuario.setText(item.getNome());
         Glide.with(context).load(item.getFoto()).into(holder.foto);
 
+        if(context_cod == 0) {
+            FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists() && dataSnapshot.hasChild(item.getUid())) {
+                                holder.botaoSeguir.setChecked(true);
+                            } else {
+                                holder.botaoSeguir.setChecked(false);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+        }
+
         holder.botaoSeguir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.botaoSeguir.isChecked()) {
-                    // REMOVE DOS SEGUIDORES DO USUARIO
+                    // ACRESCENTA NOS SEGUIDORES DO USUARIO
                     FirebaseDatabase.getInstance().getReference("usuarios").child(item.getUid()).child("seguidores")
                             .child(usuarioLogado).setValue(item);
 
-                    // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
+                    // ACRESCENTA NOS USUARIOS QUE ESTOU SEGUINDO
                     FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
                             .child(item.getUid()).setValue(item);
 
-                    follow.add(item);
-                    notifyDataSetChanged();
+                    if(context_cod == SEGUINDO_CONTEXT) {
+                        follow.add(item);
+                        notifyDataSetChanged();
+                    }
 
                     holder.botaoSeguir.setChecked(true);
                 } else {
@@ -108,9 +129,10 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                                 }
                             });
 
-                    follow.remove(item);
-
-                    notifyDataSetChanged();
+                    if(context_cod == SEGUINDO_CONTEXT) {
+                        follow.remove(item);
+                        notifyDataSetChanged();
+                    }
 
                     holder.botaoSeguir.setChecked(false);
                 }
