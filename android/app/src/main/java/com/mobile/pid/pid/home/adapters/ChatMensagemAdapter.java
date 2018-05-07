@@ -66,7 +66,7 @@ public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapte
             Glide.with(ctx)
                     .load(m.getFotoUrl())
                     .apply(RequestOptions.circleCropTransform())
-                    .into(holder.imagemUsuarioOutro);
+                    .into(holder.imagemUsuario);
         }
         else
         {
@@ -74,7 +74,7 @@ public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapte
             Glide.with(ctx)
                     .load(m.getFotoUrl())
                     .apply(RequestOptions.circleCropTransform())
-                    .into(holder.imagemUsuario);
+                    .into(holder.imagemUsuarioOutro);
         }
 
 
