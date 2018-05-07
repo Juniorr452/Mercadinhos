@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.AvisosFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.SolicitacoesFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment;
@@ -117,6 +118,8 @@ public class DetalhesTurma extends AppCompatActivity
         tvQtdAlunos.setText(Integer.toString(qtdAlunos));
 
         detalhesViewPager.setAdapter(detalhesPageAdapter);
+        detalhesViewPager.setOffscreenPageLimit(4);
+
         turmasTabLayout.setupWithViewPager(detalhesViewPager);
     }
     /*
@@ -144,9 +147,9 @@ public class DetalhesTurma extends AppCompatActivity
         public int getCount() {
             switch (USUARIO) {
                 case PROFESSOR:
-                    return 3;
+                    return 4;
                 case ALUNO:
-                    return 2;
+                    return 3;
                 default:
                     return 0;
             }
@@ -167,10 +170,11 @@ public class DetalhesTurma extends AppCompatActivity
                     chatsFragment.setArguments(b);
 
                     return chatsFragment;
-
                 case 1:
-                    return new TrabalhosFragment();
+                    return new AvisosFragment();
                 case 2:
+                    return new TrabalhosFragment();
+                case 3:
 
                     b.putParcelable("turma", turma);
 
@@ -192,8 +196,10 @@ public class DetalhesTurma extends AppCompatActivity
                 case 0:
                     return getString(R.string.chats);
                 case 1:
-                    return getString(R.string.trabalhos);
+                    return getString(R.string.avisos);
                 case 2:
+                    return getString(R.string.trabalhos);
+                case 3:
                     return getString(R.string.solicitacoes);
                 default:
                     return null;

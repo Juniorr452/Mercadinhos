@@ -117,4 +117,5 @@
     <string name="followers_upper">SEGUIDORES</string>
     <string name="posts_upper">POSTS</string>
     <string name="seguindo_upper">SEGUINDO</string>
+    <string name="avisos">Avisos</string>
 </resources>

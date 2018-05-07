@@ -76,7 +76,7 @@ public class ChatsFragment extends Fragment
 
         recyclerView.setAdapter(chatsAdapter);
 
-        conteudo.setVisibility(View.GONE);
+        conteudo.setVisibility(View.INVISIBLE);
 
         fabCriarChat.setOnClickListener(new View.OnClickListener()
         {
