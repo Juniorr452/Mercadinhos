@@ -3,8 +3,13 @@ package com.mobile.pid.pid.home.feed;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -140,4 +145,37 @@ public class Post implements Parcelable{
             return new Post[size];
         }
     };
+
+    public void criarPost() {
+
+        final DatabaseReference dbPosts = FirebaseDatabase.getInstance().getReference("posts").child(this.userId);
+        final DatabaseReference dbFeed = FirebaseDatabase.getInstance().getReference("feed").child(this.userId);
+
+        this.id = dbPosts.push().getKey();
+
+        dbPosts.child(this.id).setValue(this);
+        dbFeed.child(this.id).setValue(this);
+
+
+        FirebaseDatabase.getInstance().getReference("usuarios").child(this.userId).child("seguidores")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            for(DataSnapshot data : dataSnapshot.getChildren()) {
+                                FirebaseDatabase.getInstance().getReference("feed").child(data.getKey()).child(id).setValue(Post.this);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    public void excluirPost() {
+
+    }
 }

@@ -111,11 +111,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             public void onClick(View view) {
 
                 if(p.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    //TODO MANDA PRA ABA DE PERFIL DO USUARIO
+                    //TODO MANDAR PARA A TELA DE PERFIL FRAGMENT
+                } else
                     dialogPerfilUsuario(p, usuario);
-                } else {
-                    dialogPerfilUsuario(p, usuario);
-                }
+
             }
         });
 
@@ -127,27 +126,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                 if(holder.like.isChecked()){
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
 
-                    FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
-                            .child("likes").child(usuario).setValue(true);
+                    FirebaseDatabase.getInstance().getReference("postLikes").child(p.getId())
+                            .child(usuario).setValue(true);
 
                     // SALVAR NOS POSTS CURTIDOS DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                    FirebaseDatabase.getInstance().getReference("feedLikes").child(usuario)
                             .child(p.getId()).setValue(p);
                 } else {
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
 
-                    FirebaseDatabase.getInstance().getReference("posts").child(p.getId())
-                            .child("likes").child(usuario).removeValue();
+                    FirebaseDatabase.getInstance().getReference("postLikes").child(p.getId())
+                            .child(usuario).removeValue();
 
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                    FirebaseDatabase.getInstance().getReference("feedLikes").child(usuario)
                             .child(p.getId()).removeValue();
                 }
             }
         });
 
         // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
-        FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
-                .child("likes").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("postLikes").child(p.getId())
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
