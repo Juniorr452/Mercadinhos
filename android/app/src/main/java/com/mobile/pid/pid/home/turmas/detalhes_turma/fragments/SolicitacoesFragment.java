@@ -55,7 +55,7 @@ public class SolicitacoesFragment extends Fragment
         Context c = getContext();
 
         rv    = v.findViewById(R.id.rv_solicitacoes);
-        turma = i.getParcelableExtra("turma");
+        turma = (Turma) i.getSerializableExtra("turma");
 
         Log.d(TAG, turma.getSolicitacoes().toString());
 

@@ -2,6 +2,7 @@ package com.mobile.pid.pid.home.turmas;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.google.firebase.database.Exclude;
 
@@ -17,7 +18,7 @@ import java.util.Map;
 
 // TODO: Completar classe Turma
 
-public class Turma implements Parcelable // Parcelable Necessário pra passar ele pra outra activity https://youtu.be/ROQ4T47nMhI?t=619
+public class Turma implements Serializable // Parcelable Necessário pra passar ele pra outra activity https://youtu.be/ROQ4T47nMhI?t=619
 {
     @Exclude
     private String id;
@@ -29,9 +30,10 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
     private Map<String, Integer> diasDaSemana;
 
     private String professorUid;
-    private Map<String, Boolean> alunosUid;
 
+    private Map<String, Boolean> alunosUid;
     private Map<String, Boolean> solicitacoes;
+
 
     public Turma() {}
 
@@ -84,6 +86,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return alunosUid;
     }
 
+    @Nullable
     public void setAlunos(Map<String, Boolean> alunosUid) {
         this.alunosUid = alunosUid;
     }
@@ -92,10 +95,12 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return this.diasDaSemana;
     }
 
+    @Nullable
     public Map<String, Boolean> getSolicitacoes() {
-        return solicitacoes;
+        return this.solicitacoes;
     }
 
+    @Nullable
     public void setSolicitacoes(Map<String, Boolean> solicitacoes) {
         this.solicitacoes = solicitacoes;
     }
@@ -141,7 +146,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
     }
 
 
-    @Override
+    /*@Override
     public int describeContents() {
         return 0;
     }
@@ -162,27 +167,28 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         if(alunosUid != null)
         {
             dest.writeInt(this.alunosUid.size());
-            for (Map.Entry<String, Boolean> entry : this.alunosUid.entrySet()) {
-                dest.writeString(entry.getKey());
-                dest.writeValue(entry.getValue());
+            for (Map.Entry<String, Boolean> aluno : this.alunosUid.entrySet()) {
+                dest.writeString(aluno.getKey());
+                dest.writeValue(aluno.getValue());
             }
         }
 
         if(solicitacoes != null)
         {
             dest.writeInt(this.solicitacoes.size());
-            for (Map.Entry<String, Boolean> entry : this.solicitacoes.entrySet()) {
-                dest.writeString(entry.getKey());
-                dest.writeValue(entry.getValue());
+            for (Map.Entry<String, Boolean> solicitacao : this.solicitacoes.entrySet()) {
+                dest.writeString(solicitacao.getKey());
+                dest.writeValue(solicitacao.getValue());
             }
         }
-    }
+    }*/
 
-    protected Turma(Parcel in) {
+    /*protected Turma(Parcel in) {
         this.id = in.readString();
         this.capaUrl = in.readString();
         this.nome = in.readString();
         this.pin = in.readString();
+
         int diasDaSemanaSize = in.readInt();
         this.diasDaSemana = new HashMap<String, Integer>(diasDaSemanaSize);
         for (int i = 0; i < diasDaSemanaSize; i++) {
@@ -190,7 +196,9 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
             this.diasDaSemana.put(key, value);
         }
+
         this.professorUid = in.readString();
+
         int alunosUidSize = in.readInt();
         this.alunosUid = new HashMap<String, Boolean>(alunosUidSize);
         for (int i = 0; i < alunosUidSize; i++) {
@@ -198,6 +206,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             Boolean value = (Boolean) in.readValue(Boolean.class.getClassLoader());
             this.alunosUid.put(key, value);
         }
+
         int solicitacoesSize = in.readInt();
         this.solicitacoes = new HashMap<String, Boolean>(solicitacoesSize);
         for (int i = 0; i < solicitacoesSize; i++) {
@@ -217,5 +226,5 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         public Turma[] newArray(int size) {
             return new Turma[size];
         }
-    };
+    };*/
 }
