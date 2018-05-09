@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.ChatMensagemAdapter;
 import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.login.Usuario;
 
 import java.util.ArrayList;
 
@@ -31,19 +35,23 @@ public class ChatActivity extends AppCompatActivity
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
-    private Turma turma;
-    private Chat chat;
+    private Turma        turma;
+    private Chat         chat;
     private FirebaseUser user;
-    private boolean professor;
+    private String       fotoPerfil;
+    private boolean      professor;
 
-    private Toolbar      toolbar;
+    private ProgressBar  progressBar;
+
+    private Toolbar     toolbar;
     private ImageButton adicionarArquivo;
     private EditText    etMensagem;
     private ImageButton enviar;
 
+    private DatabaseReference  dbRoot;
     private DatabaseReference chatRef;
 
-    private RecyclerView recyclerView;
+    private RecyclerView        recyclerView;
     private LinearLayoutManager layoutManager;
     private ChatMensagemAdapter chatMensagemAdapter;
 
@@ -53,6 +61,8 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.activity_chat);
 
         Intent i = getIntent();
+
+        progressBar = findViewById(R.id.pb_chat);
 
         user      = FirebaseAuth.getInstance().getCurrentUser();
         chat      = i.getParcelableExtra("chat");
@@ -65,7 +75,8 @@ public class ChatActivity extends AppCompatActivity
         etMensagem       = findViewById(R.id.et_chat);
         enviar           = findViewById(R.id.chat_enviar);
 
-        chatRef = FirebaseDatabase.getInstance().getReference().child("chats").child(chat.getId());
+        dbRoot  = FirebaseDatabase.getInstance().getReference();
+        chatRef = dbRoot.child("chats").child(chat.getId());
 
         layoutManager = new LinearLayoutManager(this);
         chatMensagemAdapter = new ChatMensagemAdapter(this, new ArrayList<ChatMensagem>());
@@ -82,6 +93,7 @@ public class ChatActivity extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatMensagemAdapter);
 
+        pegarFotoPerfil();
         chatRef.addChildEventListener(new ChildEventListener()
         {
             @Override
@@ -119,10 +131,9 @@ public class ChatActivity extends AppCompatActivity
         try
         {
             String uid  = user.getUid();
-            String foto = user.getPhotoUrl().toString();
             String msg  = validarMensagem();
 
-            ChatMensagem cm = new ChatMensagem(uid, foto, msg, professor);
+            ChatMensagem cm = new ChatMensagem(uid, fotoPerfil, msg, professor);
 
             chatRef.push().setValue(cm);
         }
@@ -148,5 +159,29 @@ public class ChatActivity extends AppCompatActivity
         etMensagem.setText("");
 
         return m;
+    }
+
+    public void pegarFotoPerfil()
+    {
+        String uid = user.getUid();
+
+        DatabaseReference usuarioRef = dbRoot.child("usuarios").child(uid);
+
+        usuarioRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Usuario a = dataSnapshot.getValue(Usuario.class);
+
+                fotoPerfil = a.getFotoUrl();
+
+                progressBar.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

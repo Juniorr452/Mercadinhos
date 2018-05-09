@@ -122,4 +122,5 @@
     <string name="student_upper">ALUNOS</string>
     <string name="solicitar_entrada">Solicitar entrada</string>
     <string name="solicitado">SOLICITADO</string>
+    <string name="avisos">Avisos</string>
 </resources>
