@@ -119,4 +119,7 @@
     <string name="seguindo_upper">SEGUINDO</string>
     <string name="sugestao_usuarios">Usuários sugeridos</string>
     <string name="sugestas_turmas">Turmas sugeridas</string>
+    <string name="student_upper">ALUNOS</string>
+    <string name="solicitar_entrada">Solicitar entrada</string>
+    <string name="solicitado">SOLICITADO</string>
 </resources>

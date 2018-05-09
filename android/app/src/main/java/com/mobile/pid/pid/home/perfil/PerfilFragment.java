@@ -117,18 +117,18 @@ public class PerfilFragment extends Fragment
         // FIREBASEEEE
 
         pageAdapter_perfil   = new PerfilPageAdapter(getChildFragmentManager());
-        viewPager_perfil     = (ViewPager) view.findViewById(R.id.viewpager_perfil);
-        tabLayout_perfil     = (TabLayout) view.findViewById(R.id.tab_perfil);
-        imageView_user       = (ImageView) view.findViewById(R.id.image_user);
-        collapsing_perfil    = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_tb);
-        fab_menu             = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
-        fab_menu_edit        = (FloatingActionButton) view.findViewById(R.id.fab_menu_edit);
-        fab_menu_signout     = (FloatingActionButton) view.findViewById(R.id.fab_menu_signout);
+        viewPager_perfil     = view.findViewById(R.id.viewpager_perfil);
+        tabLayout_perfil     = view.findViewById(R.id.tab_perfil);
+        imageView_user       = view.findViewById(R.id.image_user);
+        collapsing_perfil    = view.findViewById(R.id.collapsing_tb);
+        fab_menu             = view.findViewById(R.id.fab_menu);
+        fab_menu_edit        = view.findViewById(R.id.fab_menu_edit);
+        fab_menu_signout     = view.findViewById(R.id.fab_menu_signout);
         count_followers      = view.findViewById(R.id.count_followers);
         count_following      = view.findViewById(R.id.count_following);
 
         // SETAR OS SEGUIDORES
-        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("seguidores")
+        FirebaseDatabase.getInstance().getReference("userSeguidores").child(user_id)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -145,7 +145,7 @@ public class PerfilFragment extends Fragment
                 });
 
         // SETAR OS SEGUINDO
-        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id).child("seguindo")
+        FirebaseDatabase.getInstance().getReference("userSeguindo").child(user_id)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

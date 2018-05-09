@@ -13,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.Dialogs;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.login.Usuario;
 
@@ -47,12 +49,12 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
             Usuario user = (Usuario) sugestaoItem.get(position);
             holder.nome.setText(user.getNome());
             Glide.with(holder.foto).load(user.getFotoUrl()).into(holder.foto);
-            holder.linearLayout.setBackgroundColor((int) R.color.red);
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         } else {
             Turma turma = (Turma) sugestaoItem.get(position);
             holder.nome.setText(turma.getNome());
             Glide.with(holder.foto).load(turma.getCapaUrl()).into(holder.foto);
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.red));
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
         }
 
     }
@@ -73,6 +75,8 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
         ImageView foto;
         LinearLayout linearLayout;
 
+        String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         public SugestaoHolder(View itemView) {
             super(itemView);
 
@@ -85,10 +89,10 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
                 public void onClick(View v) {
                     if(sugestaoItem.get(getPosition()) instanceof Usuario) {
                         Usuario user = (Usuario) sugestaoItem.get(getPosition());
-                        Toast.makeText(context, "Sou um usuario", Toast.LENGTH_SHORT).show();
+                        new Dialogs().dialogUsuario(user, context);
                     } else {
                         Turma turma = (Turma) sugestaoItem.get(getPosition());
-                        Toast.makeText(context, "Sou uma turma", Toast.LENGTH_SHORT).show();
+                        new Dialogs().dialogTurma(turma, context);
                     }
                 }
             });

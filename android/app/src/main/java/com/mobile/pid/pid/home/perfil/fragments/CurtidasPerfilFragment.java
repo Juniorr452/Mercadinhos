@@ -49,7 +49,7 @@ public class CurtidasPerfilFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("feedLikes").child(usuario.getUid())
+        FirebaseDatabase.getInstance().getReference("userLikes").child(usuario.getUid())
             .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
