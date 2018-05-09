@@ -110,13 +110,11 @@ public class PerfilFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+                             Bundle savedInstanceState)
+    {
         view = inflater.inflate(R.layout.fragment_perfil, container ,false);
 
-        // FIREBASEEEE
-
-        pageAdapter_perfil   = new PerfilPageAdapter(getChildFragmentManager());
+        pageAdapter_perfil   = new UsuarioPerfilActivity.PerfilPageAdapter(getChildFragmentManager(), getContext());
         viewPager_perfil     = view.findViewById(R.id.viewpager_perfil);
         tabLayout_perfil     = view.findViewById(R.id.tab_perfil);
         imageView_user       = view.findViewById(R.id.image_user);
@@ -226,54 +224,5 @@ public class PerfilFragment extends Fragment
             numberString = String.valueOf(number);
 
         return numberString;
-    }
-
-    private class PerfilPageAdapter extends FragmentPagerAdapter
-    {
-        public PerfilPageAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return 4;
-        }
-
-        @Override
-        public Fragment getItem(int position)
-        {
-            switch(position)
-            {
-                case 0:
-                    return new PostsFragment();
-                case 1:
-                    return new CurtidasPerfilFragment();
-                case 2:
-                    return new SeguindoFragment();
-                case 3:
-                    return new SeguidoresFragment();
-                default:
-                    return null;
-            }
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position)
-        {
-            switch(position)
-            {
-                case 0:
-                    return getString(R.string.tab_perfil_posts);
-                case 1:
-                    return getString(R.string.tab_perfil_curtidos);
-                case 2:
-                    return getString(R.string.following);
-                case 3:
-                    return getString(R.string.followers);
-                default:
-                    return null;
-            }
-        }
     }
 }

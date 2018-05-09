@@ -1,6 +1,5 @@
-package com.mobile.pid.pid.home.turmas.fragments;
+package com.mobile.pid.pid.home.perfil.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
-import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
 import com.mobile.pid.pid.home.turmas.Turma;
 
 import java.util.ArrayList;
@@ -31,20 +28,20 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TurmasMatriculadasFragment extends Fragment
+public class TurmasUsuarioFragment extends Fragment
 {
     private ProgressBar progressBar;
     private FrameLayout conteudo;
     private ImageView sadFace;
     private TextView sadMessage;
 
-    private DatabaseReference turmasMatriculadasRef;
+    private DatabaseReference turmasUsuarioRef;
 
     private TurmaAdapter turmaAdapter;
     private RecyclerView recyclerView;
-    private List<Turma> turmasMatriculadas;
+    private List<Turma> turmasUsuario;
 
-    public TurmasMatriculadasFragment() {
+    public TurmasUsuarioFragment() {
         // Required empty public constructor
     }
 
@@ -53,14 +50,14 @@ public class TurmasMatriculadasFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        turmasMatriculadas = new ArrayList<>();
-        turmaAdapter = new TurmaAdapter(getActivity(), turmasMatriculadas);
+        turmasUsuario = new ArrayList<>();
+        turmaAdapter = new TurmaAdapter(getActivity(), turmasUsuario);
 
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        turmasMatriculadasRef = FirebaseDatabase.getInstance().getReference().child("userTurmasMatriculadas").child(uid);
+        turmasUsuarioRef = FirebaseDatabase.getInstance().getReference().child("userTurmasCriadas").child(uid);
 
-        turmasMatriculadasRef.addValueEventListener(new ValueEventListener()
+        turmasUsuarioRef.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -118,11 +115,11 @@ public class TurmasMatriculadasFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_turmas_matriculadas, container, false);
+        View v = inflater.inflate(R.layout.fragment_turmas_usuario, container, false);
 
-        recyclerView = v.findViewById(R.id.rv_turmas_matriculadas);
-        progressBar  = v.findViewById(R.id.pb_turmas_matriculadas);
-        conteudo     = v.findViewById(R.id.fl_turmas_matriculadas);
+        recyclerView = v.findViewById(R.id.rv_turmas_usuario);
+        progressBar  = v.findViewById(R.id.pb_turmas_usuario);
+        conteudo     = v.findViewById(R.id.fl_turmas_usuario);
         sadFace      = v.findViewById(R.id.sad_face);
         sadMessage   = v.findViewById(R.id.sad_message);
         conteudo.setVisibility(View.GONE);

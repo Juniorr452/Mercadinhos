@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.home.perfil;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
+import com.mobile.pid.pid.home.perfil.fragments.TurmasUsuarioFragment;
 import com.mobile.pid.pid.login.Usuario;
 
 public class UsuarioPerfilActivity extends AppCompatActivity {
@@ -106,7 +109,7 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new PerfilPageAdapter(getSupportFragmentManager());
+        adapter = new PerfilPageAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -152,15 +155,18 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
         return numberString;
     }
 
-    private class PerfilPageAdapter extends FragmentPagerAdapter
+    public static class PerfilPageAdapter extends FragmentPagerAdapter
     {
-        public PerfilPageAdapter(FragmentManager fm) {
+        private Context c;
+
+        public PerfilPageAdapter(FragmentManager fm, Context c) {
             super(fm);
+            this.c = c;
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
@@ -173,8 +179,10 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
                 case 1:
                     return new CurtidasPerfilFragment();
                 case 2:
-                    return new SeguindoFragment();
+                    return new TurmasUsuarioFragment();
                 case 3:
+                    return new SeguindoFragment();
+                case 4:
                     return new SeguidoresFragment();
                 default:
                     return null;
@@ -188,13 +196,15 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
             switch(position)
             {
                 case 0:
-                    return getString(R.string.tab_perfil_posts);
+                    return c.getString(R.string.tab_perfil_posts);
                 case 1:
-                    return getString(R.string.tab_perfil_curtidos);
+                    return c.getString(R.string.tab_perfil_curtidos);
                 case 2:
-                    return getString(R.string.following);
+                    return c.getString(R.string.nav_classes);
                 case 3:
-                    return getString(R.string.followers);
+                    return c.getString(R.string.following);
+                case 4:
+                    return c.getString(R.string.followers);
                 default:
                     return null;
             }

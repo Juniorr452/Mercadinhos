@@ -46,7 +46,7 @@ public class NovaTurmaActivity extends AppCompatActivity
     Uri imagemUri;
     Map<String, Integer> diasDaSemana;
 
-    DatabaseReference usuariosDatabaseReference;
+    DatabaseReference turmasCriadasDatabaseReference;
     DatabaseReference turmasDatabaseReference;
     StorageReference  turmasStorageReference;
 
@@ -57,10 +57,11 @@ public class NovaTurmaActivity extends AppCompatActivity
         setContentView(R.layout.activity_nova_turma);
 
         // Referências do FIrebase
-        DatabaseReference dbRoot  = FirebaseDatabase.getInstance().getReference();
-        usuariosDatabaseReference = dbRoot.child("usuarios");
-        turmasDatabaseReference   = dbRoot.child("turmas");
-        turmasStorageReference    = FirebaseStorage.getInstance().getReference().child("turmas");
+        DatabaseReference dbRoot       = FirebaseDatabase.getInstance().getReference();
+        turmasCriadasDatabaseReference = dbRoot.child("userTurmasCriadas");
+        turmasDatabaseReference        = dbRoot.child("turmas");
+        turmasStorageReference         = FirebaseStorage.getInstance().getReference().child("turmas");
+
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         // Elementos da UI
@@ -160,17 +161,8 @@ public class NovaTurmaActivity extends AppCompatActivity
         // Cadastrar a turma
         turmasDatabaseReference.child(turmaId).setValue(t);
 
-        // Cadastrar referência da turma criada no professor
-        usuariosDatabaseReference.child(user.getUid()).child("turmas_criadas").child(turmaId).setValue(true);
-
-        /*DatabaseReference usuarioTurmaDbRef = usuariosDatabaseReference.child(user.getId()).child("turmas_criadas").child(turmaId);
-
-        String nomeTurma   = t.getNome();
-        String fotoCapaUrl = t.getCapaUrl();
-
-        usuarioTurmaDbRef.child("nome").setValue(nomeTurma);
-        usuarioTurmaDbRef.child("capaUrl").setValue(fotoCapaUrl);
-        usuarioTurmaDbRef.child("diasDaSemana").setValue(diasDaSemana);*/
+        // Cadastrar referência no turmas_criadas
+        turmasCriadasDatabaseReference.child(user.getUid()).child(turmaId).setValue(true);
 
         Toast.makeText(this, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
         finish();

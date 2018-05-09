@@ -72,7 +72,7 @@ public class TurmasCriadasFragment extends Fragment
         // Pegar os dados de turmas criadas pelo usuário no db
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(uid).child("turmas_criadas");
+        turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("userTurmasCriadas").child(uid);
 
         turmasCriadasRef.addValueEventListener(new ValueEventListener()
         {

@@ -92,9 +92,9 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
     private void adicionarUsuarioNaTurma(String uid)
     {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference turmaMatriculadaRef = dbRef.child("usuarios")
+        DatabaseReference turmaMatriculadaRef = dbRef.child("userTurmasMatriculadas")
                 .child(uid)
-                .child("turmas_matriculadas").child(t.getId());
+                .child(t.getId());
 
         // Adicionar como aluno na turma
         dbRef.child("turmas")

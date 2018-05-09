@@ -140,6 +140,7 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return false;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -157,13 +158,17 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
             dest.writeValue(entry.getValue());
         }
         dest.writeString(this.professorUid);
-        dest.writeInt(this.alunosUid.size());
-        for (Map.Entry<String, Boolean> entry : this.alunosUid.entrySet()) {
-            dest.writeString(entry.getKey());
-            dest.writeValue(entry.getValue());
+
+        if(alunosUid != null)
+        {
+            dest.writeInt(this.alunosUid.size());
+            for (Map.Entry<String, Boolean> entry : this.alunosUid.entrySet()) {
+                dest.writeString(entry.getKey());
+                dest.writeValue(entry.getValue());
+            }
         }
 
-        if (solicitacoes != null)
+        if(solicitacoes != null)
         {
             dest.writeInt(this.solicitacoes.size());
             for (Map.Entry<String, Boolean> entry : this.solicitacoes.entrySet()) {

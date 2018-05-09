@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,12 @@ import java.util.Map;
  */
 public class SolicitacoesFragment extends Fragment
 {
+    private static String TAG = "SolicitaçõesFragment";
+
     RecyclerView rv;
     SolicitacaoAdapter adapter;
 
-    DatabaseReference usuariosRef;
+    DatabaseReference turmasCriadasRef;
     Turma turma;
 
     final List<Usuario> solicitacoes = new ArrayList<>();
@@ -54,6 +57,10 @@ public class SolicitacoesFragment extends Fragment
         rv    = v.findViewById(R.id.rv_solicitacoes);
         turma = i.getParcelableExtra("turma");
 
+        Log.d(TAG, turma.getSolicitacoes().toString());
+
+        turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("userTurmasCriadas").child(turma.getProfessorUid());
+
         adapter = new SolicitacaoAdapter(c, turma, solicitacoes);
 
         rv.setLayoutManager(new LinearLayoutManager(c));
@@ -69,7 +76,8 @@ public class SolicitacoesFragment extends Fragment
 
         adapter.clear();
 
-        usuariosRef = FirebaseDatabase.getInstance().getReference().child("usuarios");
+        DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference().child("usuarios");
+
         for(String uid : turma.getSolicitacoes().keySet())
             usuariosRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener()
             {

@@ -39,8 +39,6 @@ import java.util.Map;
 // TODO: Estudar essa p**** direito
 public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHolder>
 {
-    private static final int COD_TURMAS_MATRICULADAS = 0;
-    private static final int COD_TURMAS_CRIADAS = 1;
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
