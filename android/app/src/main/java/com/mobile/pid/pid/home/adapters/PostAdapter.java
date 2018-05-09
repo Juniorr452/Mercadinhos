@@ -1,44 +1,28 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.nfc.Tag;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.feed.FeedFragment;
+import com.mobile.pid.pid.home.Dialogs;
 import com.mobile.pid.pid.home.feed.Post;
-import com.mobile.pid.pid.home.perfil.PerfilFragment;
-import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
 import com.mobile.pid.pid.login.Usuario;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -69,7 +53,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
     public void onBindViewHolder(final RecyclerViewHolder holder, int position)
     {
         final Post p = posts.get(position);
-        final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String usuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         try
@@ -110,12 +94,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             @Override
             public void onClick(View view) {
 
-                if(p.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    //TODO MANDA PRA ABA DE PERFIL DO USUARIO
-                    dialogPerfilUsuario(p, usuario);
-                } else {
-                    dialogPerfilUsuario(p, usuario);
-                }
+                Usuario user = new Usuario(p.getUserId(), p.getUser(), null, p.getPhotoUrl());
+
+                if(p.getUserId().equals(usuarioLogado)) {
+                    //TODO ENVIAR PARA O PERFIL FRAGMENT
+                    new Dialogs().dialogUsuario(user, context);
+                } else
+                    new Dialogs().dialogUsuario(user, context);
+
             }
         });
 
@@ -127,27 +113,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                 if(holder.like.isChecked()){
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
 
-                    FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
-                            .child("likes").child(usuario).setValue(true);
+                    FirebaseDatabase.getInstance().getReference("postLikes").child(p.getId())
+                            .child(usuarioLogado).setValue(true);
 
                     // SALVAR NOS POSTS CURTIDOS DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                    FirebaseDatabase.getInstance().getReference("userLikes").child(usuarioLogado)
                             .child(p.getId()).setValue(p);
                 } else {
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
 
-                    FirebaseDatabase.getInstance().getReference("posts").child(p.getId())
-                            .child("likes").child(usuario).removeValue();
+                    FirebaseDatabase.getInstance().getReference("postLikes").child(p.getId())
+                            .child(usuarioLogado).removeValue();
 
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("posts_like")
+                    FirebaseDatabase.getInstance().getReference("userLikes").child(usuarioLogado)
                             .child(p.getId()).removeValue();
                 }
             }
         });
 
         // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
-        FirebaseDatabase.getInstance().getReference().child("posts").child(p.getId())
-                .child("likes").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("postLikes").child(p.getId())
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -160,7 +146,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                 }
 
                 // MOSTRA NO FEED O POST CURTIDO CASO O USUARIO TENHA CURTIDO ANTERIORMENTE
-                if(dataSnapshot.hasChild(usuario)) {
+                if(dataSnapshot.hasChild(usuarioLogado)) {
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
                     holder.like.setChecked(true);
                 } else {
@@ -207,144 +193,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     String.format("%02d", (c.get(Calendar.MONTH) + 1)) + "/" +
                     c.get(Calendar.YEAR);
         }
-
-    }
-
-    public void dialogPerfilUsuario(final Post p, final String usuario) {
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_perfil_usuario, null);
-
-        final AlertDialog.Builder mBuilderUsuario = new AlertDialog.Builder(context);
-        mBuilderUsuario.setView(view);
-
-        final Button seguir = view.findViewById(R.id.seguir);
-        final TextView nome = view.findViewById(R.id.nome);
-        final ImageView foto = view.findViewById(R.id.foto);
-        final TextView count_seguindo = view.findViewById(R.id.seguindo);
-        final TextView count_seguidores = view.findViewById(R.id.seguidores);
-
-        if(p.getUserId().equals(usuario)) {
-            seguir.setVisibility(View.GONE);
-        } else {
-            FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("seguindo").child(p.getUserId())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()) {
-                                seguir.setText(context.getText(R.string.following));
-                            } else {
-                                seguir.setText(context.getText(R.string.follow));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-        }
-
-
-
-        final AlertDialog dialogUsuario = mBuilderUsuario.create();
-        dialogUsuario.show();
-
-        nome.setText(p.getUser());
-        Glide.with(context)
-                .load(p.getPhotoUrl())
-                .into(foto);
-
-        FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId()).child("seguindo")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
-                            count_seguindo.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-                        } else {
-                            count_seguindo.setText("0");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId()).child("seguidores")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
-                            count_seguidores.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-                        } else {
-                            count_seguidores.setText("0");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        seguir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios");
-
-                if(seguir.getText().toString().equals(context.getText(R.string.following))) {
-                    dialogUsuario.dismiss();
-
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-                    mBuilder.setTitle(R.string.confirmacao)
-                            .setMessage(context.getText(R.string.unfollow_message) + " "+ p.getUser() + "?")
-                            .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogUsuario.show();
-                                    seguir.setText(R.string.follow);
-
-                                    // EXCLUI NOS "SEGUINDO" DO USUARIO LOGADO
-                                    db.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("seguindo").child(p.getUserId()).removeValue();
-                                    // EXCLUI NOS "SEGUIDORES" DO USUARIO
-                                    db.child(p.getUserId()).child("seguidores").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
-
-                                    seguir.setText(context.getText(R.string.follow));
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogUsuario.show();
-                                }
-                            });
-
-                    AlertDialog dialog = mBuilder.create();
-                    dialog.show();
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.gray_font));
-                } else {
-                    seguir.setText(context.getText(R.string.following));
-
-                    // ADICIONA NOS "SEGUINDO" DO USUARIO LOGADO
-                    db.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("seguindo").child(p.getUserId()).setValue(true);
-                    // ADICIONA NOS "SEGUIDORES" DO USUARIO
-                    db.child(p.getUserId()).child("seguidores").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true);
-                }
-
-
-            }
-        });
-
-        foto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(context, UsuarioPerfilActivity.class);
-                i.putExtra("usuario", p.getUserId());
-                context.startActivity(i);
-            }
-        });
-
 
     }
 

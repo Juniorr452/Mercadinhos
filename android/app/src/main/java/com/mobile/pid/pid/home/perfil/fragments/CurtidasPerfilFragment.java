@@ -38,7 +38,7 @@ public class CurtidasPerfilFragment extends Fragment {
     private List<Post> posts;
 
     public CurtidasPerfilFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CurtidasPerfilFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts_like")
+        FirebaseDatabase.getInstance().getReference("userLikes").child(usuario.getUid())
             .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -87,29 +87,6 @@ public class CurtidasPerfilFragment extends Fragment {
 
             }
         });
-
-        /*FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts_like")
-                .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    recyclerView.getRecycledViewPool().clear();
-                    postAdapter.clear();
-
-                    for (DataSnapshot data: dataSnapshot.getChildren()) {
-                        Post post = data.getValue(Post.class);
-                        post.setId(dataSnapshot.getKey());
-                        postAdapter.add(post);
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
     @Override

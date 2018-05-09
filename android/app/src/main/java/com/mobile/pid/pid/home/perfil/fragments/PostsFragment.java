@@ -51,7 +51,7 @@ public class PostsFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        postsRef = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
+        postsRef = FirebaseDatabase.getInstance().getReference("posts").child(usuario.getUid());
         postsChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

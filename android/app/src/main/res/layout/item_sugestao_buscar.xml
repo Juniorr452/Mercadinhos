@@ -3,30 +3,33 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:cardElevation="6dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginTop="20dp">
+    android:layout_width="170dp"
+    app:cardCornerRadius="4dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginVertical="8dp"
+    android:layout_height="200dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/red"
-        android:gravity="center">
+        android:background="@color/red">
 
         <ImageView
             android:id="@+id/foto"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
+            android:scaleType="centerCrop"
             android:background="@color/gray_font"/>
 
         <TextView
             android:id="@+id/nome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="testando"
+            android:layout_height="40dp"
+            android:paddingVertical="2dp"
+            android:paddingHorizontal="8dp"
             android:gravity="center"
             android:textColor="@color/white"/>
 
@@ -36,6 +39,7 @@
             android:layout_height="wrap_content"
             android:text="10 amigos em comum"
             android:textSize="12sp"
+            android:textColor="@color/black"
             android:gravity="center"/>
     </LinearLayout>
 

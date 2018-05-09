@@ -54,8 +54,6 @@ public class FeedFragment extends Fragment {
     private FrameLayout conteudo;
 
     private FirebaseUser usuario;
-    private DatabaseReference postsRef;
-    private ChildEventListener postsChildListener;
     private ImageView sadFace;
     private TextView sadMessage;
 
@@ -74,7 +72,7 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts").orderByChild("postData")
+        FirebaseDatabase.getInstance().getReference("feed").child(usuario.getUid()).orderByChild("postData")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -193,32 +191,8 @@ public class FeedFragment extends Fragment {
             @Override
             public void onClick(View view)
             {
-                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts");
-                final Post post = new Post(null,
-                                           usuario.getUid(),
-                                           edit_post.getText().toString());
-
-                post.setId(db.push().getKey());
-                db.child(post.getId()).setValue(post);
-
-                FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("seguidores")
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()) {
-                                    for(DataSnapshot data : dataSnapshot.getChildren()) {
-                                        FirebaseDatabase.getInstance().getReference("usuarios").child(data.getKey()).child("posts")
-                                                .child(post.getId()).setValue(post);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
+                Post post = new Post(null, usuario.getUid(), edit_post.getText().toString());
+                post.criarPost();
                 dialog.dismiss();
             }
         });

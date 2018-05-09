@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/fundoRecycle"
     tools:context="com.mobile.pid.pid.home.buscar.BuscarFragment">
 
     <Toolbar
@@ -23,13 +24,41 @@
 
     </Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_buscar"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:paddingTop="8dp"
+        android:textColor="@color/gray_font"
+        android:text="@string/sugestao_usuarios"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_usuarios"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:textColor="@color/gray_font"
+        android:text="@string/sugestas_turmas"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_turmas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp"
         android:paddingBottom="16dp"
         android:clipToPadding="false"/>
+
+
 
 </LinearLayout>
