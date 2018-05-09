@@ -121,6 +121,25 @@ public class Turma implements Parcelable // Parcelable Necessário pra passar el
         return false;
     }
 
+    public void adicionarSolicitacao(String uid)
+    {
+        if(solicitacoes == null)
+            solicitacoes = new HashMap<>();
+
+        solicitacoes.put(uid, true);
+    }
+
+    public boolean enviouSolicitacao(String uid)
+    {
+        if (solicitacoes == null)
+            return false;
+
+        if(solicitacoes.containsKey(uid))
+            return true;
+
+        return false;
+    }
+
     @Override
     public int describeContents() {
         return 0;

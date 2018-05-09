@@ -159,12 +159,13 @@ public class Dialogs {
         });
     }
 
-    public void dialogTurma(final Turma t, final Context context) {
+    public void dialogTurma(final Turma t, final Context context)
+    {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_detalhe_turma, null);
         final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        final AlertDialog.Builder mBuilderUsuario = new AlertDialog.Builder(context);
-        mBuilderUsuario.setView(view);
+        final AlertDialog.Builder mBuilderTurma = new AlertDialog.Builder(context);
+        mBuilderTurma.setView(view);
 
         final Button solicitar = view.findViewById(R.id.solicitar);
         final TextView nome = view.findViewById(R.id.nome);
@@ -172,12 +173,8 @@ public class Dialogs {
         final ImageView foto =  view.findViewById(R.id.foto);
         final TextView count_alunos = view.findViewById(R.id.count_alunos);
 
-        if(t.estaNaTurma(usuario)) {
-            //solicitar.setVisibility(View.GONE);
-        }
-
-        final AlertDialog dialogUsuario = mBuilderUsuario.create();
-        dialogUsuario.show();
+        final AlertDialog dialogTurma = mBuilderTurma.create();
+        dialogTurma.show();
 
         nome.setText(t.getNome());
         Glide.with(context)
@@ -188,48 +185,40 @@ public class Dialogs {
 
         count_alunos.setText(String.valueOf(t.getQtdAlunos()));
 
-        solicitar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final DatabaseReference dbSolicitacoes = FirebaseDatabase.getInstance().getReference("turmas").child("solicitacoes");
-
-                final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                //TODO VERIFICAR SE O PROFESSOR REJEITOU A SOLICITACAO, CASO SIM, SETAR O BOTAO "SOLICITAR" COMO CLICKABLE E A STRING COMO SOLICITAR ENTRADA
-
-                if(solicitar.getText().toString().equals(context.getText(R.string.solicitar_entrada))) {
-                    dialogUsuario.dismiss();
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-                    mBuilder.setTitle(R.string.warning)
-                            .setMessage(R.string.deseja_solicitacao)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+        if(t.estaNaTurma(usuario))
+            solicitar.setVisibility(View.GONE);
+        else if(t.enviouSolicitacao(usuario))
+            desabilitarBotaoSolicitar(solicitar);
+        else
+            solicitar.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+                     mBuilder.setTitle(R.string.warning)
+                        .setMessage(R.string.deseja_solicitacao)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i)
                             {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i)
-                                {
-                                    enviarSolicitacaoTurma(t, usuario);
+                                enviarSolicitacaoTurma(t, usuario);
 
-                                    new AlertDialog.Builder(context)
-                                            .setMessage(R.string.solicitacao_sucesso)
-                                            .setPositiveButton(R.string.Ok, null)
-                                            .show();
+                                new AlertDialog.Builder(context)
+                                        .setMessage(R.string.solicitacao_sucesso)
+                                        .setPositiveButton(R.string.Ok, null)
+                                        .show();
 
-                                    solicitar.setText(context.getText(R.string.solicitado));
-                                    solicitar.setClickable(false);
-                                    solicitar.setTextColor(context.getResources().getColor(R.color.gray_font));
-                                }
-                            })
-                            .setNegativeButton(R.string.no, null);
+                                desabilitarBotaoSolicitar(solicitar);
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null);
 
-                    AlertDialog dialog = mBuilder.create();
-                    dialog.show();
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.gray_font));
-
+                     AlertDialog dialog = mBuilder.create();
+                     dialog.show();
                 }
-            }
-        });
-
+            });
     }
 
     private void carregarFotoProfessor(final ImageView foto, Turma t) {
@@ -255,5 +244,16 @@ public class Dialogs {
                 .child(t.getId())
                 .child("solicitacoes")
                 .child(uid).setValue(true);
+
+        t.adicionarSolicitacao(uid);
+    }
+
+    private void desabilitarBotaoSolicitar(Button solicitar)
+    {
+        Context context = solicitar.getContext();
+
+        solicitar.setText(context.getText(R.string.solicitado));
+        solicitar.setClickable(false);
+        solicitar.setTextColor(context.getResources().getColor(R.color.gray_font));
     }
 }
