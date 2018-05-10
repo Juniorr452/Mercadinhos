@@ -114,7 +114,7 @@ public class ChatsFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        turma        = getArguments().getParcelable("turma");
+        turma        = (Turma) getArguments().getSerializable("turma");
         int usuario  = getArguments().getInt("usuario");
         chatsAdapter = new ChatsAdapter(getActivity(), new ArrayList<Chat>(), turma, usuario);
         chatsRef     = FirebaseDatabase.getInstance().getReference()

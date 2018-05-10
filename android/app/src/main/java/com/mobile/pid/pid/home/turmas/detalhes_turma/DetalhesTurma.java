@@ -65,7 +65,7 @@ public class DetalhesTurma extends AppCompatActivity
         imgProfessor                      = findViewById(R.id.icon_turma_professor);
 
         // Pegar os dados
-        turma = i.getParcelableExtra("turma");
+        turma = (Turma) i.getSerializableExtra("turma");
         USUARIO = (int) i.getExtras().get("usuario");
 
         switch (USUARIO) {
@@ -163,7 +163,7 @@ public class DetalhesTurma extends AppCompatActivity
             switch(position)
             {
                 case 0:
-                    b.putParcelable("turma", turma);
+                    b.putSerializable("turma", turma);
                     b.putInt("usuario", USUARIO);
 
                     Fragment chatsFragment = new ChatsFragment();
@@ -176,7 +176,7 @@ public class DetalhesTurma extends AppCompatActivity
                     return new TrabalhosFragment();
                 case 3:
 
-                    b.putParcelable("turma", turma);
+                    b.putSerializable("turma", turma);
 
                     Fragment solicitacoesFragment = new SolicitacoesFragment();
                     solicitacoesFragment.setArguments(b);
