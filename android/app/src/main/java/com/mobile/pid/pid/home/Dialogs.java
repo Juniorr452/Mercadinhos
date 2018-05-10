@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -162,7 +163,7 @@ public class Dialogs {
     public void dialogTurma(final Turma t, final Context context)
     {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_detalhe_turma, null);
-        final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         final AlertDialog.Builder mBuilderTurma = new AlertDialog.Builder(context);
         mBuilderTurma.setView(view);
@@ -185,9 +186,9 @@ public class Dialogs {
 
         count_alunos.setText(String.valueOf(t.getQtdAlunos()));
 
-        if(t.estaNaTurma(usuario))
+        if(t.estaNaTurma(uid))
             solicitar.setVisibility(View.GONE);
-        else if(t.enviouSolicitacao(usuario))
+        else if(t.enviouSolicitacao(uid))
             desabilitarBotaoSolicitar(solicitar);
         else
             solicitar.setOnClickListener(new View.OnClickListener()
@@ -195,28 +196,67 @@ public class Dialogs {
                 @Override
                 public void onClick(View view)
                 {
-                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-                     mBuilder.setTitle(R.string.warning)
-                        .setMessage(R.string.deseja_solicitacao)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                    // Se a turma não tiver PIN
+                    if(t.getPin().equals(""))
+                    {
+                        new android.support.v7.app.AlertDialog.Builder(context)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.deseja_solicitacao)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i)
+                                    {
+                                        enviarSolicitacaoTurma(t, uid);
+
+                                        new android.support.v7.app.AlertDialog.Builder(context)
+                                                .setMessage(R.string.solicitacao_sucesso)
+                                                .setPositiveButton(R.string.Ok, null)
+                                                .show();
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                    }
+                    else
+                    {
+                        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        final View v         = layoutInflater.inflate(R.layout.dialog_pin, null);
+                        final EditText pinEt = v.findViewById(R.id.dialog_pin);
+
+                        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
+                                .setView(v)
+                                .setPositiveButton(R.string.Ok, null)
+                                .setNegativeButton(R.string.cancel, null)
+                                .create();
+
+                        dialog.show();
+
+                        dialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
                         {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i)
+                            public void onClick(View v)
                             {
-                                enviarSolicitacaoTurma(t, usuario);
+                                String pin = pinEt.getText().toString();
 
-                                new AlertDialog.Builder(context)
-                                        .setMessage(R.string.solicitacao_sucesso)
-                                        .setPositiveButton(R.string.Ok, null)
-                                        .show();
+                                android.support.v7.app.AlertDialog.Builder alerta = new android.support.v7.app.AlertDialog.Builder(context)
+                                        .setTitle(R.string.warning)
+                                        .setPositiveButton(R.string.Ok, null);
 
-                                desabilitarBotaoSolicitar(solicitar);
+                                if(pin.equals(t.getPin()))
+                                {
+                                    enviarSolicitacaoTurma(t, uid);
+                                    alerta.setMessage(R.string.solicitacao_sucesso);
+                                    dialog.dismiss();
+                                }
+                                else
+                                    alerta.setMessage(R.string.wrong_pin);
+
+                                alerta.show();
                             }
-                        })
-                        .setNegativeButton(R.string.no, null);
-
-                     AlertDialog dialog = mBuilder.create();
-                     dialog.show();
+                        });
+                    }
                 }
             });
     }
