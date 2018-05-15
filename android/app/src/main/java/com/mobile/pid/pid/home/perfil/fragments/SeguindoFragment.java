@@ -49,7 +49,7 @@ public class SeguindoFragment extends Fragment {
         usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         followAdapter = new FollowAdapter(getActivity(), 1);
 
-        db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("seguindo");
+        db = FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuario);
 
         db.addValueEventListener(new ValueEventListener() {
             @Override
