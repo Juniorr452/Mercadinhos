@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,7 @@ public class SeguidoresFragment extends Fragment {
     private List<FollowItem> follow;
     private FollowAdapter followAdapter;
     private FollowItem item;
+    private String usuario;
 
 
     public SeguidoresFragment() {
@@ -41,10 +43,11 @@ public class SeguidoresFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        usuario = getArguments().getString("usuario");
+
         followAdapter = new FollowAdapter(getActivity(), 0);
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("seguidores")
+        FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

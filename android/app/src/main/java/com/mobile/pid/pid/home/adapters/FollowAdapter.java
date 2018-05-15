@@ -63,7 +63,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
         Glide.with(context).load(item.getFoto()).into(holder.foto);
 
         if(context_cod == 0) {
-            FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
+            FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado)
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,12 +86,12 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
             public void onClick(View v) {
                 if(holder.botaoSeguir.isChecked()) {
                     // ACRESCENTA NOS SEGUIDORES DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(item.getUid()).child("seguidores")
-                            .child(usuarioLogado).setValue(item);
+                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(item.getUid())
+                            .child(usuarioLogado).setValue(true);
 
                     // ACRESCENTA NOS USUARIOS QUE ESTOU SEGUINDO
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
-                            .child(item.getUid()).setValue(item);
+                    FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado)
+                            .child(item.getUid()).setValue(true);
 
                     if(context_cod == SEGUINDO_CONTEXT) {
                         follow.add(item);
@@ -101,15 +101,15 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                     holder.botaoSeguir.setChecked(true);
                 } else {
                     // REMOVE DOS SEGUIDORES DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(item.getUid()).child("seguidores")
+                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(item.getUid())
                             .child(usuarioLogado).removeValue();
 
                     // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("seguindo")
+                    FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado)
                             .child(item.getUid()).removeValue();
 
                     // REMOVE TODOS OS POSTS DO USUARIO DO MEU FEED
-                    FirebaseDatabase.getInstance().getReference("usuarios").child(usuarioLogado).child("posts")
+                    FirebaseDatabase.getInstance().getReference("feed").child(usuarioLogado)
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
