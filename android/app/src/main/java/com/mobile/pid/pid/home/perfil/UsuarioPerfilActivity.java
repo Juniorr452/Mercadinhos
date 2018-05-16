@@ -217,7 +217,6 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putString("usuario", usuario);
 
-
             switch(position)
             {
                 case 0:

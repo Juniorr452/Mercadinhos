@@ -53,7 +53,7 @@ public class TurmasUsuarioFragment extends Fragment
         turmasUsuario = new ArrayList<>();
         turmaAdapter = new TurmaAdapter(getActivity(), turmasUsuario);
 
-        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String uid = getArguments().getString("usuario"); //FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         turmasUsuarioRef = FirebaseDatabase.getInstance().getReference().child("userTurmasCriadas").child(uid);
 
@@ -71,25 +71,23 @@ public class TurmasUsuarioFragment extends Fragment
                     {
                         String tuid = dataTurma.getKey();
                         FirebaseDatabase.getInstance().getReference()
-                                .child("turmas")
-                                .child(tuid)
-                                .addListenerForSingleValueEvent(new ValueEventListener()
+                            .child("turmas")
+                            .child(tuid)
+                            .addListenerForSingleValueEvent(new ValueEventListener()
+                            {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshotTurma)
                                 {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshotTurma)
-                                    {
-                                        Turma t = dataSnapshotTurma.getValue(Turma.class);
-                                        t.setId(dataSnapshotTurma.getKey());
+                                    Turma t = dataSnapshotTurma.getValue(Turma.class);
+                                    t.setId(dataSnapshotTurma.getKey());
 
-                                        turmaAdapter.add(t);
-                                        turmaAdapter.notifyDataSetChanged();
-                                    }
+                                    turmaAdapter.add(t);
+                                    turmaAdapter.notifyDataSetChanged();
+                                }
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {}
+                            });
                     }
 
                     sadFace.setVisibility(View.GONE);
