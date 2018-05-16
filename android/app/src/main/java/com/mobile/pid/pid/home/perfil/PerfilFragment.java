@@ -39,6 +39,7 @@ import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
+import com.mobile.pid.pid.home.perfil.fragments.TurmasUsuarioFragment;
 import com.mobile.pid.pid.login.RedesSociaisActivity;
 import com.mobile.pid.pid.login.Usuario;
 
@@ -47,8 +48,7 @@ import com.mobile.pid.pid.login.Usuario;
  */
 
 // https://www.youtube.com/watch?v=BTYuLho5_rE COLLAPSING TOOLBAR
-public class PerfilFragment extends Fragment
-{
+public class PerfilFragment extends Fragment {
     private static final String TAG = "PerfilFragment";
     private View view;
 
@@ -68,7 +68,7 @@ public class PerfilFragment extends Fragment
     //firebase
 
     DatabaseReference db;
-    String user_id;
+    private static String user_id;
     Usuario user;
     FirebaseAuth auth;
 
@@ -110,27 +110,26 @@ public class PerfilFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        view = inflater.inflate(R.layout.fragment_perfil, container ,false);
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
-        pageAdapter_perfil   = new UsuarioPerfilActivity.PerfilPageAdapter(getChildFragmentManager(), getContext());
-        viewPager_perfil     = view.findViewById(R.id.viewpager_perfil);
-        tabLayout_perfil     = view.findViewById(R.id.tab_perfil);
-        imageView_user       = view.findViewById(R.id.image_user);
-        collapsing_perfil    = view.findViewById(R.id.collapsing_tb);
-        fab_menu             = view.findViewById(R.id.fab_menu);
-        fab_menu_edit        = view.findViewById(R.id.fab_menu_edit);
-        fab_menu_signout     = view.findViewById(R.id.fab_menu_signout);
-        count_followers      = view.findViewById(R.id.count_followers);
-        count_following      = view.findViewById(R.id.count_following);
+        pageAdapter_perfil = new PerfilPageAdapter(getChildFragmentManager(), getContext());
+        viewPager_perfil = view.findViewById(R.id.viewpager_perfil);
+        tabLayout_perfil = view.findViewById(R.id.tab_perfil);
+        imageView_user = view.findViewById(R.id.image_user);
+        collapsing_perfil = view.findViewById(R.id.collapsing_tb);
+        fab_menu = view.findViewById(R.id.fab_menu);
+        fab_menu_edit = view.findViewById(R.id.fab_menu_edit);
+        fab_menu_signout = view.findViewById(R.id.fab_menu_signout);
+        count_followers = view.findViewById(R.id.count_followers);
+        count_following = view.findViewById(R.id.count_following);
 
         // SETAR OS SEGUIDORES
         FirebaseDatabase.getInstance().getReference("userSeguidores").child(user_id)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists())
+                        if (dataSnapshot.exists())
                             count_followers.setText(String.valueOf(dataSnapshot.getChildrenCount()));
                         else
                             count_followers.setText("0");
@@ -147,7 +146,7 @@ public class PerfilFragment extends Fragment
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists())
+                        if (dataSnapshot.exists())
                             count_following.setText(String.valueOf(dataSnapshot.getChildrenCount()));
                         else
                             count_following.setText("0");
@@ -178,7 +177,9 @@ public class PerfilFragment extends Fragment
 
                 image_user_fullsize.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) { dialog.dismiss(); }
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
                 });
             }
         });
@@ -196,8 +197,7 @@ public class PerfilFragment extends Fragment
 
         fab_menu_signout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Context c = getActivity();
 
                 fab_menu.close(true);
@@ -224,5 +224,71 @@ public class PerfilFragment extends Fragment
             numberString = String.valueOf(number);
 
         return numberString;
+    }
+
+    public static class PerfilPageAdapter extends FragmentPagerAdapter {
+        private Context c;
+
+        public PerfilPageAdapter(FragmentManager fm, Context c) {
+            super(fm);
+            this.c = c;
+        }
+
+        @Override
+        public int getCount() {
+            return 5;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("usuario", user_id);
+
+            switch (position) {
+                case 0:
+                    PostsFragment p = new PostsFragment();
+                    p.setArguments(bundle);
+                    return p;
+                case 1:
+                    CurtidasPerfilFragment c = new CurtidasPerfilFragment();
+                    c.setArguments(bundle);
+                    return c;
+                case 2:
+                    TurmasUsuarioFragment t = new TurmasUsuarioFragment();
+                    t.setArguments(bundle);
+                    return t;
+                case 3:
+                    SeguindoFragment s = new SeguindoFragment();
+                    s.setArguments(bundle);
+                    return s;
+                case 4:
+                    SeguidoresFragment sf = new SeguidoresFragment();
+                    sf.setArguments(bundle);
+                    return sf;
+                default:
+                    return null;
+            }
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return c.getString(R.string.tab_perfil_posts);
+                case 1:
+                    return c.getString(R.string.tab_perfil_curtidos);
+                case 2:
+                    return c.getString(R.string.nav_classes);
+                case 3:
+                    return c.getString(R.string.following);
+                case 4:
+                    return c.getString(R.string.followers);
+                default:
+                    return null;
+            }
+        }
+
     }
 }

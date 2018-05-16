@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
 import com.mobile.pid.pid.home.feed.Post;
+import com.mobile.pid.pid.login.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public class PostsFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
-    private FirebaseUser usuario;
+    private String usuario;
     private DatabaseReference postsRef;
     private ChildEventListener postsChildListener;
 
@@ -47,20 +49,24 @@ public class PostsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        usuario = getArguments().getString("usuario");
+
         posts = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), posts);
-        usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        postsRef = FirebaseDatabase.getInstance().getReference("posts").child(usuario.getUid());
+        postsRef = FirebaseDatabase.getInstance().getReference("posts").child(usuario);
         postsChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                recyclerView.getRecycledViewPool().clear();
-                postAdapter.notifyDataSetChanged();
+                if(dataSnapshot.exists()) {
+                    recyclerView.getRecycledViewPool().clear();
+                    postAdapter.notifyDataSetChanged();
 
-                Post post = dataSnapshot.getValue(Post.class);
-                post.setId(dataSnapshot.getKey());
-                postAdapter.add(post);
+                    Post post = dataSnapshot.getValue(Post.class);
+                    post.setId(dataSnapshot.getKey());
+                    postAdapter.add(post);
+                }
+
             }
 
             @Override
@@ -94,6 +100,7 @@ public class PostsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
 
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
 

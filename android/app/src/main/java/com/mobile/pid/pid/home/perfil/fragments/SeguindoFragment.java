@@ -46,7 +46,7 @@ public class SeguindoFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        usuario = getArguments().getString("usuario");
         followAdapter = new FollowAdapter(getActivity(), 1);
 
         db = FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuario);

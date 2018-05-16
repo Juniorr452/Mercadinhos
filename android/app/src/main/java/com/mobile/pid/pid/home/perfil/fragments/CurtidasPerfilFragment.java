@@ -32,7 +32,7 @@ import java.util.List;
 public class CurtidasPerfilFragment extends Fragment {
 
     private PostAdapter postAdapter;
-    private FirebaseUser usuario;
+    private String usuario;
 
     private RecyclerView recyclerView;
     private List<Post> posts;
@@ -45,11 +45,13 @@ public class CurtidasPerfilFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        usuario = getArguments().getString("usuario");
+
         posts = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), posts);
-        usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("userLikes").child(usuario.getUid())
+
+        FirebaseDatabase.getInstance().getReference("userLikes").child(usuario)
             .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
