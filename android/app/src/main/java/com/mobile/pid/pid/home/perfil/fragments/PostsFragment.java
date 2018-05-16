@@ -66,7 +66,6 @@ public class PostsFragment extends Fragment {
                     post.setId(dataSnapshot.getKey());
                     postAdapter.add(post);
                 }
-
             }
 
             @Override

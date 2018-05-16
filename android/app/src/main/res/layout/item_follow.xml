@@ -25,7 +25,9 @@
                 android:id="@+id/icon_user_follow"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:background="@color/gray_font" />
+                android:background="@color/gray_font"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"/>
         </android.support.v7.widget.CardView>
 
         <LinearLayout
