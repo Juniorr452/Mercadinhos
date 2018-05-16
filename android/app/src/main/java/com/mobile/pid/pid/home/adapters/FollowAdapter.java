@@ -39,98 +39,113 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     private final String FOLLOW_STRING;
     private final String FOLLOWING_STRING;
 
-    public FollowAdapter(Context context, int context_cod) {
+    private final String uid;
+
+    public FollowAdapter(Context context, int context_cod)
+    {
         this.context = context;
         this.follow = new ArrayList<>();
         this.context_cod = context_cod;
         FOLLOW_STRING = context.getResources().getString(R.string.follow);
         FOLLOWING_STRING = context.getResources().getString(R.string.following);
+
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     @Override
-    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
+    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         View view = LayoutInflater.from(context).inflate(R.layout.item_follow, parent, false);
         return new RecyclerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
-        final FollowItem item = follow.get(position);
-        final String usuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    public void onBindViewHolder(final RecyclerViewHolder holder, int position)
+    {
+        final FollowItem followItem = follow.get(position);
 
-        holder.usuario.setText(item.getNome());
-        Glide.with(context).load(item.getFoto()).into(holder.foto);
+        holder.usuario.setText(followItem.getNome());
+        Glide.with(context).load(followItem.getFoto()).into(holder.foto);
 
-        if(context_cod == 0) {
-            FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado)
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists() && dataSnapshot.hasChild(item.getUid())) {
-                                holder.botaoSeguir.setChecked(true);
-                            } else {
-                                holder.botaoSeguir.setChecked(false);
-                            }
-                        }
+        if(context_cod == 0)
+            FirebaseDatabase.getInstance().getReference("userSeguindo").child(uid)
+                .addValueEventListener(new ValueEventListener()
+                {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        if(dataSnapshot.exists() && dataSnapshot.hasChild(followItem.getUid()))
+                            holder.botaoSeguir.setChecked(true);
+                        else
+                            holder.botaoSeguir.setChecked(false);
+                    }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
 
-                        }
-                    });
-        }
-
-        holder.botaoSeguir.setOnClickListener(new View.OnClickListener() {
+        if(followItem.getUid().equals(uid))
+            holder.botaoSeguir.setVisibility(View.INVISIBLE);
+        else
+        holder.botaoSeguir.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                if(holder.botaoSeguir.isChecked()) {
+            public void onClick(View v)
+            {
+                if(holder.botaoSeguir.isChecked())
+                {
                     // ACRESCENTA NOS SEGUIDORES DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(item.getUid())
-                            .child(usuarioLogado).setValue(true);
+                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(followItem.getUid())
+                            .child(uid).setValue(true);
 
                     // ACRESCENTA NOS USUARIOS QUE ESTOU SEGUINDO
-                    FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado)
-                            .child(item.getUid()).setValue(true);
+                    FirebaseDatabase.getInstance().getReference("userSeguindo").child(uid)
+                            .child(followItem.getUid()).setValue(true);
 
-                    if(context_cod == SEGUINDO_CONTEXT) {
-                        follow.add(item);
+                    if(context_cod == SEGUINDO_CONTEXT)
+                    {
+                        follow.add(followItem);
                         notifyDataSetChanged();
                     }
 
                     holder.botaoSeguir.setChecked(true);
-                } else {
+                }
+                else
+                {
                     // REMOVE DOS SEGUIDORES DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(item.getUid())
-                            .child(usuarioLogado).removeValue();
+                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(followItem.getUid())
+                            .child(uid).removeValue();
 
                     // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
-                    FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado)
-                            .child(item.getUid()).removeValue();
+                    FirebaseDatabase.getInstance().getReference("userSeguindo").child(uid)
+                            .child(followItem.getUid()).removeValue();
 
                     // REMOVE TODOS OS POSTS DO USUARIO DO MEU FEED
-                    FirebaseDatabase.getInstance().getReference("feed").child(usuarioLogado)
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.exists()) {
-                                        for(DataSnapshot post : dataSnapshot.getChildren()) {
-                                            Post p = post.getValue(Post.class);
+                    FirebaseDatabase.getInstance().getReference("feed").child(uid)
+                        .addListenerForSingleValueEvent(new ValueEventListener()
+                        {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot)
+                            {
+                                if(dataSnapshot.exists())
+                                {
+                                    for(DataSnapshot post : dataSnapshot.getChildren())
+                                    {
+                                        Post p = post.getValue(Post.class);
 
-                                            if(p.getUserId().equals(item.getUid()))
-                                                post.getRef().removeValue();
-                                        }
+                                        if(p.getUserId().equals(followItem.getUid()))
+                                            post.getRef().removeValue();
                                     }
                                 }
+                            }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {}
+                        });
 
-                                }
-                            });
-
-                    if(context_cod == SEGUINDO_CONTEXT) {
-                        follow.remove(item);
+                    if(context_cod == SEGUINDO_CONTEXT)
+                    {
+                        follow.remove(followItem);
                         notifyDataSetChanged();
                     }
 
@@ -163,7 +178,6 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
         follow.clear();
         notifyDataSetChanged();
     }
-
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
