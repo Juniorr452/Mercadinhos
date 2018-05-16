@@ -44,7 +44,7 @@ public class SeguidoresFragment extends Fragment {
         String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
         followAdapter = new FollowAdapter(getActivity(), 0);
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario).child("seguidores")
+        FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
