@@ -15,7 +15,7 @@ const admin     = require('firebase-admin');
 admin.initializeApp();
 
 exports.olaMundoGrafo = functions.https.onRequest((request, response) => {
-    let grafo = new Grafo();
+    let grafo = new Grafo(2);
     response.send(grafo.helloWorldGrafo());
 });
 
@@ -27,8 +27,15 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
     if(uid === undefined)
         return;
 
-    let grafo = new Grafo();
-    grafo.lerGrafo(uid);
+    let grafo = new Grafo(2);
+
+    grafo.lerGrafo(uid).then(terminou => 
+    {
+        grafo.imprimirAdjList();
+        return true;
+    }).catch(err => {
+        console.log(err);
+    });
 
     response.send("uid = " + uid);
 });
