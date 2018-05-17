@@ -54,6 +54,9 @@ dependencies {
 
     // Floating Action Menu
     implementation 'com.github.clans:fab:1.6.2'
+
+    // Search View
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 }
 
 

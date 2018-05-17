@@ -3,17 +3,25 @@ package com.mobile.pid.pid.home.buscar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.SugestaoAdapter;
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
@@ -38,7 +46,9 @@ public class BuscarFragment extends Fragment
     private SugestaoAdapter sugestaoAdapter_usuarios;
     private RecyclerView recyclerView_turmas;
     private RecyclerView recyclerView_usuarios;
+    private Toolbar toolbar;
     private List<Turma> turmasCriadas;
+    //private MaterialSearchView searchView;
 
     // TODO: Código turmas criadas
     public BuscarFragment() {
@@ -126,6 +136,7 @@ public class BuscarFragment extends Fragment
         // Recycler View
         recyclerView_turmas = v.findViewById(R.id.rv_turmas);
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
+        //searchView = v.findViewById(R.id.search_view);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
@@ -133,10 +144,41 @@ public class BuscarFragment extends Fragment
         llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView_turmas.setLayoutManager(llm);
         recyclerView_usuarios.setLayoutManager(llm2);
+        toolbar = v.findViewById(R.id.toolbar_buscar);
 
         recyclerView_turmas.setAdapter(sugestaoAdapter_turmas);
         recyclerView_usuarios.setAdapter(sugestaoAdapter_usuarios);
 
+        if(getActivity() instanceof AppCompatActivity) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Buscar");
+        }
+
+
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.menuSearch);
+
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 }
