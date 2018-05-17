@@ -13,9 +13,32 @@ function Grafo(profundidadeMax, grafoDbRef)
     this.grafoDbRef = grafoDbRef;
 }
 
+// Em construção
+// Tratar p/ n enviar ou mostrar o usuário logado na recomendação
+// https://www.youtube.com/watch?v=-he67EEM6z0&t=94s
 Grafo.prototype.bfs = function(uid)
 {
-    
+    let filaVertices = [];
+    let verticeAtual;
+
+    filaVertices.push(this)
+
+    while(filaVertices.length > 0)
+    {
+        verticeAtual = filaVertices.shift();
+        
+        verticeAtual.visitado = true;
+        
+        verticeAtual.vizinhos.forEach(vizinho => {
+            vizinho.pontuacao++;
+
+            if(!vizinho.visitado)
+            {
+                vizinho.visitado = true;
+                filaVertices.push(vizinho);
+            }
+        });
+    }
 }
 
 // Ler o grafo recursivamente do db até uma certa profundidade
@@ -31,7 +54,7 @@ Grafo.prototype.lerGrafo = function(uid, profundidade)
 
     return userSeguindoRef.once('value').then(seguindoUids => 
     {
-        // Lista de promises,
+        // Lista de promises
         let promises = [];
 
         if(seguindoUids)
