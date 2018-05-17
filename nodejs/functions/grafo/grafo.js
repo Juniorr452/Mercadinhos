@@ -87,7 +87,7 @@ Grafo.prototype.imprimirAdjList = function()
 Grafo.prototype.addVertice = function(chave, vertice, vizinhos)
 {
     vizinhos.forEach(vizinho => {
-        vertice.addVizinho(vizinho.key);
+        vertice.addVizinho(vizinho);
     });
 
     this.vertices[chave] = vertice;
