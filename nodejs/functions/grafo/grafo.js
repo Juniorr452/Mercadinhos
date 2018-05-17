@@ -1,91 +1,73 @@
 // Prototypes - https://tableless.com.br/dominando-o-uso-de-prototype-em-javascript/
 
 const Vertice = require('./vertice.js');
-const admin   = require('firebase-admin');
 
-function Grafo(profundidadeMax)
+function Grafo(profundidadeMax, grafoDbRef)
 {
     this.vertices = {};
-    this.profundidadeMax = profundidadeMax;
-    this.profundidade = 0;
 
-    this.db = admin.database();
+    // Profundidade máxima de leitura do grafo
+    this.profundidadeMax = profundidadeMax;
+
+    // Referência do db de onde estão os vértices
+    this.grafoDbRef = grafoDbRef;
 }
 
-Grafo.prototype.bfs = uid =>
+Grafo.prototype.bfs = function(uid)
 {
     
 }
 
-Grafo.prototype.lerGrafo = uid =>
+// Ler o grafo recursivamente do db até uma certa profundidade
+// Retorna uma promise ou falso, se a profundidade já for máxima
+// Promises - https://www.youtube.com/watch?v=726GW5bg3OY 
+Grafo.prototype.lerGrafo = function(uid, profundidade)
 {
-    if(this.profundidade > this.profundidadeMax)
-    {
-        this.profundidade = 0;
+    // Talvez depois eu tire esse vertices.hasOwnProperty, mas vou deixar pra não estragar o que já tá funcionando
+    if((profundidade >= this.profundidadeMax) || this.vertices.hasOwnProperty(uid))
         return false;
-    }
 
-    this.profundidade++;
-
-    console.log(this.profundidade);
-
-    let vertice = new Vertice();
-    let userSeguindoRef = this.db.ref("userSeguindo").child(uid);
+    let userSeguindoRef = this.grafoDbRef.child(uid);
 
     return userSeguindoRef.once('value').then(seguindoUids => 
     {
+        // Lista de promises,
+        let promises = [];
+
         if(seguindoUids)
         {
+            this.addVertice(uid, new Vertice(), seguindoUids);
+
             seguindoUids.forEach(seguindo => 
             {
-                let seguindoUid = seguindo.key;
-                this.addVizinhoVertice(seguindoUids);
-
-                if(this.vertices[uid] === undefined)
-                    lerGrafo(seguindoUid);
+                if(!this.vertices.hasOwnProperty(seguindo.key))          
+                    promises.push(this.lerGrafo(seguindo.key, profundidade + 1));
             });
         }
-            
-        return false;
+        
+        // Só vai retornar quando terminar de executar todas as promises da lista.
+        return Promise.all(promises);
     });
 }
 
-/*Grafo.prototype.lerUsuarioSeguindo = uid =>
-{
-    let seguindo = [];
-
-    const userSeguindoRef = this.db.ref("userSeguindo").child(uid);
-    
-    // https://firebase.googleblog.com/2016/01/keeping-our-promises-and-callbacks_76.html
-    userSeguindoRef.once('value').then(snapshot => 
+Grafo.prototype.imprimirAdjList = function()
+{    
+    for(var key in this.vertices)
     {
-        let seguindoUids = snapshot.keys;
-        console.log(seguindoUids);
+        console.log(key);
+        this.vertices[key].vizinhos.forEach(vizinho => {
+            console.log("    " + vizinho);
+        });
+    }
+}
 
-        return seguindoUids;
-    }).catch(err =>{
-        console.log(err);
-    });
-}*/
-
-Grafo.prototype.imprimirAdjList = () =>
+Grafo.prototype.addVertice = function(chave, vertice, vizinhos)
 {
-    console.log(vertices);
-    /*this.vertices.forEach(vertice => {
+    vizinhos.forEach(vizinho => {
+        vertice.addVizinho(vizinho.key);
+    });
 
-    });*/
-}
-
-Grafo.prototype.addVertice = (chave, vertice) => {
     this.vertices[chave] = vertice;
-}
-
-Grafo.prototype.addVizinhoVertice = (chave, vizinhos) => {
-    this.vertice[chave].addVizinhoVertice(vizinhos);
-}
-
-Grafo.prototype.helloWorldGrafo = () => {
-    return "Hello World do Grafo";
 }
 
 module.exports = Grafo;

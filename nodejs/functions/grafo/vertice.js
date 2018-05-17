@@ -5,11 +5,11 @@ function Vertice()
     this.visitado  = false;
 }
 
-Vertice.prototype.setVizinhos = (vizinhos) => {
+Vertice.prototype.setVizinhos = function(vizinhos) {
     this.vizinhos = vizinhos;
 }
 
-Vertice.prototype.addVizinho = (vizinho) => {
+Vertice.prototype.addVizinho = function(vizinho) {
     this.vizinhos.push(vizinho);
 }
 

@@ -13,23 +13,20 @@ const admin     = require('firebase-admin');
 // });
 
 admin.initializeApp();
-
-exports.olaMundoGrafo = functions.https.onRequest((request, response) => {
-    let grafo = new Grafo(2);
-    response.send(grafo.helloWorldGrafo());
-});
+let userSeguindoRef = admin.database().ref("userSeguindo");
 
 // Recomendações de usuários para seguir
 exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response) => {
     //let uid = request.query.uid;
+    // Tô colocando só meu uid por enquanto
     let uid = "ECevzocmNxaERZq8KO3lwDiE79Y2";
 
     if(uid === undefined)
         return;
 
-    let grafo = new Grafo(2);
+    let grafo = new Grafo(2, userSeguindoRef);
 
-    grafo.lerGrafo(uid).then(terminou => 
+    grafo.lerGrafo(uid, 0).then(terminou => 
     {
         grafo.imprimirAdjList();
         return true;
