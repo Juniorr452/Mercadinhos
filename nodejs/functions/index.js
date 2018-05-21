@@ -28,7 +28,12 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
 
     grafo.lerGrafo(uid, 0).then(terminou => 
     {
-        grafo.imprimirAdjList();
+        //grafo.imprimirAdjList();
+        grafo.bfs(uid);
+        grafo.imprimirPontuacao();
+        console.log('===============================');
+        console.log(grafo.vertices);
+
         return true;
     }).catch(err => {
         console.log(err);
@@ -36,3 +41,8 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
 
     response.send("uid = " + uid);
 });
+
+function ordenarLista()
+{
+
+}

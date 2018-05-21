@@ -9,7 +9,6 @@ function Grafo(profundidadeMax, grafoDbRef)
     // Profundidade máxima de leitura do grafo
     this.profundidadeMax = profundidadeMax;
 
-    // Referência do db de onde estão os vértices
     this.grafoDbRef = grafoDbRef;
 }
 
@@ -19,23 +18,26 @@ function Grafo(profundidadeMax, grafoDbRef)
 Grafo.prototype.bfs = function(uid)
 {
     let filaVertices = [];
-    let verticeAtual;
 
-    filaVertices.push(this)
+    let verticeAtual = this.vertices[uid];
+    verticeAtual.visitado = true;
+
+    filaVertices.push(verticeAtual);
 
     while(filaVertices.length > 0)
     {
         verticeAtual = filaVertices.shift();
         
-        verticeAtual.visitado = true;
-        
-        verticeAtual.vizinhos.forEach(vizinho => {
-            vizinho.pontuacao++;
+        verticeAtual.vizinhos.forEach(vizinhoid => 
+        {
+            verticeVizinho = this.vertices[vizinhoid];
 
-            if(!vizinho.visitado)
+            verticeVizinho.pontuacao++;
+
+            if(!verticeVizinho.visitado)
             {
-                vizinho.visitado = true;
-                filaVertices.push(vizinho);
+                verticeVizinho.visitado = true;
+                filaVertices.push(verticeVizinho);
             }
         });
     }
@@ -54,7 +56,6 @@ Grafo.prototype.lerGrafo = function(uid, profundidade)
 
     return userSeguindoRef.once('value').then(seguindoUids => 
     {
-        // Lista de promises
         let promises = [];
 
         if(seguindoUids)
@@ -77,17 +78,23 @@ Grafo.prototype.imprimirAdjList = function()
 {    
     for(var key in this.vertices)
     {
-        console.log(key);
+        console.log(this.vertices[key]);
         this.vertices[key].vizinhos.forEach(vizinho => {
             console.log("    " + vizinho);
         });
     }
 }
 
+Grafo.prototype.imprimirPontuacao = function()
+{    
+    for(var key in this.vertices)
+        console.log(key + " = " + this.vertices[key].pontuacao);
+}
+
 Grafo.prototype.addVertice = function(chave, vertice, vizinhos)
 {
     vizinhos.forEach(vizinho => {
-        vertice.addVizinho(vizinho);
+        vertice.addVizinho(vizinho.key);
     });
 
     this.vertices[chave] = vertice;
