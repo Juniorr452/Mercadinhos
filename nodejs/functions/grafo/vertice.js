@@ -1,5 +1,6 @@
-function Vertice()
+function Vertice(id)
 {
+    this.id = id;
     this.pontuacao = 0;
     this.vizinhos  = [];
     this.visitado  = false;

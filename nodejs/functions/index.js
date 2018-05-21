@@ -13,36 +13,64 @@ const admin     = require('firebase-admin');
 // });
 
 admin.initializeApp();
+let usuariosRef     = admin.database().ref("usuarios");
 let userSeguindoRef = admin.database().ref("userSeguindo");
 
 // Recomendações de usuários para seguir
 exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response) => {
-    //let uid = request.query.uid;
-    // Tô colocando só meu uid por enquanto
-    let uid = "ECevzocmNxaERZq8KO3lwDiE79Y2";
+    let uid = request.query.uid;
+
+    //let uid = "ECevzocmNxaERZq8KO3lwDiE79Y2";
 
     if(uid === undefined)
         return;
 
     let grafo = new Grafo(2, userSeguindoRef);
 
+    let listaVertices = [];
+
     grafo.lerGrafo(uid, 0).then(terminou => 
     {
         //grafo.imprimirAdjList();
         grafo.bfs(uid);
         grafo.imprimirPontuacao();
-        console.log('===============================');
-        console.log(grafo.vertices);
 
-        return true;
+        let listaVertices = ordenarLista(Object.values(grafo.vertices));
+
+        return pegarUsuarios(listaVertices);
+
+    }).then(lista => {
+        return response.send(lista);
+
     }).catch(err => {
         console.log(err);
+        response.send(err);
     });
-
-    response.send("uid = " + uid);
 });
 
-function ordenarLista()
+function ordenarLista(lista)
 {
+    lista.sort((a, b) => {
+        return b.pontuacao - a.pontuacao;
+    });
 
+    return lista;
+}
+
+function pegarUsuarios(listaVertices)
+{
+    let promises = [];
+
+    listaVertices.forEach(usuario => 
+    {
+        let promise = usuariosRef.child(usuario.id).once('value', snapshot => {
+            usuario.perfil = snapshot.val();
+        });
+
+        promises.push(promise);
+    });
+    
+    return Promise.all(promises).then(() => {
+        return listaVertices;
+    });
 }

@@ -12,9 +12,6 @@ function Grafo(profundidadeMax, grafoDbRef)
     this.grafoDbRef = grafoDbRef;
 }
 
-// Em construção
-// Tratar p/ n enviar ou mostrar o usuário logado na recomendação
-// https://www.youtube.com/watch?v=-he67EEM6z0&t=94s
 Grafo.prototype.bfs = function(uid)
 {
     let filaVertices = [];
@@ -60,7 +57,7 @@ Grafo.prototype.lerGrafo = function(uid, profundidade)
 
         if(seguindoUids)
         {
-            this.addVertice(uid, new Vertice(), seguindoUids);
+            this.addVertice(new Vertice(uid), seguindoUids);
 
             seguindoUids.forEach(seguindo => 
             {
@@ -91,13 +88,13 @@ Grafo.prototype.imprimirPontuacao = function()
         console.log(key + " = " + this.vertices[key].pontuacao);
 }
 
-Grafo.prototype.addVertice = function(chave, vertice, vizinhos)
+Grafo.prototype.addVertice = function(vertice, vizinhos)
 {
     vizinhos.forEach(vizinho => {
         vertice.addVizinho(vizinho.key);
     });
 
-    this.vertices[chave] = vertice;
+    this.vertices[vertice.id] = vertice;
 }
 
 module.exports = Grafo;
