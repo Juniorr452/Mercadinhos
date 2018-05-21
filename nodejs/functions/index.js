@@ -23,7 +23,7 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
     //let uid = "ECevzocmNxaERZq8KO3lwDiE79Y2";
 
     if(uid === undefined)
-        return;
+        return response.send("ERRO: UID não informado");
 
     let grafo = new Grafo(2, userSeguindoRef);
 
@@ -71,6 +71,6 @@ function pegarUsuarios(listaVertices)
     });
     
     return Promise.all(promises).then(() => {
-        return listaVertices;
+        return listaVertices.map(vertice => vertice.perfil);
     });
 }
