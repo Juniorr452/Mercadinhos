@@ -1,7 +1,6 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,16 +19,15 @@ import com.mobile.pid.pid.login.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.SugestaoHolder> {
 
     private Context context;
-    private List<Object> sugestaoItem;
+    private List<Object> sugestoes;
 
     public SugestaoAdapter(Context context) {
         this.context = context;
-        sugestaoItem = new ArrayList<>();
+        sugestoes = new ArrayList<>();
     }
 
 
@@ -45,13 +42,13 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
     @Override
     public void onBindViewHolder(@NonNull SugestaoHolder holder, int position) {
 
-        if(sugestaoItem.get(position) instanceof Usuario) {
-            Usuario user = (Usuario) sugestaoItem.get(position);
+        if(sugestoes.get(position) instanceof Usuario) {
+            Usuario user = (Usuario) sugestoes.get(position);
             holder.nome.setText(user.getNome());
             Glide.with(holder.foto).load(user.getFotoUrl()).into(holder.foto);
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         } else {
-            Turma turma = (Turma) sugestaoItem.get(position);
+            Turma turma = (Turma) sugestoes.get(position);
             holder.nome.setText(turma.getNome());
             Glide.with(holder.foto).load(turma.getCapaUrl()).into(holder.foto);
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
@@ -61,11 +58,16 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
     @Override
     public int getItemCount() {
-        return sugestaoItem.size();
+        return sugestoes.size();
     }
 
     public void add(Object obj) {
-        sugestaoItem.add(obj);
+        sugestoes.add(obj);
+        notifyDataSetChanged();
+    }
+
+    public void setSugestoes(List<Object> sugestoes){
+        this.sugestoes = sugestoes;
         notifyDataSetChanged();
     }
 
@@ -87,11 +89,11 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(sugestaoItem.get(getPosition()) instanceof Usuario) {
-                        Usuario user = (Usuario) sugestaoItem.get(getPosition());
+                    if(sugestoes.get(getPosition()) instanceof Usuario) {
+                        Usuario user = (Usuario) sugestoes.get(getPosition());
                         new Dialogs().dialogUsuario(user, context);
                     } else {
-                        Turma turma = (Turma) sugestaoItem.get(getPosition());
+                        Turma turma = (Turma) sugestoes.get(getPosition());
                         new Dialogs().dialogTurma(turma, context);
                     }
                 }
