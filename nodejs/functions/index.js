@@ -35,8 +35,11 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
         grafo.bfs(uid);
         grafo.imprimirPontuacao();
 
-        let listaVertices = ordenarLista(Object.values(grafo.vertices));
-
+        // Firebase não suporta o Object.values por causa da versão do Node que ele usa. Vou usar essa solução https://stackoverflow.com/questions/38748445/uncaught-typeerror-object-values-is-not-a-function-javascript
+        //let listaVertices = ordenarLista(Object.values(grafo.vertices));
+        let listaVertices = ordenarLista(Object.keys(grafo.vertices).map(chave => {
+            return grafo.vertices[chave];
+        }));
         return pegarUsuarios(listaVertices);
 
     }).then(lista => {
