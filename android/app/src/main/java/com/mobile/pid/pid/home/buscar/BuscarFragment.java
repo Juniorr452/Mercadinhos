@@ -14,15 +14,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.adapters.BuscarAdapter;
 import com.mobile.pid.pid.home.adapters.SugestaoAdapter;
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
 import com.mobile.pid.pid.home.turmas.Turma;
@@ -42,13 +45,16 @@ public class BuscarFragment extends Fragment
     private ChildEventListener turmasChildEventListener;
 
     private TurmaAdapter turmaAdapter;
+    private BuscarAdapter buscarAdapter;
     private SugestaoAdapter sugestaoAdapter_turmas;
     private SugestaoAdapter sugestaoAdapter_usuarios;
     private RecyclerView recyclerView_turmas;
     private RecyclerView recyclerView_usuarios;
+    private RecyclerView recycle_busca;
     private Toolbar toolbar;
     private List<Turma> turmasCriadas;
-    //private MaterialSearchView searchView;
+    private FrameLayout sugestoes;
+    private FrameLayout busca;
 
     // TODO: Código turmas criadas
     public BuscarFragment() {
@@ -59,8 +65,13 @@ public class BuscarFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
         turmasCriadas = new ArrayList<>();
         turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas);
+        buscarAdapter = new BuscarAdapter(getActivity());
+
         sugestaoAdapter_turmas = new SugestaoAdapter(getActivity());
         sugestaoAdapter_usuarios = new SugestaoAdapter(getActivity());
 
@@ -136,6 +147,7 @@ public class BuscarFragment extends Fragment
         // Recycler View
         recyclerView_turmas = v.findViewById(R.id.rv_turmas);
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
+        recycle_busca = v.findViewById(R.id.recycle_busca);
         //searchView = v.findViewById(R.id.search_view);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -144,14 +156,21 @@ public class BuscarFragment extends Fragment
         llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView_turmas.setLayoutManager(llm);
         recyclerView_usuarios.setLayoutManager(llm2);
+        recycle_busca.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         toolbar = v.findViewById(R.id.toolbar_buscar);
+        sugestoes = v.findViewById(R.id.sugestoes);
+        busca = v.findViewById(R.id.busca);
 
         recyclerView_turmas.setAdapter(sugestaoAdapter_turmas);
         recyclerView_usuarios.setAdapter(sugestaoAdapter_usuarios);
+        recycle_busca.setAdapter(buscarAdapter);
 
         if(getActivity() instanceof AppCompatActivity) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Buscar");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         }
 
 
@@ -160,23 +179,87 @@ public class BuscarFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_search, menu);
+
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.menuSearch);
 
         SearchView searchView = (SearchView) item.getActionView();
 
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
+        //searchView.setMaxWidth(getActivity().getWindowManager().getDefaultDisplay().getWidth());
+        
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+
+                FirebaseDatabase.getInstance().getReference("usuarios").orderByChild("nome").startAt(query)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                buscarAdapter.clear();
+
+                                if (dataSnapshot.exists()) {
+
+                                    for (DataSnapshot user : dataSnapshot.getChildren()) {
+                                        Usuario u = user.getValue(Usuario.class);
+                                        u.setUid(user.getKey());
+                                        buscarAdapter.add(u);
+                                    }
+
+                                    sugestoes.setVisibility(View.GONE);
+                                    busca.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                FirebaseDatabase.getInstance().getReference("turmas").orderByChild("nome").startAt(query)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+
+                                    for (DataSnapshot turma : dataSnapshot.getChildren()) {
+                                        Turma t = turma.getValue(Turma.class);
+                                        t.setId(turma.getKey());
+                                        buscarAdapter.add(t);
+                                    }
+
+                                    sugestoes.setVisibility(View.GONE);
+                                    busca.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+                return true;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+
+                buscarAdapter.clear();
+
+                sugestoes.setVisibility(View.VISIBLE);
+                busca.setVisibility(View.GONE);
                 return false;
             }
         });
