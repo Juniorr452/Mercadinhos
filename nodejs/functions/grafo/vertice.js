@@ -4,6 +4,7 @@ function Vertice(id)
     this.pontuacao = 0;
     this.vizinhos  = [];
     this.visitado  = false;
+    this.ignorar   = false;
 }
 
 Vertice.prototype.setVizinhos = function(vizinhos) {

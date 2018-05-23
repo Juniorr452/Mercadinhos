@@ -16,8 +16,14 @@ Grafo.prototype.bfs = function(uid)
 {
     let filaVertices = [];
 
+    // Ignorar vértice atual (você) e seus vizinhos (seus seguidores)
+    // para recomendar apenas quem você não conhece
     let verticeAtual = this.vertices[uid];
-    verticeAtual.visitado = true;
+    verticeAtual.ignorar = true;
+
+    verticeAtual.vizinhos.forEach(vizinho => {
+        vizinho.ignorar = true;
+    });
 
     filaVertices.push(verticeAtual);
 
@@ -29,12 +35,15 @@ Grafo.prototype.bfs = function(uid)
         {
             verticeVizinho = this.vertices[vizinhoid];
 
-            verticeVizinho.pontuacao++;
-
-            if(!verticeVizinho.visitado)
+            if(!verticeVizinho.ignorar)
             {
-                verticeVizinho.visitado = true;
-                filaVertices.push(verticeVizinho);
+                verticeVizinho.pontuacao++;
+
+                if(!verticeVizinho.visitado)
+                {
+                    verticeVizinho.visitado = true;
+                    filaVertices.push(verticeVizinho);
+                }
             }
         });
     }
