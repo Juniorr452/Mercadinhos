@@ -53,11 +53,9 @@ public class LoginOnCompleteListener implements OnCompleteListener<AuthResult>
         }
         else
         {
-            // TODO: Tratar exceptions
-            // If sign in fails, display a message to the user.
             Log.w(TAG, "signInWithCredential:failure", task.getException());
             progressDialog.dismiss();
-            Toast.makeText(c, "Falha na autenticação. Tente logar com outro serviço.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }
