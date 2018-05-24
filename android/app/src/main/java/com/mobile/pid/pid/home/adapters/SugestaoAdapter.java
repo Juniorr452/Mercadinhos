@@ -23,7 +23,7 @@ import java.util.List;
 public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.SugestaoHolder> {
 
     private Context context;
-    private List<Object> sugestoes;
+    private List<Usuario> sugestoes;
 
     public SugestaoAdapter(Context context) {
         this.context = context;
@@ -42,17 +42,9 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
     @Override
     public void onBindViewHolder(@NonNull SugestaoHolder holder, int position) {
 
-        if(sugestoes.get(position) instanceof Usuario) {
             Usuario user = (Usuario) sugestoes.get(position);
             holder.nome.setText(user.getNome());
             Glide.with(holder.foto).load(user.getFotoUrl()).into(holder.foto);
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-        } else {
-            Turma turma = (Turma) sugestoes.get(position);
-            holder.nome.setText(turma.getNome());
-            Glide.with(holder.foto).load(turma.getCapaUrl()).into(holder.foto);
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-        }
 
     }
 
@@ -61,12 +53,12 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
         return sugestoes.size();
     }
 
-    public void add(Object obj) {
+    public void add(Usuario obj) {
         sugestoes.add(obj);
         notifyDataSetChanged();
     }
 
-    public void setSugestoes(List<Object> sugestoes){
+    public void setSugestoes(List<Usuario> sugestoes){
         this.sugestoes = sugestoes;
         notifyDataSetChanged();
     }
@@ -75,7 +67,6 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
         TextView nome;
         ImageView foto;
-        LinearLayout linearLayout;
 
         String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -84,18 +75,12 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
             nome = itemView.findViewById(R.id.nome);
             foto = itemView.findViewById(R.id.foto);
-            linearLayout = itemView.findViewById(R.id.linear);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(sugestoes.get(getPosition()) instanceof Usuario) {
-                        Usuario user = (Usuario) sugestoes.get(getPosition());
-                        new Dialogs().dialogUsuario(user, context);
-                    } else {
-                        Turma turma = (Turma) sugestoes.get(getPosition());
-                        new Dialogs().dialogTurma(turma, context);
-                    }
+                    Usuario user = (Usuario) sugestoes.get(getPosition());
+                    new Dialogs().dialogUsuario(user, context);
                 }
             });
         }

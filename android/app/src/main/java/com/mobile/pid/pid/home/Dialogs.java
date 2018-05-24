@@ -38,6 +38,8 @@ public class Dialogs {
         final TextView count_seguindo = view.findViewById(R.id.seguindo);
         final TextView count_seguidores = view.findViewById(R.id.seguidores);
 
+
+        //TODO ERRO TA AQUI!!!!!! NAO TA RECUPERANDO O UID DO USUARIO NO GRAFO
         if(u.getUid().equals(usuario)) {
             seguir.setVisibility(View.GONE);
         } else {

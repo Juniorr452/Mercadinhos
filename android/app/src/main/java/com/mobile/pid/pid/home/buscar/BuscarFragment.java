@@ -4,6 +4,7 @@ package com.mobile.pid.pid.home.buscar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -60,9 +61,8 @@ public class BuscarFragment extends Fragment
 
     private TurmaAdapter turmaAdapter;
     private BuscarAdapter buscarAdapter;
-    private SugestaoAdapter sugestaoAdapter_turmas;
     private SugestaoAdapter sugestaoAdapter_usuarios;
-    private RecyclerView recyclerView_turmas;
+
     private RecyclerView recyclerView_usuarios;
     private RecyclerView recycle_busca;
     private Toolbar toolbar;
@@ -84,46 +84,12 @@ public class BuscarFragment extends Fragment
 
         setHasOptionsMenu(true);
 
-        turmasCriadas = new ArrayList<>();
-        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas);
         buscarAdapter = new BuscarAdapter(getActivity());
 
-        sugestaoAdapter_turmas = new SugestaoAdapter(getActivity());
         sugestaoAdapter_usuarios = new SugestaoAdapter(getActivity());
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        turmasRef = FirebaseDatabase.getInstance().getReference().child("turmas");
-        turmasChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Turma t = dataSnapshot.getValue(Turma.class);
-                t.setId(dataSnapshot.getKey());
-                sugestaoAdapter_turmas.add(t);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        turmasRef.addChildEventListener(turmasChildEventListener);
     }
 
     @Override
@@ -140,24 +106,24 @@ public class BuscarFragment extends Fragment
         View v = inflater.inflate(R.layout.fragment_buscar, container, false);
 
         // Recycler View
-        recyclerView_turmas = v.findViewById(R.id.rv_turmas);
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
         recycle_busca = v.findViewById(R.id.recycle_busca);
         //searchView = v.findViewById(R.id.search_view);
 
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
-        llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView_turmas.setLayoutManager(llm);
-        recyclerView_usuarios.setLayoutManager(llm2);
+        //LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
+        //llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        
+        recyclerView_usuarios.setLayoutManager(gridLayoutManager);
+
+        recyclerView_usuarios.setHasFixedSize(true);
         recycle_busca.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         toolbar = v.findViewById(R.id.toolbar_buscar);
         sugestoes = v.findViewById(R.id.sugestoes);
         busca = v.findViewById(R.id.busca);
 
-        recyclerView_turmas.setAdapter(sugestaoAdapter_turmas);
         recyclerView_usuarios.setAdapter(sugestaoAdapter_usuarios);
         recycle_busca.setAdapter(buscarAdapter);
 
@@ -192,7 +158,7 @@ public class BuscarFragment extends Fragment
                 {
                     List<Usuario> usuariosRecomendados = response.body();
 
-                    sugestaoAdapter_usuarios.setSugestoes(new ArrayList<Object>(usuariosRecomendados));
+                    sugestaoAdapter_usuarios.setSugestoes(usuariosRecomendados);
                 }
                 else
                     Log.i(TAG, "Merda");
