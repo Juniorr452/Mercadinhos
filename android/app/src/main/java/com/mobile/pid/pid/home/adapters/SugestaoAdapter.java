@@ -49,12 +49,10 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
             Usuario user = (Usuario) sugestaoItem.get(position);
             holder.nome.setText(user.getNome());
             Glide.with(holder.foto).load(user.getFotoUrl()).into(holder.foto);
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         } else {
             Turma turma = (Turma) sugestaoItem.get(position);
             holder.nome.setText(turma.getNome());
             Glide.with(holder.foto).load(turma.getCapaUrl()).into(holder.foto);
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
         }
 
     }
@@ -73,7 +71,6 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
         TextView nome;
         ImageView foto;
-        LinearLayout linearLayout;
 
         String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -82,7 +79,6 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
             nome = itemView.findViewById(R.id.nome);
             foto = itemView.findViewById(R.id.foto);
-            linearLayout = itemView.findViewById(R.id.linear);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

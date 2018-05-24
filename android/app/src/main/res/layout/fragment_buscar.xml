@@ -54,13 +54,11 @@
                     android:text="@string/sugestao_usuarios"/>
 
                 <android.support.v7.widget.RecyclerView
-
                     android:id="@+id/rv_usuarios"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="8dp"
-                    android:paddingBottom="8dp"
-                    android:clipToPadding="false"/>
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="8dp"/>
             </LinearLayout>
     </FrameLayout>
 

@@ -4,6 +4,7 @@ package com.mobile.pid.pid.home.buscar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -113,9 +114,14 @@ public class BuscarFragment extends Fragment
         recycle_busca = v.findViewById(R.id.recycle_busca);
         //searchView = v.findViewById(R.id.search_view);
 
-        LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
-        llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView_usuarios.setLayoutManager(llm2);
+        //LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
+        //llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        
+        recyclerView_usuarios.setLayoutManager(gridLayoutManager);
+
+        recyclerView_usuarios.setHasFixedSize(true);
         recycle_busca.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         toolbar = v.findViewById(R.id.toolbar_buscar);
