@@ -78,7 +78,7 @@ function pegarUsuarios(listaVertices)
         {
             let promise = usuariosRef.child(usuario.id).once('value', snapshot => {
                 usuario.perfil = snapshot.val();
-                usuario.perfil.id = usuario.id;
+                usuario.perfil.uid = usuario.id;
                 usuario.perfil.pontuacao = usuario.pontuacao;
 
                 usuarios.push(usuario.perfil);
