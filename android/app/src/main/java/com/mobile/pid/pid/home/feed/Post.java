@@ -21,7 +21,7 @@ import java.util.Map;
 public class Post implements Parcelable{
 
     private String photoUrl;
-    private String user;
+    private String username;
     private String userId;
     private String texto;
     private String id;
@@ -30,14 +30,6 @@ public class Post implements Parcelable{
     public Post() {
 
     }
-
-    /*public Post(String id, String user, String photoUrl, String text, Map<String, String> postData) {
-        this.id = id;
-        this.user = user;
-        this.photoUrl = photoUrl;
-        this.texto = text;
-        this.postData = postData;
-    }*/
 
     public Post(String id, String userId, String text) {
         this.id = id;
@@ -50,16 +42,16 @@ public class Post implements Parcelable{
         this.texto = text;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserName() {
+        return username;
     }
 
     public String getTexto() {
         return texto;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserName(String username) {
+        this.username = username;
     }
 
     public void setTexto(String text) {
@@ -118,7 +110,7 @@ public class Post implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int i) {
         dest.writeString(this.photoUrl);
-        dest.writeString(this.user);
+        dest.writeString(this.username);
         dest.writeString(this.userId);
         dest.writeString(this.texto);
         dest.writeString(this.id);
@@ -127,7 +119,7 @@ public class Post implements Parcelable{
 
     protected Post(Parcel in) {
         this.photoUrl = in.readString();
-        this.user = in.readString();
+        this.username = in.readString();
         this.userId = in.readString();
         this.texto = in.readString();
         this.id = in.readString();
