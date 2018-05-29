@@ -36,6 +36,7 @@
             android:background="@drawable/border_posts"
             android:scrollbars="vertical"
             android:gravity="top|left"
+            android:textColor="@color/black"
             android:scrollHorizontally="false"
             android:scrollbarStyle="insideInset"
             android:padding="8dp"
