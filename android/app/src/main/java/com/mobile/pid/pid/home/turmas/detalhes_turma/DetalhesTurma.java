@@ -160,24 +160,24 @@ public class DetalhesTurma extends AppCompatActivity
         {
             Bundle b = new Bundle();
 
+            b.putSerializable("turma", turma);
+            b.putInt("usuario", USUARIO);
+
             switch(position)
             {
                 case 0:
-                    b.putSerializable("turma", turma);
-                    b.putInt("usuario", USUARIO);
-
                     Fragment chatsFragment = new ChatsFragment();
                     chatsFragment.setArguments(b);
 
                     return chatsFragment;
                 case 1:
-                    return new AvisosFragment();
+                    Fragment avisosFragment = new AvisosFragment();
+                    avisosFragment.setArguments(b);
+
+                    return avisosFragment;
                 case 2:
                     return new TrabalhosFragment();
                 case 3:
-
-                    b.putSerializable("turma", turma);
-
                     Fragment solicitacoesFragment = new SolicitacoesFragment();
                     solicitacoesFragment.setArguments(b);
 

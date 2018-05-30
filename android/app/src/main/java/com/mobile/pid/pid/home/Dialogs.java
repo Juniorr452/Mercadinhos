@@ -4,12 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,10 +24,61 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
+import com.mobile.pid.pid.home.turmas.AvisoTurma;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.login.Usuario;
 
-public class Dialogs {
+public class Dialogs
+{
+    public static void dialogAvisoTurma(final Context context, final String tid)
+    {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_criar_aviso_turma, null);
+        final EditText etAviso = view.findViewById(R.id.et_aviso);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+            .setView(view)
+            .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    Toast.makeText(context, "Aviso postado com sucesso", Toast.LENGTH_SHORT).show();
+
+                    new AvisoTurma(etAviso.getText().toString()).postarAviso(tid);
+                }
+            })
+            .setNegativeButton(R.string.cancel, null)
+            .create();
+
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        // Não tá funfando
+        final TextWatcher textWatcher = new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2)
+            {
+                if(s.length() > 1)
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                else
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
+
+        etAviso.addTextChangedListener(textWatcher);
+    }
 
     public void dialogUsuario(final Usuario u, final Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_perfil_usuario, null);

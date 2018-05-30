@@ -97,6 +97,8 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
 
     @Nullable
     public Map<String, Boolean> getSolicitacoes() {
+        if(this.solicitacoes == null)
+            this.solicitacoes = new HashMap<>();
         return this.solicitacoes;
     }
 

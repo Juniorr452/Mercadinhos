@@ -123,4 +123,5 @@
     <string name="solicitar_entrada">Solicitar entrada</string>
     <string name="solicitado">SOLICITADO</string>
     <string name="avisos">Avisos</string>
+    <string name="novo_aviso">Novo Aviso</string>
 </resources>
