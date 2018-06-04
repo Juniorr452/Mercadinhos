@@ -136,8 +136,7 @@ public class LoginActivity extends AppCompatActivity
                         if (task.isSuccessful())
                             Toast.makeText(LoginActivity.this, R.string.success_send_email, Toast.LENGTH_SHORT).show();
                         else
-                            // TODO: Não foi possível enviar o email
-                            Toast.makeText(LoginActivity.this, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, R.string.failure_send_email_pass, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

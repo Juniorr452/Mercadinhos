@@ -122,4 +122,5 @@
     <string name="solicitado">SOLICITADO</string>
     <string name="avisos">Avisos</string>
     <string name="novo_aviso">Novo Aviso</string>
+    <string name="failure_send_email_pass">Não foi possível enviar o e-mail de recuperação de senha</string>
 </resources>

@@ -88,8 +88,8 @@ public class DetalhesTurma extends AppCompatActivity
         nomeTurma = findViewById(R.id.tv_turma_nome);
         capa      = findViewById(R.id.capa_detail);
 
-        tvQtdAlunos      = findViewById(R.id.qtd_aluno);
-        tvAlunos         = findViewById(R.id.tv_detalhes_turma_alunos);
+        tvQtdAlunos = findViewById(R.id.qtd_aluno);
+        tvAlunos    = findViewById(R.id.tv_detalhes_turma_alunos);
 
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
 

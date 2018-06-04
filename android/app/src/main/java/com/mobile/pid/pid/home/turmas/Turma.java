@@ -16,8 +16,6 @@ import java.util.Map;
  * Created by junio on 07/03/2018.
  */
 
-// TODO: Completar classe Turma
-
 public class Turma implements Serializable // Parcelable Necessário pra passar ele pra outra activity https://youtu.be/ROQ4T47nMhI?t=619
 {
     @Exclude
