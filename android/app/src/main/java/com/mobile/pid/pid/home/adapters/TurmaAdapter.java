@@ -36,7 +36,6 @@ import java.util.Map;
  * Created by junio on 12/03/2018.
  */
 
-// TODO: Estudar essa p**** direito
 public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHolder>
 {
     private static final int PROFESSOR = 0;
