@@ -17,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -55,20 +58,19 @@ public class BuscarFragment extends Fragment
 
     private UsuarioService usuarioService;
 
-    private DatabaseReference turmasRef;
+    private DatabaseReference  turmasRef;
     private ChildEventListener turmasChildEventListener;
 
-    private TurmaAdapter turmaAdapter;
-    private BuscarAdapter buscarAdapter;
+    private BuscarAdapter   buscarAdapter;
     private SugestaoAdapter sugestaoAdapter_turmas;
     private SugestaoAdapter sugestaoAdapter_usuarios;
-    private RecyclerView recyclerView_turmas;
-    private RecyclerView recyclerView_usuarios;
-    private RecyclerView recycle_busca;
-    private Toolbar toolbar;
-    private List<Turma> turmasCriadas;
-    private FrameLayout sugestoes;
-    private FrameLayout busca;
+    private ProgressBar     progressBar;
+    private ScrollView      sv_usuarios_sugeridos;
+    private RecyclerView    recyclerView_usuarios;
+    private RecyclerView    recycle_busca;
+    private Toolbar         toolbar;
+    private RelativeLayout  sugestoes;
+    private FrameLayout     busca;
 
     private String uid;
 
@@ -83,8 +85,6 @@ public class BuscarFragment extends Fragment
 
         setHasOptionsMenu(true);
 
-        turmasCriadas = new ArrayList<>();
-        turmaAdapter = new TurmaAdapter(getActivity(), turmasCriadas);
         buscarAdapter = new BuscarAdapter(getActivity());
 
         sugestaoAdapter_turmas = new SugestaoAdapter(getActivity());
@@ -123,11 +123,6 @@ public class BuscarFragment extends Fragment
         };
 
         turmasRef.addChildEventListener(turmasChildEventListener);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         carregarRecomendacoesUsuarios();
     }
@@ -138,17 +133,21 @@ public class BuscarFragment extends Fragment
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_buscar, container, false);
 
+        sv_usuarios_sugeridos = v.findViewById(R.id.sv_usuarios_sugeridos);
+        progressBar           = v.findViewById(R.id.progress_bar);
+
+        progressBar.setVisibility(View.VISIBLE);
+        sv_usuarios_sugeridos.setVisibility(View.GONE);
+
         // Recycler View
-        recyclerView_turmas = v.findViewById(R.id.rv_turmas);
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
-        recycle_busca = v.findViewById(R.id.recycle_busca);
+        recycle_busca         = v.findViewById(R.id.recycle_busca);
         //searchView = v.findViewById(R.id.search_view);
 
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        LinearLayoutManager llm  = new LinearLayoutManager(getActivity());
         LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView_turmas.setLayoutManager(llm);
         recyclerView_usuarios.setLayoutManager(llm2);
         recycle_busca.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -156,7 +155,6 @@ public class BuscarFragment extends Fragment
         sugestoes = v.findViewById(R.id.sugestoes);
         busca = v.findViewById(R.id.busca);
 
-        recyclerView_turmas.setAdapter(sugestaoAdapter_turmas);
         recyclerView_usuarios.setAdapter(sugestaoAdapter_usuarios);
         recycle_busca.setAdapter(buscarAdapter);
 
@@ -166,7 +164,6 @@ public class BuscarFragment extends Fragment
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         }
-
 
         return v;
     }
@@ -192,9 +189,12 @@ public class BuscarFragment extends Fragment
                     List<Usuario> usuariosRecomendados = response.body();
 
                     sugestaoAdapter_usuarios.setSugestoes(new ArrayList<Object>(usuariosRecomendados));
+
+                    progressBar.setVisibility(View.GONE);
+                    sv_usuarios_sugeridos.setVisibility(View.VISIBLE);
                 }
                 else
-                    Log.i(TAG, "Merda");
+                    Log.i(TAG, response.errorBody().toString());
             }
 
             @Override
