@@ -52,7 +52,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
             @Override
             public void onClick(View view)
             {
-                // TODO: Intent chat
                 Intent i = new Intent(ctx, ChatActivity.class);
                 i.putExtra("turma",   t);
                 i.putExtra("chat",    c);

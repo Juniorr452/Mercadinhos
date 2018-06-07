@@ -21,11 +21,16 @@ Grafo.prototype.bfs = function(uid)
     let verticeAtual = this.vertices[uid];
     verticeAtual.ignorar = true;
 
-    verticeAtual.vizinhos.forEach(vizinho => {
-        vizinho.ignorar = true;
+    verticeAtual.vizinhos.forEach(vizinhoid => {
+        verticeVizinho = this.vertices[vizinhoid];
+
+        verticeVizinho.ignorar = true;
+        verticeVizinho.pontuacao = 1;
+
+        filaVertices.push(verticeVizinho);
     });
 
-    filaVertices.push(verticeAtual);
+    //filaVertices.push(verticeAtual);
 
     while(filaVertices.length > 0)
     {
@@ -37,7 +42,7 @@ Grafo.prototype.bfs = function(uid)
 
             if(!verticeVizinho.ignorar)
             {
-                verticeVizinho.pontuacao++;
+                verticeVizinho.pontuacao += verticeAtual.pontuacao;
 
                 if(!verticeVizinho.visitado)
                 {
@@ -82,12 +87,17 @@ Grafo.prototype.lerGrafo = function(uid, profundidade)
 
 Grafo.prototype.imprimirAdjList = function()
 {    
+    let adjs;
     for(var key in this.vertices)
     {
-        console.log(this.vertices[key]);
-        this.vertices[key].vizinhos.forEach(vizinho => {
-            console.log("    " + vizinho);
+        msg = this.vertices[key].id + " => ";
+
+        this.vertices[key].vizinhos.forEach(v => {
+            vizinho = this.vertices[v];
+            msg += vizinho.id + " (" + vizinho.pontuacao + ") ";
         });
+
+        console.log(msg);
     }
 }
 

@@ -89,7 +89,7 @@ public class PerfilFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
+    public void onStart(){
         super.onStart();
 
         FirebaseDatabase.getInstance().getReference("usuarios").child(user_id)
@@ -98,7 +98,7 @@ public class PerfilFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         user = dataSnapshot.getValue(Usuario.class);
                         collapsing_perfil.setTitle(user.getNome());
-                        Glide.with(imageView_user).load(user.getFotoUrl()).into(imageView_user);
+                        Glide.with(getActivity()).load(user.getFotoUrl()).into(imageView_user);
                     }
 
                     @Override

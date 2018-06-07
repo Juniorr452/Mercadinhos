@@ -69,7 +69,6 @@ public class CurtidasPerfilFragment extends Fragment {
 
             }
 
-            //TODO LIMPAR O CACHE DO FRAGMENT DE CURTIDAS
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 recyclerView.getRecycledViewPool().clear();

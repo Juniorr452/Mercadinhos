@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -28,7 +27,6 @@ import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.AvisosFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.SolicitacoesFragment;
-import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment;
 import com.mobile.pid.pid.login.Usuario;
 
 public class DetalhesTurma extends AppCompatActivity
@@ -90,8 +88,8 @@ public class DetalhesTurma extends AppCompatActivity
         nomeTurma = findViewById(R.id.tv_turma_nome);
         capa      = findViewById(R.id.capa_detail);
 
-        tvQtdAlunos      = findViewById(R.id.qtd_aluno);
-        tvAlunos         = findViewById(R.id.tv_detalhes_turma_alunos);
+        tvQtdAlunos = findViewById(R.id.qtd_aluno);
+        tvAlunos    = findViewById(R.id.tv_detalhes_turma_alunos);
 
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
 
@@ -122,19 +120,6 @@ public class DetalhesTurma extends AppCompatActivity
 
         turmasTabLayout.setupWithViewPager(detalhesViewPager);
     }
-    /*
-    private class DetalheTurmasPagerAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return 0;
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return false;
-        }
-    }*/
 
     // Tabs and ViewPager - https://www.youtube.com/watch?v=zQekzaAgIlQ
     private class DetalheTurmasPageAdapter extends FragmentPagerAdapter
@@ -147,9 +132,9 @@ public class DetalhesTurma extends AppCompatActivity
         public int getCount() {
             switch (USUARIO) {
                 case PROFESSOR:
-                    return 4;
-                case ALUNO:
                     return 3;
+                case ALUNO:
+                    return 2;
                 default:
                     return 0;
             }
@@ -160,24 +145,22 @@ public class DetalhesTurma extends AppCompatActivity
         {
             Bundle b = new Bundle();
 
+            b.putSerializable("turma", turma);
+            b.putInt("usuario", USUARIO);
+
             switch(position)
             {
                 case 0:
-                    b.putSerializable("turma", turma);
-                    b.putInt("usuario", USUARIO);
-
                     Fragment chatsFragment = new ChatsFragment();
                     chatsFragment.setArguments(b);
 
                     return chatsFragment;
                 case 1:
-                    return new AvisosFragment();
+                    Fragment avisosFragment = new AvisosFragment();
+                    avisosFragment.setArguments(b);
+
+                    return avisosFragment;
                 case 2:
-                    return new TrabalhosFragment();
-                case 3:
-
-                    b.putSerializable("turma", turma);
-
                     Fragment solicitacoesFragment = new SolicitacoesFragment();
                     solicitacoesFragment.setArguments(b);
 
@@ -198,8 +181,6 @@ public class DetalhesTurma extends AppCompatActivity
                 case 1:
                     return getString(R.string.avisos);
                 case 2:
-                    return getString(R.string.trabalhos);
-                case 3:
                     return getString(R.string.solicitacoes);
                 default:
                     return null;

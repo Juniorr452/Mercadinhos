@@ -102,8 +102,29 @@ public class LoginActivity extends AppCompatActivity
 
         progressDialog.show();
 
-        // TODO: Validar campos
-        auth.signInWithEmailAndPassword(emailText, senhaText).addOnCompleteListener(new LoginOnCompleteListener(this, progressDialog));
+        try
+        {
+            validarCampos(emailText, senhaText);
+            auth.signInWithEmailAndPassword(emailText, senhaText).addOnCompleteListener(new LoginOnCompleteListener(this, progressDialog));
+        }
+        catch(NoSuchFieldException e)
+        {
+            progressDialog.dismiss();
+
+            new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle(R.string.warning)
+                    .setMessage(e.getMessage())
+                    .show();
+        }
+    }
+
+    public void validarCampos(String email, String senha) throws NoSuchFieldException
+    {
+        if(email.isEmpty())
+            throw new NoSuchFieldException(getString(R.string.preencha_email));
+
+        if(senha.isEmpty())
+            throw new NoSuchFieldException("Informe sua senha e tente novamente.");
     }
 
     public void esqueciSenha(View v)
@@ -136,8 +157,7 @@ public class LoginActivity extends AppCompatActivity
                         if (task.isSuccessful())
                             Toast.makeText(LoginActivity.this, R.string.success_send_email, Toast.LENGTH_SHORT).show();
                         else
-                            // TODO: Não foi possível enviar o email
-                            Toast.makeText(LoginActivity.this, R.string.success_send_email, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, R.string.failure_send_email_pass, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

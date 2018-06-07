@@ -244,8 +244,9 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
     public boolean validarCampos(String nome, String data)
     {
-        if(nome.equals("") || data.equals(""))
-            return false;
+        // TODO: Checar se é null para não dar crash
+        //if(nome.equals("") || data.equals(""))
+        //    return false;
 
         return true;
     }

@@ -5,6 +5,8 @@ const functions = require('firebase-functions');
 const Grafo     = require('./grafo/grafo.js');
 const admin     = require('firebase-admin');
 
+const PROFUNDIDADE_MAX = 4;
+
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -25,21 +27,25 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
     if(uid === undefined)
         return response.send("ERRO: UID não informado");
 
-    let grafo = new Grafo(2, userSeguindoRef);
+    let grafo = new Grafo(PROFUNDIDADE_MAX, userSeguindoRef);
 
     let listaVertices = [];
 
     grafo.lerGrafo(uid, 0).then(terminou => 
     {
         //grafo.imprimirAdjList();
+
         grafo.bfs(uid);
-        grafo.imprimirPontuacao();
+        //console.log("==============================");
+
+        //grafo.imprimirAdjList();
 
         // Firebase não suporta o Object.values por causa da versão do Node que ele usa. Vou usar essa solução https://stackoverflow.com/questions/38748445/uncaught-typeerror-object-values-is-not-a-function-javascript
         //let listaVertices = ordenarLista(Object.values(grafo.vertices));
         let listaVertices = ordenarLista(Object.keys(grafo.vertices).map(chave => {
             return grafo.vertices[chave];
         }));
+
         return pegarUsuarios(listaVertices);
 
     }).then(lista => {
@@ -60,20 +66,29 @@ function ordenarLista(lista)
     return lista;
 }
 
+// Pegar o perfil dos usuários no firebase
 function pegarUsuarios(listaVertices)
 {
     let promises = [];
+    let usuarios = [];
 
     listaVertices.forEach(usuario => 
     {
-        let promise = usuariosRef.child(usuario.id).once('value', snapshot => {
-            usuario.perfil = snapshot.val();
-        });
+        if(!usuario.ignorar)
+        {
+            let promise = usuariosRef.child(usuario.id).once('value', snapshot => {
+                usuario.perfil = snapshot.val();
+                usuario.perfil.uid = usuario.id;
+                usuario.perfil.pontuacao = usuario.pontuacao;
 
-        promises.push(promise);
+                usuarios.push(usuario.perfil);
+            });
+    
+            promises.push(promise);
+        }
     });
     
     return Promise.all(promises).then(() => {
-        return listaVertices.map(vertice => vertice.perfil);
+        return usuarios;
     });
 }

@@ -72,7 +72,6 @@ public class BuscarFragment extends Fragment
 
     private String uid;
 
-    // TODO: Código turmas criadas
     public BuscarFragment() {
         // Required empty public constructor
     }

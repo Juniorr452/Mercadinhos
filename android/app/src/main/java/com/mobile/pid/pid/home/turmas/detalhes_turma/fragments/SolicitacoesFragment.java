@@ -57,8 +57,6 @@ public class SolicitacoesFragment extends Fragment
         rv    = v.findViewById(R.id.rv_solicitacoes);
         turma = (Turma) i.getSerializableExtra("turma");
 
-        Log.d(TAG, turma.getSolicitacoes().toString());
-
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("userTurmasCriadas").child(turma.getProfessorUid());
 
         adapter = new SolicitacaoAdapter(c, turma, solicitacoes);

@@ -1,7 +1,7 @@
 function Vertice(id)
 {
     this.id = id;
-    this.pontuacao = 0;
+    this.pontuacao = 1;
     this.vizinhos  = [];
     this.visitado  = false;
     this.ignorar   = false;

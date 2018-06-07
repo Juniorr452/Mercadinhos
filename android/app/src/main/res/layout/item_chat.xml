@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="#nome-da-turma"
         android:padding="16dp"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"/>
