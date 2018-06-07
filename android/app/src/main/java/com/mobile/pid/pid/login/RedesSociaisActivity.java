@@ -169,7 +169,6 @@ public class RedesSociaisActivity extends AppCompatActivity
         }
     }
 
-    // DIALOG CRIAR CONTA ----------------------------------------
     public void dialogCriarConta(View v)
     {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this);
@@ -182,19 +181,29 @@ public class RedesSociaisActivity extends AppCompatActivity
 
         mBuilder.setView(mView);
 
-        mBuilder.setPositiveButton(R.string.create_account, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        mBuilder.setPositiveButton(R.string.create_account, null);
 
+        mBuilder.setNegativeButton(R.string.cancel, null);
+
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
                 final String username = dialog_username.getText().toString();
                 final String email    = dialog_email.getText().toString();
-                String senha    = dialog_password.getText().toString();
-                String senhaC   = dialog_password_confirm.getText().toString();
+                String senha  = dialog_password.getText().toString();
+                String senhaC = dialog_password_confirm.getText().toString();
 
                 progressDialog.show();
 
-                if(validarCamposCriarConta(username, email, senha, senhaC))
+                try
                 {
+                    validarCamposCriarConta(username, email, senha, senhaC);
+
                     firebaseAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>()
                     {
                         @Override
@@ -228,32 +237,37 @@ public class RedesSociaisActivity extends AppCompatActivity
                         }
                     });
                 }
-                else
-                    Toast.makeText(RedesSociaisActivity.this, R.string.error_create_login, Toast.LENGTH_SHORT).show();
+                catch(NoSuchFieldException e)
+                {
+                    progressDialog.dismiss();
+
+                    new AlertDialog.Builder(RedesSociaisActivity.this)
+                            .setTitle(R.string.warning)
+                            .setMessage(e.getMessage())
+                            .show();
+                }
             }
         });
 
-        mBuilder.setNegativeButton(R.string.cancel, null);
-
-        AlertDialog dialog = mBuilder.create();
-        dialog.show();
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.gray_font));
-
     }
 
-    // TODO: Validação
-    private boolean validarCamposCriarConta(String username, String email, String senha, String senhaC)
+    private void validarCamposCriarConta(String username, String email, String senha, String senhaC) throws NoSuchFieldException
     {
-        /*if (username == null || email == null || senha == null || senhaC == null)
-            return false;
+        if(username.isEmpty())
+            throw new NoSuchFieldException(getString(R.string.preencha_nome_usuario));
 
-        if (username.isEmpty() || email.isEmpty() || senha.isEmpty() || senhaC.isEmpty())
-            return false;
+        if(email.isEmpty())
+            throw new NoSuchFieldException(getString(R.string.preencha_email));
 
-        if (!senha.equals(senhaC))
-            return false;*/
+        if (senha.isEmpty() || senhaC.isEmpty())
+            throw new NoSuchFieldException(getString(R.string.preencha_senhas));
 
-        return true;
+        if(!senha.equals(senhaC))
+            throw new NoSuchFieldException(getString(R.string.erro_senhas));
+
+        if(senha.length() < 6 || senhaC.length() < 6)
+            throw new NoSuchFieldException(getString(R.string.erro_senha_6));
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account)
