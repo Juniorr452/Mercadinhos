@@ -146,8 +146,8 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                // TODO: Validar e-mail
-                String emailText = email.getText().toString();
+
+                String emailText = email.getText().toString().trim();
 
                 FirebaseAuth.getInstance().sendPasswordResetEmail(emailText).addOnCompleteListener(new OnCompleteListener<Void>()
                 {

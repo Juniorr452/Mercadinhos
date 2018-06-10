@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/white"
     tools:context="com.mobile.pid.pid.login.RedesSociaisActivity">
 
     <android.support.v7.widget.AppCompatImageView
@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
+        android:textColor="@color/gray_font"
         android:text="@string/welcome"
         android:textSize="16dp"
         android:textStyle="bold" />
@@ -65,6 +66,7 @@
         android:id="@+id/tv_criarConta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/gray_font"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
         android:clickable="true"

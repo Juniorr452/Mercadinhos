@@ -106,8 +106,12 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i)
                             {
+
                                 DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
-                                DatabaseReference usuariosRef = rootRef.child("usuarios");
+                                DatabaseReference turmasCriadasRef = rootRef.child("userTurmasCriadas");
+                                DatabaseReference turmasMatriculadasRef = rootRef.child("userTurmasMatriculadas");
+
+
                                 String tuid = t.getId();
 
                                 // Deletar turma.
@@ -116,8 +120,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                                     .removeValue();
 
                                 // Deletar no turmas_criadas do professor.
-                                usuariosRef.child(t.getProfessorUid())
-                                    .child("turmas_criadas")
+                                turmasCriadasRef.child(t.getProfessorUid())
                                     .child(tuid)
                                     .removeValue();
 
@@ -125,8 +128,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                                 // Deletar no turmas_matriculadas dos alunos.
                                 if(t.getAlunos() != null)
                                     for(String auid : t.getAlunos().keySet())
-                                        usuariosRef.child(auid)
-                                            .child("turmas_matriculadas")
+                                        turmasMatriculadasRef.child(auid)
                                             .child(tuid)
                                             .removeValue();
                             }

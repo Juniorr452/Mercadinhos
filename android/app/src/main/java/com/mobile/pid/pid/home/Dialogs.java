@@ -98,7 +98,6 @@ public class Dialogs
         dialogUsuario.show();
 
         /////////////////////////////// SETAR AS INFORMACOES DO DIALOG ////////////////////////////
-        //TODO ERRO TA AQUI!!!!!! NAO TA RECUPERANDO O UID DO USUARIO NO GRAFO
         if(u.getUid().equals(usuario)) {
             seguir.setVisibility(View.GONE);
         } else {

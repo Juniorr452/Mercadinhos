@@ -193,10 +193,10 @@ public class RedesSociaisActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                final String username = dialog_username.getText().toString();
-                final String email    = dialog_email.getText().toString();
-                String senha  = dialog_password.getText().toString();
-                String senhaC = dialog_password_confirm.getText().toString();
+                final String username = dialog_username.getText().toString().trim();
+                final String email    = dialog_email.getText().toString().trim();
+                String senha  = dialog_password.getText().toString().trim();
+                String senhaC = dialog_password_confirm.getText().toString().trim();
 
                 progressDialog.show();
 

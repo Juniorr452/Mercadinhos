@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_feed"
+    android:background="@color/fundoRecycle"
     tools:context=".home.turmas.detalhes_turma.fragments.AvisosFragment">
 
     <android.support.design.widget.FloatingActionButton

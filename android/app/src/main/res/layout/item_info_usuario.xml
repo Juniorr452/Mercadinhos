@@ -2,7 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@color/fundoPost">
 
     <!-- https://stackoverflow.com/questions/47977796/what-is-the-best-way-to-create-a-circular-imageview -->
     <de.hdodenhof.circleimageview.CircleImageView

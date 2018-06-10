@@ -129,6 +129,6 @@
     <string name="erro_senhas">Senhas não correspondem. Tente novamente.</string>
     <string name="erro_senha_6">Senha precisa de, pelo menos, 6 caracteres. Tente novamente.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

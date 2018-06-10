@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_margin="8dp"
     android:elevation="4dp"
-    android:backgroundTint="@color/white"
+    android:backgroundTint="@color/fundoPost"
     android:minHeight="100dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,14 +18,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Data"
-            android:textColor="@color/black"
+            android:textColor="@color/gray_font"
             android:layout_gravity="right"/>
 
         <TextView
             android:id="@+id/aviso_turma_aviso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:text="Aviso"/>
     </LinearLayout>
 

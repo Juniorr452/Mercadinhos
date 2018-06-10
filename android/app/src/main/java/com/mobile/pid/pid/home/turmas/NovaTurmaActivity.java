@@ -173,7 +173,6 @@ public class NovaTurmaActivity extends AppCompatActivity
         Consumer<String> acao;
         boolean checado = ((CheckBox) v).isChecked();
 
-        // TODO: Achar um jeito melhor de fazer isso
         switch(v.getId())
         {
             case R.id.nova_turma_domingo:

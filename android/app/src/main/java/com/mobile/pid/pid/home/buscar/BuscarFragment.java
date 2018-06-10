@@ -197,9 +197,11 @@ public class BuscarFragment extends Fragment
         
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
 
-                FirebaseDatabase.getInstance().getReference("usuarios").orderByChild("nome").startAt(query)
+                //TODO TA RETORNANDO SOMENTE AS TURMAS DUPLICADAS
+
+                FirebaseDatabase.getInstance().getReference("usuarios").orderByChild("nome")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -211,7 +213,9 @@ public class BuscarFragment extends Fragment
                                     for (DataSnapshot user : dataSnapshot.getChildren()) {
                                         Usuario u = user.getValue(Usuario.class);
                                         u.setUid(user.getKey());
-                                        buscarAdapter.add(u);
+
+                                        if(u.getNome().toLowerCase().contains(query.toLowerCase()))
+                                            buscarAdapter.add(u);
                                     }
 
                                     sugestoes.setVisibility(View.GONE);
@@ -225,7 +229,7 @@ public class BuscarFragment extends Fragment
                             }
                         });
 
-                FirebaseDatabase.getInstance().getReference("turmas").orderByChild("nome").startAt(query)
+                FirebaseDatabase.getInstance().getReference("turmas").orderByChild("nome")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -234,7 +238,10 @@ public class BuscarFragment extends Fragment
                                     for (DataSnapshot turma : dataSnapshot.getChildren()) {
                                         Turma t = turma.getValue(Turma.class);
                                         t.setId(turma.getKey());
-                                        buscarAdapter.add(t);
+
+                                        if(t.getNome().toLowerCase().contains(query.toLowerCase()))
+                                            buscarAdapter.add(t);
+
                                     }
 
                                     sugestoes.setVisibility(View.GONE);

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.mobile.pid.pid.login.LoginActivity">
 
@@ -44,6 +44,7 @@
             android:id="@+id/TILemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/gray_font"
             android:layout_marginLeft="8dp">
 
             <EditText
@@ -76,6 +77,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/TILpassword"
             android:layout_width="match_parent"
+            android:textColorHint="@color/gray_font"
             android:layout_height="wrap_content"
             android:layout_marginLeft="11dp">
 
