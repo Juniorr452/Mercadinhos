@@ -57,12 +57,12 @@
                 android:src="@color/gray" />
 
             <ImageView
-                android:id="@+id/turma_opcoes"
+                android:id="@+id/turma_excluir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/settings_dots"
+                android:background="@drawable/baseline_close_white_24"
                 android:backgroundTint="@color/white" />
 
             <TextView
