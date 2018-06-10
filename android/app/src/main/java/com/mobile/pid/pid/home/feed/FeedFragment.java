@@ -77,15 +77,17 @@ public class FeedFragment extends Fragment {
 
         postQuery = FirebaseDatabase.getInstance().getReference("feed").child(usuario.getUid()).orderByChild("postData");
 
-
-
-        postListener = new ValueEventListener() {
+        postListener = new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
                     postAdapter.clear();
 
-                    for(DataSnapshot data : dataSnapshot.getChildren()) {
+                    for(DataSnapshot data : dataSnapshot.getChildren())
+                    {
                         Post p = data.getValue(Post.class);
                         p.setId(data.getKey());
                         postAdapter.add(p);
@@ -93,9 +95,11 @@ public class FeedFragment extends Fragment {
 
                     sadFace.setVisibility(View.GONE);
                     sadMessage.setVisibility(View.GONE);
-                } else {
+                }
+                else
+                {
                     sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.GONE);
+                    sadMessage.setVisibility(View.VISIBLE);
                 }
 
                 progressBar.setVisibility(View.GONE);
@@ -107,7 +111,6 @@ public class FeedFragment extends Fragment {
 
             }
         };
-
     }
 
     @Override
@@ -124,7 +127,8 @@ public class FeedFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
 
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
@@ -144,7 +148,8 @@ public class FeedFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(postAdapter);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -152,7 +157,8 @@ public class FeedFragment extends Fragment {
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if(dy < 0 && !criarPost.isShown())
@@ -170,11 +176,10 @@ public class FeedFragment extends Fragment {
         });
 
         return view;
-
     }
 
-    private void criarPost(View view) {
-
+    private void criarPost(View view)
+    {
         final View mView = getLayoutInflater().inflate(R.layout.dialog_criar_post, null);
         final AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setView(mView)
