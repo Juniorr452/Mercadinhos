@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/white"
     tools:context="com.mobile.pid.pid.login.RedesSociaisActivity">
 
     <android.support.v7.widget.AppCompatImageView
@@ -26,7 +26,8 @@
         android:layout_gravity="center"
         android:text="@string/welcome"
         android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/btn_facebook"
@@ -71,6 +72,7 @@
         android:linksClickable="true"
         android:text="@string/message_create_account"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:onClick="dialogCriarConta"/>
+        android:onClick="dialogCriarConta"
+        android:textColor="@color/black"/>
 
 </android.support.v7.widget.LinearLayoutCompat>
