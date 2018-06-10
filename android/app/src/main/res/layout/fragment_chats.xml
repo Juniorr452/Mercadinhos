@@ -1,7 +1,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:background="@color/fundoRecycle">
 
     <ProgressBar
         android:id="@+id/pb_chats"
@@ -22,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
+            android:background="@color/fundoRecycle"
             android:paddingBottom="16dp"
             android:clipToPadding="false"/>
 
@@ -32,6 +34,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="25dp"
             android:tint="@android:color/white"
+            android:background="@color/colorAccent"
             android:src="@android:drawable/ic_input_add"
             app:fabSize="normal" />
 

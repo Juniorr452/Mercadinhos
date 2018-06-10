@@ -80,7 +80,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                         holder.usuario.setText(user.getNome());
 
                         p.setPhotoUrl(user.getFotoUrl());
-                        p.setUser(user.getNome());
+                        p.setNomeUser(user.getNome());
                     }
 
                     @Override
@@ -94,7 +94,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             @Override
             public void onClick(View view) {
 
-                Usuario user = new Usuario(p.getUserId(), p.getUser(), null, p.getPhotoUrl());
+                Usuario user = new Usuario(p.getUserId(), p.getNomeUser(), null, p.getPhotoUrl());
 
                 if(p.getUserId().equals(usuarioLogado)) {
                     //TODO ENVIAR PARA O PERFIL FRAGMENT

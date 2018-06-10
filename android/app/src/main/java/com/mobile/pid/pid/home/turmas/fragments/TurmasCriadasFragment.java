@@ -57,6 +57,8 @@ public class TurmasCriadasFragment extends Fragment
 
     private FloatingActionButton fabAdicionarTurma;
 
+    private ValueEventListener turmasListener;
+
     public TurmasCriadasFragment() {
         // Required empty public constructor
     }
@@ -74,11 +76,9 @@ public class TurmasCriadasFragment extends Fragment
 
         turmasCriadasRef = FirebaseDatabase.getInstance().getReference().child("userTurmasCriadas").child(uid);
 
-        turmasCriadasRef.addValueEventListener(new ValueEventListener()
-        {
+        turmasListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
                 {
                     recyclerView.getRecycledViewPool().clear();
@@ -88,25 +88,25 @@ public class TurmasCriadasFragment extends Fragment
                     {
                         String tuid = dataTurma.getKey();
                         FirebaseDatabase.getInstance().getReference()
-                            .child("turmas")
-                            .child(tuid)
-                            .addListenerForSingleValueEvent(new ValueEventListener()
-                            {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshotTurma)
+                                .child("turmas")
+                                .child(tuid)
+                                .addListenerForSingleValueEvent(new ValueEventListener()
                                 {
-                                    Turma t = dataSnapshotTurma.getValue(Turma.class);
-                                    t.setId(dataSnapshotTurma.getKey());
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshotTurma)
+                                    {
+                                        Turma t = dataSnapshotTurma.getValue(Turma.class);
+                                        t.setId(dataSnapshotTurma.getKey());
 
-                                    turmaAdapter.add(t);
-                                    turmaAdapter.notifyDataSetChanged();
-                                }
+                                        turmaAdapter.add(t);
+                                        turmaAdapter.notifyDataSetChanged();
+                                    }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                                }
-                            });
+                                    }
+                                });
                     }
 
                     sadFace.setVisibility(View.GONE);
@@ -126,7 +126,19 @@ public class TurmasCriadasFragment extends Fragment
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        turmasCriadasRef.addValueEventListener(turmasListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        turmasCriadasRef.removeEventListener(turmasListener);
     }
 
     @Override

@@ -75,6 +75,14 @@ public class PerfilFragment extends Fragment {
     private TextView count_followers;
     private TextView count_following;
 
+    private DatabaseReference userRef;
+    private DatabaseReference postRef;
+    private DatabaseReference seguindoRef;
+    private DatabaseReference seguidoresRef;
+
+    private ValueEventListener userListener;
+    private ValueEventListener seguidoresListener;
+    private ValueEventListener seguindoListener;
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -86,26 +94,72 @@ public class PerfilFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
         user_id = auth.getCurrentUser().getUid();
+
+        userRef = FirebaseDatabase.getInstance().getReference("usuarios").child(user_id);
+        seguidoresRef = FirebaseDatabase.getInstance().getReference("userSeguidores").child(user_id);
+        seguindoRef = FirebaseDatabase.getInstance().getReference("userSeguindo").child(user_id);
+
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(Usuario.class);
+                collapsing_perfil.setTitle(user.getNome());
+                Glide.with(imageView_user).load(user.getFotoUrl()).into(imageView_user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        seguidoresListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    count_followers.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                else
+                    count_followers.setText("0");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        seguindoListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    count_following.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                else
+                    count_following.setText("0");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        FirebaseDatabase.getInstance().getReference("usuarios").child(user_id)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        user = dataSnapshot.getValue(Usuario.class);
-                        collapsing_perfil.setTitle(user.getNome());
-                        Glide.with(imageView_user).load(user.getFotoUrl()).into(imageView_user);
-                    }
+        userRef.addValueEventListener(userListener);
+        seguidoresRef.addValueEventListener(seguidoresListener);
+        seguindoRef.addValueEventListener(seguindoListener);
+    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+    @Override
+    public void onStop() {
+        super.onStop();
 
-                    }
-                });
+        userRef.removeEventListener(userListener);
+        seguidoresRef.removeEventListener(seguidoresListener);
+        seguindoRef.removeEventListener(seguindoListener);
     }
 
     @Override
@@ -124,39 +178,6 @@ public class PerfilFragment extends Fragment {
         count_followers = view.findViewById(R.id.count_followers);
         count_following = view.findViewById(R.id.count_following);
 
-        // SETAR OS SEGUIDORES
-        FirebaseDatabase.getInstance().getReference("userSeguidores").child(user_id)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists())
-                            count_followers.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-                        else
-                            count_followers.setText("0");
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        // SETAR OS SEGUINDO
-        FirebaseDatabase.getInstance().getReference("userSeguindo").child(user_id)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists())
-                            count_following.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-                        else
-                            count_following.setText("0");
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
         viewPager_perfil.setAdapter(pageAdapter_perfil);
         tabLayout_perfil.setupWithViewPager(viewPager_perfil);

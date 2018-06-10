@@ -35,6 +35,7 @@ public class SeguindoFragment extends Fragment {
 
 
     private DatabaseReference db;
+    private ValueEventListener seguindoListener;
     private String usuario;
 
 
@@ -51,10 +52,9 @@ public class SeguindoFragment extends Fragment {
 
         db = FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuario);
 
-        db.addValueEventListener(new ValueEventListener() {
+        seguindoListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 recyclerView.getRecycledViewPool().clear();
                 followAdapter.clear();
 
@@ -86,8 +86,20 @@ public class SeguindoFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        db.addValueEventListener(seguindoListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        db.removeEventListener(seguindoListener);
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.Map;
 public class Post implements Parcelable{
 
     private String photoUrl;
-    private String user;
+    private String nomeUser;
     private String userId;
     private String texto;
     private String id;
@@ -31,9 +31,9 @@ public class Post implements Parcelable{
 
     }
 
-    /*public Post(String id, String user, String photoUrl, String text, Map<String, String> postData) {
+    /*public Post(String id, String nomeUser, String photoUrl, String text, Map<String, String> postData) {
         this.id = id;
-        this.user = user;
+        this.nomeUser = nomeUser;
         this.photoUrl = photoUrl;
         this.texto = text;
         this.postData = postData;
@@ -50,16 +50,16 @@ public class Post implements Parcelable{
         this.texto = text;
     }
 
-    public String getUser() {
-        return user;
+    public String getNomeUser() {
+        return nomeUser;
     }
 
     public String getTexto() {
         return texto;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setNomeUser(String nomeUser) {
+        this.nomeUser = nomeUser;
     }
 
     public void setTexto(String text) {
@@ -118,7 +118,7 @@ public class Post implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int i) {
         dest.writeString(this.photoUrl);
-        dest.writeString(this.user);
+        dest.writeString(this.nomeUser);
         dest.writeString(this.userId);
         dest.writeString(this.texto);
         dest.writeString(this.id);
@@ -127,7 +127,7 @@ public class Post implements Parcelable{
 
     protected Post(Parcel in) {
         this.photoUrl = in.readString();
-        this.user = in.readString();
+        this.nomeUser = in.readString();
         this.userId = in.readString();
         this.texto = in.readString();
         this.id = in.readString();
@@ -145,37 +145,4 @@ public class Post implements Parcelable{
             return new Post[size];
         }
     };
-
-    public void criarPost() {
-
-        final DatabaseReference dbPosts = FirebaseDatabase.getInstance().getReference("posts").child(this.userId);
-        final DatabaseReference dbFeed = FirebaseDatabase.getInstance().getReference("feed").child(this.userId);
-
-        this.id = dbPosts.push().getKey();
-
-        dbPosts.child(this.id).setValue(this);
-        dbFeed.child(this.id).setValue(this);
-
-
-        FirebaseDatabase.getInstance().getReference("usuarios").child(this.userId).child("seguidores")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
-                            for(DataSnapshot data : dataSnapshot.getChildren()) {
-                                FirebaseDatabase.getInstance().getReference("feed").child(data.getKey()).child(id).setValue(Post.this);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-    }
-
-    public void excluirPost() {
-
-    }
 }

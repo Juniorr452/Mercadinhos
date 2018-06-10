@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.Feed;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.login.Usuario;
@@ -38,7 +39,10 @@ public class Dialogs {
         final TextView count_seguindo = view.findViewById(R.id.seguindo);
         final TextView count_seguidores = view.findViewById(R.id.seguidores);
 
+        final AlertDialog dialogUsuario = mBuilderUsuario.create();
+        dialogUsuario.show();
 
+        /////////////////////////////// SETAR AS INFORMACOES DO DIALOG ////////////////////////////
         //TODO ERRO TA AQUI!!!!!! NAO TA RECUPERANDO O UID DO USUARIO NO GRAFO
         if(u.getUid().equals(usuario)) {
             seguir.setVisibility(View.GONE);
@@ -60,9 +64,6 @@ public class Dialogs {
                         }
                     });
         }
-
-        final AlertDialog dialogUsuario = mBuilderUsuario.create();
-        dialogUsuario.show();
 
         nome.setText(u.getNome());
         Glide.with(context)
@@ -103,6 +104,8 @@ public class Dialogs {
                     }
                 });
 
+        //////////////////////////////////////////////////////////////////////////
+
         seguir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,6 +130,8 @@ public class Dialogs {
                                     dbSeguindo.child(usuario).child(u.getUid()).removeValue();
                                     // EXCLUI NOS "SEGUIDORES" DO USUARIO
                                     dbSeguidores.child(u.getUid()).child(usuario).removeValue();
+                                    // REMOVE TODOS OS POSTS DO USUARIO UNFOLLOW
+                                    Feed.excluirPostsFollow(usuario, u.getUid());
 
                                     seguir.setText(context.getText(R.string.follow));
                                 }

@@ -8,7 +8,7 @@
     <string name="back_button">Voltar</string>
     <string name="confirm">OK</string>
     <string name="email">E-mail</string>
-    <string name="user">Usuário</string>
+    <string name="nomeUser">Usuário</string>
     <string name="nome_e_sobrenome">Nome e Sobrenome</string>
     <string name="password">Senha</string>
     <string name="password_confirm">Confirmar Senha</string>

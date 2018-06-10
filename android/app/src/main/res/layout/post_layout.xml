@@ -41,7 +41,7 @@
                 android:id="@+id/tv_user_feed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/user"
+                android:text="@string/nomeUser"
                 android:layout_marginLeft="30dp"/>
         </Toolbar>
 

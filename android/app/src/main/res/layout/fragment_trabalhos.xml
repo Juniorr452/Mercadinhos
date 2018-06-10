@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.TrabalhosFragment">
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trabalhos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/fundoRecycle">
+    </android.support.v7.widget.RecyclerView>
 </FrameLayout>

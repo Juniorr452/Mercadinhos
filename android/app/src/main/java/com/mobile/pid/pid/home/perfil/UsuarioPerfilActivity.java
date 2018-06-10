@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.feed.Feed;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
@@ -42,7 +43,6 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
     Usuario user;
 
     private ImageView foto;
-    private TextView countPosts;
     private TextView countSeguidores;
     private TextView countSeguindo;
     private ViewPager viewPager;
@@ -51,9 +51,22 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
     private PagerAdapter adapter;
     private Toolbar toolbar;
     private FloatingActionButton fabSeguir;
-    private static String usuario = "";
 
-    DatabaseReference db;
+    private static String usuario = "";
+    private static final int FOLLOW = 0;
+    private static final int UNFOLLOW = 1;
+
+    private DatabaseReference userRef;
+    private DatabaseReference seguidoresRef;
+    private DatabaseReference seguindoRef;
+    private DatabaseReference followRef;
+
+    private ValueEventListener userListener;
+    private ValueEventListener seguidoresListener;
+    private ValueEventListener seguindoListener;
+    private ValueEventListener followListener;
+
+    private String usuarioLogado;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -64,7 +77,6 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
          usuario = i.getStringExtra("usuario");
 
         foto = findViewById(R.id.image_user);
-        countPosts = findViewById(R.id.count_posts);
         countSeguidores = findViewById(R.id.count_followers);
         countSeguindo = findViewById(R.id.count_following);
         collapsing = findViewById(R.id.collapsing_tb);
@@ -73,30 +85,76 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         fabSeguir = findViewById(R.id.fab_seguir);
 
-        String usuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        usuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado).child(usuario)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
-                            setFollow();
-                        } else {
-                            setUnfollow();
-                        }
-                    }
+        followRef = FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado).child(usuario);
+        userRef = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario);
+        seguidoresRef = FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario);
+        seguindoRef = FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuario);
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+        // SE ESTA SEGUINDO OU NAO
+        followListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    setFollow();
+                } else {
+                    setUnfollow();
+                }
+            }
 
-                    }
-                });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        // CARREGAR NOME E FOTO DO USUARIO
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(Usuario.class);
+                Glide.with(UsuarioPerfilActivity.this).load(user.getFotoUrl()).into(foto);
+                collapsing.setTitle(user.getNome());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        // CARREGAR QUANTIDADE DE SEGUIDORES
+        seguidoresListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                countSeguidores.setText(formatNumber(dataSnapshot.getChildrenCount()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        // CARREGAR QUANTIDADE DE SEGUINDO
+        seguindoListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                countSeguindo.setText(formatNumber(dataSnapshot.getChildrenCount()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
 
         fabSeguir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(fabSeguir.getTag().equals("SEGUINDO")) {
-                    setFollow();
+                    followUser(FOLLOW);
 
                     Snackbar.make(findViewById(android.R.id.content), "Você está seguindo " + user.getNome(), Snackbar.LENGTH_SHORT).setAction("ClOSE", new View.OnClickListener() {
                         @Override
@@ -105,7 +163,7 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
                         }
                     }).show();
                 } else {
-                    setUnfollow();
+                    followUser(UNFOLLOW);
 
                     Snackbar.make(findViewById(android.R.id.content), "Você deixou de seguir " + user.getNome(), Snackbar.LENGTH_SHORT).setAction("ClOSE", new View.OnClickListener() {
                         @Override
@@ -130,58 +188,27 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        db = FirebaseDatabase.getInstance().getReference("usuarios").child(usuario);
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(Usuario.class);
-                Glide.with(UsuarioPerfilActivity.this).load(user.getFotoUrl()).into(foto);
-                collapsing.setTitle(user.getNome());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference("posts").child(usuario).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                countPosts.setText(formatNumber(dataSnapshot.getChildrenCount()));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                countSeguidores.setText(formatNumber(dataSnapshot.getChildrenCount()));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuario).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                countSeguindo.setText(formatNumber(dataSnapshot.getChildrenCount()));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        userRef.addValueEventListener(userListener);
+        followRef.addValueEventListener(followListener);
+        seguidoresRef.addValueEventListener(seguidoresListener);
+        seguindoRef.addValueEventListener(seguindoListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        userRef.removeEventListener(userListener);
+        followRef.removeEventListener(followListener);
+        seguidoresRef.removeEventListener(seguidoresListener);
+        seguindoRef.removeEventListener(seguindoListener);
+    }
 
     private String formatNumber(long number) {
 
@@ -266,15 +293,37 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
         }
     }
 
-    public void setFollow() {
+    private void setFollow() {
         fabSeguir.setBackgroundTintList(getResources().getColorStateList(android.R.color.holo_green_dark));
         fabSeguir.setImageResource(R.drawable.seguindo);
         fabSeguir.setTag("SEGUIR");
     }
 
-    public void setUnfollow() {
+    private void setUnfollow() {
         fabSeguir.setBackgroundTintList(getResources().getColorStateList(R.color.colorAccent));
         fabSeguir.setImageResource(R.drawable.icon_seguir);
         fabSeguir.setTag("SEGUINDO");
     }
+
+    private void followUser(int contexto) {
+
+        DatabaseReference seguindo = FirebaseDatabase.getInstance().getReference("userSeguindo").child(usuarioLogado).child(usuario);
+        DatabaseReference seguidores = FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario).child(usuarioLogado);
+
+        switch (contexto) {
+            case FOLLOW:
+                seguindo.setValue(true);
+                seguidores.setValue(true);
+                setFollow();
+                break;
+            case UNFOLLOW:
+                seguindo.removeValue();
+                seguidores.removeValue();
+                setUnfollow();
+                Feed.excluirPostsFollow(usuarioLogado, usuario);
+                break;
+        }
+    }
+
+
 }
