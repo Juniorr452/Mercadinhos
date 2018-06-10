@@ -18,6 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -56,19 +59,19 @@ public class BuscarFragment extends Fragment
 
     private UsuarioService usuarioService;
 
-    private DatabaseReference turmasRef;
+    private DatabaseReference  turmasRef;
     private ChildEventListener turmasChildEventListener;
 
-    private TurmaAdapter turmaAdapter;
-    private BuscarAdapter buscarAdapter;
+    private BuscarAdapter   buscarAdapter;
+    private SugestaoAdapter sugestaoAdapter_turmas;
     private SugestaoAdapter sugestaoAdapter_usuarios;
-
-    private RecyclerView recyclerView_usuarios;
-    private RecyclerView recycle_busca;
-    private Toolbar toolbar;
-    private List<Turma> turmasCriadas;
-    private FrameLayout sugestoes;
-    private FrameLayout busca;
+    private ProgressBar     progressBar;
+    private ScrollView      sv_usuarios_sugeridos;
+    private RecyclerView    recyclerView_usuarios;
+    private RecyclerView    recycle_busca;
+    private Toolbar         toolbar;
+    private RelativeLayout  sugestoes;
+    private FrameLayout     busca;
 
     private String uid;
 
@@ -88,7 +91,6 @@ public class BuscarFragment extends Fragment
         sugestaoAdapter_usuarios = new SugestaoAdapter(getActivity());
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
     }
 
     @Override
@@ -104,9 +106,15 @@ public class BuscarFragment extends Fragment
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_buscar, container, false);
 
+        sv_usuarios_sugeridos = v.findViewById(R.id.sv_usuarios_sugeridos);
+        progressBar           = v.findViewById(R.id.progress_bar);
+
+        progressBar.setVisibility(View.VISIBLE);
+        sv_usuarios_sugeridos.setVisibility(View.GONE);
+
         // Recycler View
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
-        recycle_busca = v.findViewById(R.id.recycle_busca);
+        recycle_busca         = v.findViewById(R.id.recycle_busca);
         //searchView = v.findViewById(R.id.search_view);
 
         //LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
@@ -133,7 +141,6 @@ public class BuscarFragment extends Fragment
 
         }
 
-
         return v;
     }
 
@@ -158,9 +165,13 @@ public class BuscarFragment extends Fragment
                     List<Usuario> usuariosRecomendados = response.body();
 
                     sugestaoAdapter_usuarios.setSugestoes(usuariosRecomendados);
+                    //sugestaoAdapter_usuarios.setSugestoes(new ArrayList<Object>(usuariosRecomendados));
+
+                    progressBar.setVisibility(View.GONE);
+                    sv_usuarios_sugeridos.setVisibility(View.VISIBLE);
                 }
                 else
-                    Log.i(TAG, "Merda");
+                    Log.i(TAG, response.errorBody().toString());
             }
 
             @Override
