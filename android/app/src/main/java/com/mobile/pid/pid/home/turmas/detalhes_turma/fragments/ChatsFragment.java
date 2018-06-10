@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,14 +89,38 @@ public class ChatsFragment extends Fragment
             {
                 final View d = getLayoutInflater().inflate(R.layout.dialog_criar_chat, null);
 
+                final TextView chatExibidoComo = d.findViewById(R.id.chat_exibido_como);
                 final EditText chatNome = d.findViewById(R.id.dialog_chat_nome);
+
+                final TextWatcher textWatcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count)
+                    {
+                        String nome = getString(R.string.chat_exibido_como) + " " + getNomeChat(s.toString());
+                        chatExibidoComo.setText(nome);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                };
+
+                chatNome.addTextChangedListener(textWatcher);
 
                 DialogInterface.OnClickListener criarConta = new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
                     {
-                        Chat c = new Chat(chatNome.getText().toString());
+                        String nome = chatNome.getText().toString();
+                        Chat      c = new Chat(getNomeChat(nome));
+
                         chatsRef.push().setValue(c);
                     }
                 };
@@ -170,5 +196,9 @@ public class ChatsFragment extends Fragment
     public void onStop() {
         super.onStop();
         chatsRef.removeEventListener(chatsListener);
+    }
+
+    public String getNomeChat(String nome){
+        return nome.replace(' ', '-');
     }
 }

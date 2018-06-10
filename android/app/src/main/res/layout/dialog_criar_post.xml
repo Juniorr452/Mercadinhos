@@ -37,14 +37,15 @@
             android:background="@drawable/border_posts"
             android:scrollbars="vertical"
             android:gravity="top|left"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:scrollHorizontally="false"
             android:scrollbarStyle="insideInset"
             android:padding="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="16dp"
+            android:textColorHint="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
