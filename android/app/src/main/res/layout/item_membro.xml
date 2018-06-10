@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/ll_membro"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
 
     <!-- https://stackoverflow.com/questions/47977796/what-is-the-best-way-to-create-a-circular-imageview -->
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/membro_imagem"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/membro_foto"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/logo"
         android:layout_marginRight="8dp"/>
 
     <TextView
-        android:id="@+id/info_usuario_nome"
+        android:id="@+id/membro_nome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -22,6 +22,7 @@
         android:text="Nome"/>
 
     <TextView
+        android:id="@+id/membro_professor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|right"
@@ -31,10 +32,12 @@
         android:visibility="invisible"/>
 
     <ImageView
+        android:id="@+id/membro_excluir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginHorizontal="8dp"
-        android:background="@drawable/baseline_close_white_18"/>
+        android:background="@drawable/baseline_close_white_18"
+        android:clickable="true"/>
 
 </LinearLayout>
