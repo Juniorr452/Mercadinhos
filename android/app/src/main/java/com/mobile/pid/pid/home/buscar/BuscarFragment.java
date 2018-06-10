@@ -195,58 +195,70 @@ public class BuscarFragment extends Fragment
 
         //searchView.setMaxWidth(getActivity().getWindowManager().getDefaultDisplay().getWidth());
         
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String query)
+            {
+                FirebaseDatabase.getInstance().getReference("usuarios")
+                    .orderByChild("nome")
+                    .startAt(query).endAt(query + "\uf8ff")
+                    .addListenerForSingleValueEvent(new ValueEventListener()
+                    {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot)
+                        {
 
-                FirebaseDatabase.getInstance().getReference("usuarios").orderByChild("nome").startAt(query)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                            buscarAdapter.clear();
 
-                                buscarAdapter.clear();
+                            if (dataSnapshot.exists())
+                            {
 
-                                if (dataSnapshot.exists()) {
-
-                                    for (DataSnapshot user : dataSnapshot.getChildren()) {
-                                        Usuario u = user.getValue(Usuario.class);
-                                        u.setUid(user.getKey());
-                                        buscarAdapter.add(u);
-                                    }
-
-                                    sugestoes.setVisibility(View.GONE);
-                                    busca.setVisibility(View.VISIBLE);
+                                for (DataSnapshot user : dataSnapshot.getChildren())
+                                {
+                                    Usuario u = user.getValue(Usuario.class);
+                                    u.setUid(user.getKey());
+                                    buscarAdapter.add(u);
                                 }
+
+                                sugestoes.setVisibility(View.GONE);
+                                busca.setVisibility(View.VISIBLE);
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                        }
+                    });
 
-                FirebaseDatabase.getInstance().getReference("turmas").orderByChild("nome").startAt(query)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-
-                                    for (DataSnapshot turma : dataSnapshot.getChildren()) {
-                                        Turma t = turma.getValue(Turma.class);
-                                        t.setId(turma.getKey());
-                                        buscarAdapter.add(t);
-                                    }
-
-                                    sugestoes.setVisibility(View.GONE);
-                                    busca.setVisibility(View.VISIBLE);
+                FirebaseDatabase.getInstance().getReference("turmas")
+                    .orderByChild("nome")
+                    .startAt(query).endAt(query + "\uf8ff")
+                    .addListenerForSingleValueEvent(new ValueEventListener()
+                    {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot)
+                        {
+                            if (dataSnapshot.exists())
+                            {
+                                for (DataSnapshot turma : dataSnapshot.getChildren())
+                                {
+                                    Turma t = turma.getValue(Turma.class);
+                                    t.setId(turma.getKey());
+                                    buscarAdapter.add(t);
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
+                                sugestoes.setVisibility(View.GONE);
+                                busca.setVisibility(View.VISIBLE);
                             }
-                        });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 return true;
             }
