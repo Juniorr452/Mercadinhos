@@ -68,9 +68,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         holder.texto.setText(p.getTexto());
 
         FirebaseDatabase.getInstance().getReference("usuarios").child(p.getUserId())
-            .addValueEventListener(new ValueEventListener() {
+            .addValueEventListener(new ValueEventListener() 
+            {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(DataSnapshot dataSnapshot) 
+                {
                     Usuario user = dataSnapshot.getValue(Usuario.class);
 
                     Glide.with(context.getApplicationContext())
@@ -80,7 +82,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     holder.usuario.setText(user.getNome());
 
                     p.setPhotoUrl(user.getFotoUrl());
-                    p.setUserName(user.getNome());
+                    p.setNomeUser(user.getNome());
                 }
 
                 @Override
@@ -90,13 +92,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             });
 
         // CLICAR NA FOTO DO USUARIO REDIRECIONA PRO PERFIL DA PESSOA
-        holder.foto.setOnClickListener(new View.OnClickListener() {
+        holder.foto.setOnClickListener(new View.OnClickListener() 
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) 
+            {
+                Usuario user = new Usuario(p.getUserId(), p.getNomeUser(), null, p.getPhotoUrl());
 
-                Usuario user = new Usuario(p.getUserId(), p.getUserName(), null, p.getPhotoUrl());
-
-                if(p.getUserId().equals(usuarioLogado)) {
+                if(p.getUserId().equals(usuarioLogado)) 
+                {
                     //TODO ENVIAR PARA O PERFIL FRAGMENT
                     new Dialogs().dialogUsuario(user, context);
                 } else
@@ -105,10 +109,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             }
         });
 
-
-        holder.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() 
+        {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) 
+            {
 
                 if(holder.like.isChecked()){
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.red));
@@ -119,7 +124,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     // SALVAR NOS POSTS CURTIDOS DO USUARIO
                     FirebaseDatabase.getInstance().getReference("userLikes").child(usuarioLogado)
                             .child(p.getId()).setValue(p);
-                } else {
+                } 
+                else 
+                {
                     holder.like.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
 
                     FirebaseDatabase.getInstance().getReference("postLikes").child(p.getId())

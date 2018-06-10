@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
@@ -34,6 +35,9 @@ public class SeguidoresFragment extends Fragment {
     private FollowItem item;
     private String usuario;
 
+    private ValueEventListener followListener;
+    private DatabaseReference followRef;
+
 
     public SeguidoresFragment() {
         // Required empty public constructor
@@ -47,42 +51,55 @@ public class SeguidoresFragment extends Fragment {
 
         followAdapter = new FollowAdapter(getActivity(), 0);
 
-        FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+        followRef = FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario);
 
-                        recyclerView.getRecycledViewPool().clear();
-                        followAdapter.clear();
+        followListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                recyclerView.getRecycledViewPool().clear();
+                followAdapter.clear();
 
-                        if(dataSnapshot.exists()) {
+                if(dataSnapshot.exists()) {
 
-                            for(DataSnapshot users : dataSnapshot.getChildren()) {
-                                final String uid = users.getKey();
+                    for(DataSnapshot users : dataSnapshot.getChildren()) {
+                        final String uid = users.getKey();
 
-                                FirebaseDatabase.getInstance().getReference("usuarios").child(uid)
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                Usuario user = dataSnapshot.getValue(Usuario.class);
-                                                item = new FollowItem(uid, user.getFotoUrl(), user.getNome());
-                                                followAdapter.add(item);
-                                            }
+                        FirebaseDatabase.getInstance().getReference("usuarios").child(uid)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Usuario user = dataSnapshot.getValue(Usuario.class);
+                                        item = new FollowItem(uid, user.getFotoUrl(), user.getNome());
+                                        followAdapter.add(item);
+                                    }
 
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                                            }
-                                        });
-                            }
-                        }
+                                    }
+                                });
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        };
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        followRef.addValueEventListener(followListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        followRef.removeEventListener(followListener);
     }
 
     @Override

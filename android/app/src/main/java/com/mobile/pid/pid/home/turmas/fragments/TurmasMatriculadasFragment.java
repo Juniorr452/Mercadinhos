@@ -44,6 +44,8 @@ public class TurmasMatriculadasFragment extends Fragment
     private RecyclerView recyclerView;
     private List<Turma> turmasMatriculadas;
 
+    private ValueEventListener turmasListener;
+
     public TurmasMatriculadasFragment() {
         // Required empty public constructor
     }
@@ -60,11 +62,9 @@ public class TurmasMatriculadasFragment extends Fragment
 
         turmasMatriculadasRef = FirebaseDatabase.getInstance().getReference().child("userTurmasMatriculadas").child(uid);
 
-        turmasMatriculadasRef.addValueEventListener(new ValueEventListener()
-        {
+        turmasListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
                 {
                     recyclerView.getRecycledViewPool().clear();
@@ -112,7 +112,19 @@ public class TurmasMatriculadasFragment extends Fragment
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        turmasMatriculadasRef.addValueEventListener(turmasListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        turmasMatriculadasRef.removeEventListener(turmasListener);
     }
 
     @Override

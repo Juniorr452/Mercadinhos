@@ -50,6 +50,8 @@ public class ChatsFragment extends Fragment
 
     private FloatingActionButton fabCriarChat;
 
+    private ValueEventListener chatsListener;
+
     public ChatsFragment() {
         // Required empty public constructor
     }
@@ -122,11 +124,9 @@ public class ChatsFragment extends Fragment
                         .child(turma.getId())
                         .child("chats");
 
-        chatsRef.addValueEventListener(new ValueEventListener()
-        {
+        chatsListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
                 {
                     recyclerView.getRecycledViewPool().clear();
@@ -157,6 +157,18 @@ public class ChatsFragment extends Fragment
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        chatsRef.addValueEventListener(chatsListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        chatsRef.removeEventListener(chatsListener);
     }
 }

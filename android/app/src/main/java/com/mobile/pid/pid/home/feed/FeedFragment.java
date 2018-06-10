@@ -59,6 +59,9 @@ public class FeedFragment extends Fragment {
 
     private PostAdapter postAdapter;
 
+    private ValueEventListener postListener;
+    private Query postQuery;
+
     public FeedFragment() {
         // Required empty public constructor
     }
@@ -72,54 +75,51 @@ public class FeedFragment extends Fragment {
         postAdapter = new PostAdapter(getActivity(), posts);
         usuario = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference("feed").child(usuario.getUid()).orderByChild("postData")
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        postQuery = FirebaseDatabase.getInstance().getReference("feed").child(usuario.getUid()).orderByChild("postData");
 
-                        if(dataSnapshot.exists()) {
-                            recyclerView.getRecycledViewPool().clear();
-                            recyclerView.setItemViewCacheSize(0);
 
-                            Post p = dataSnapshot.getValue(Post.class);
-                            p.setId(dataSnapshot.getKey());
-                            postAdapter.add(p);
 
-                            sadFace.setVisibility(View.GONE);
-                            sadMessage.setVisibility(View.GONE);
-                        } else {
-                            sadFace.setVisibility(View.VISIBLE);
-                            sadMessage.setVisibility(View.GONE);
-                        }
+        postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    postAdapter.clear();
 
-                        progressBar.setVisibility(View.GONE);
-                        conteudo.setVisibility(View.VISIBLE);
-
+                    for(DataSnapshot data : dataSnapshot.getChildren()) {
+                        Post p = data.getValue(Post.class);
+                        p.setId(data.getKey());
+                        postAdapter.add(p);
                     }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    sadFace.setVisibility(View.GONE);
+                    sadMessage.setVisibility(View.GONE);
+                } else {
+                    sadFace.setVisibility(View.VISIBLE);
+                    sadMessage.setVisibility(View.GONE);
+                }
 
-                    }
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
+            }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        Post p = dataSnapshot.getValue(Post.class);
-                        p.setId(dataSnapshot.getKey());
-                        postAdapter.removePost(p);
-                    }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+        };
 
-                    }
+    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+    @Override
+    public void onStart() {
+        super.onStart();
+        postQuery.addValueEventListener(postListener);
+    }
 
-                    }
-                });
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        postQuery.removeEventListener(postListener);
     }
 
     @Override
@@ -192,7 +192,7 @@ public class FeedFragment extends Fragment {
             public void onClick(View view)
             {
                 Post post = new Post(null, usuario.getUid(), edit_post.getText().toString());
-                post.criarPost();
+                Feed.criarPost(post);
                 dialog.dismiss();
             }
         });
@@ -210,12 +210,12 @@ public class FeedFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2)
             {
-                if(s.length() <= 200 && s.length() > 0) {
+                if(s.length() <= 200 && s.length() >= 0) {
                     countChars.setTextColor(getResources().getColor(R.color.gray_font));
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 }
                 else {
-                    countChars.setTextColor(Color.RED);
+                    countChars.setTextColor(getResources().getColor(R.color.colorAccent));
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 }
 

@@ -37,6 +37,11 @@ public class CurtidasPerfilFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<Post> posts;
 
+    private Query likesRef;
+    private ChildEventListener likesListener;
+
+
+
     public CurtidasPerfilFragment() {
 
     }
@@ -50,15 +55,16 @@ public class CurtidasPerfilFragment extends Fragment {
         posts = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), posts);
 
+        likesRef = FirebaseDatabase.getInstance().getReference("userLikes").child(usuario).orderByChild("postData");
 
-        FirebaseDatabase.getInstance().getReference("userLikes").child(usuario)
-            .addChildEventListener(new ChildEventListener() {
+        likesListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 recyclerView.getRecycledViewPool().clear();
                 recyclerView.setItemViewCacheSize(0);
                 postAdapter.notifyDataSetChanged();
 
+                //TODO DATA DO POST TA VINDO ERRADA
                 Post post = dataSnapshot.getValue(Post.class);
                 post.setId(dataSnapshot.getKey());
                 postAdapter.add(post);
@@ -87,7 +93,20 @@ public class CurtidasPerfilFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        postAdapter.clear();
+        likesRef.addChildEventListener(likesListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        likesRef.removeEventListener(likesListener);
     }
 
     @Override

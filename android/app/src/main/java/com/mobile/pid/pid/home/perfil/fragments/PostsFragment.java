@@ -92,8 +92,19 @@ public class PostsFragment extends Fragment {
 
             }
         };
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        postAdapter.clear();
         postsRef.addChildEventListener(postsChildListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        postsRef.removeEventListener(postsChildListener);
     }
 
     @Override
