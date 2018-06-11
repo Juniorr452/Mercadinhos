@@ -99,7 +99,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
             holder.excluir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new AlertDialog.Builder(layoutInflater.getContext())
+                    new AlertDialog.Builder(layoutInflater.getContext(), R.style.DialogTheme)
                         .setTitle("Excluir a turma?")
                         .setMessage("Deseja realmente excluir a turma?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {

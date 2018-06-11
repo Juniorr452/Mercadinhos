@@ -38,4 +38,11 @@
         <item name="searchHintIcon">@null</item>
         <item name="android:maxWidth">1000dp</item>
     </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/fundoRecycle</item>
+        <item name="android:colorAccent">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
 </resources>

@@ -239,7 +239,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
                     if(p.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
 
-                        AlertDialog dialog = new AlertDialog.Builder(context)
+                        AlertDialog dialog = new AlertDialog.Builder(context, R.style.DialogTheme)
                                 .setTitle(R.string.confirmacao)
                                 .setMessage(R.string.excluir_post)
                                 .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
@@ -251,6 +251,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                                                     @Override
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
 
+                                                        //TODO ALTERAR COMO O POST É EXCLUIDO
                                                         // REMOVE O POST CURTIDO DE TODOS OS USUARIOS QUE CURTIRAM
                                                         if(dataSnapshot.exists()) {
                                                             for(DataSnapshot data : dataSnapshot.getChildren()) {
@@ -279,6 +280,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                         dialog.show();
 
                         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.gray_font));
+
 
                         return true;
                     }
