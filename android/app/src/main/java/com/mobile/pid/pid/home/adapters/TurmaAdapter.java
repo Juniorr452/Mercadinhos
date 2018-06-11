@@ -94,9 +94,9 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         holder.nome.setText(t.getNome());
 
         if(!professor)
-            holder.opcoes.setVisibility(View.INVISIBLE);
+            holder.excluir.setVisibility(View.INVISIBLE);
         else
-            holder.opcoes.setOnClickListener(new View.OnClickListener() {
+            holder.excluir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     new AlertDialog.Builder(layoutInflater.getContext())
@@ -264,7 +264,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     {
         public ImageView fotoProf;
         public ImageView capa;
-        public ImageView opcoes;
+        public ImageView excluir;
         public TextView  nome;
         public TextView  dia;
 
@@ -274,7 +274,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
             fotoProf = itemView.findViewById(R.id.icon_turma_professor);
             capa   = itemView.findViewById(R.id.turma_capa);
-            opcoes = itemView.findViewById(R.id.turma_opcoes);
+            excluir = itemView.findViewById(R.id.turma_excluir);
             nome   = itemView.findViewById(R.id.turma_nome);
             dia    = itemView.findViewById(R.id.turma_dia);
         }

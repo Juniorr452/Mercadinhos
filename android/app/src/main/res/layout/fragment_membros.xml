@@ -6,9 +6,12 @@
     android:background="@color/fundoRecycle"
     tools:context=".home.turmas.detalhes_turma.fragments.MembrosFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:scrollbars="vertical"
+        android:background="@color/fundoRecycle"
+        android:clipToPadding="false"/>
 
 </FrameLayout>

@@ -46,10 +46,11 @@
     </android.support.design.widget.TextInputLayout>
 
     <TextView
+        android:id="@+id/chat_exibido_como"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:layout_marginLeft="8dp"
-        android:text="Seu chat será exibido como: "/>
+        android:text="@string/chat_exibido_como"/>
 
 </LinearLayout>

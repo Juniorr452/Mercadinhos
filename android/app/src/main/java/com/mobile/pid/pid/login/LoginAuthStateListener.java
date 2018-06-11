@@ -30,12 +30,6 @@ public class LoginAuthStateListener implements FirebaseAuth.AuthStateListener
         {
             FirebaseAuth.getInstance().removeAuthStateListener(this);
 
-            Toast.makeText(a,
-                    "Logado como " + firebaseAuth.getCurrentUser().getEmail(),
-                    Toast.LENGTH_SHORT).show();
-
-            Log.d(TAG, "Logado");
-
             a.startActivity(new Intent(a, HomeActivity.class));
             a.finish();
         }

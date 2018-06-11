@@ -184,7 +184,8 @@ public class BuscarFragment extends Fragment
     }
     
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
         inflater.inflate(R.menu.menu_search, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -195,65 +196,81 @@ public class BuscarFragment extends Fragment
 
         //searchView.setMaxWidth(getActivity().getWindowManager().getDefaultDisplay().getWidth());
         
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
             @Override
-            public boolean onQueryTextSubmit(final String query) {
+            public boolean onQueryTextSubmit(final String query)
+            {
 
                 //TODO TA RETORNANDO SOMENTE AS TURMAS DUPLICADAS
 
                 FirebaseDatabase.getInstance().getReference("usuarios").orderByChild("nome")
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                    .addListenerForSingleValueEvent(new ValueEventListener()
+                    {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot)
+                        {
 
-                                buscarAdapter.clear();
+                            buscarAdapter.clear();
 
-                                if (dataSnapshot.exists()) {
+                            if (dataSnapshot.exists())
+                            {
 
-                                    for (DataSnapshot user : dataSnapshot.getChildren()) {
-                                        Usuario u = user.getValue(Usuario.class);
-                                        u.setUid(user.getKey());
+                                for (DataSnapshot user : dataSnapshot.getChildren())
+                                {
+                                    Usuario u = user.getValue(Usuario.class);
+                                    u.setUid(user.getKey());
 
-                                        if(u.getNome().toLowerCase().contains(query.toLowerCase()))
-                                            buscarAdapter.add(u);
-                                    }
-
-                                    sugestoes.setVisibility(View.GONE);
-                                    busca.setVisibility(View.VISIBLE);
+                                    if(u.getNome().toLowerCase().contains(query.toLowerCase()))
+                                        buscarAdapter.add(u);
                                 }
+
+                                sugestoes.setVisibility(View.GONE);
+                                busca.setVisibility(View.VISIBLE);
                             }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            sugestoes.setVisibility(View.GONE);
+                            busca.setVisibility(View.VISIBLE);
+                        }
 
-                            }
-                        });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 FirebaseDatabase.getInstance().getReference("turmas").orderByChild("nome")
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
+                    .addListenerForSingleValueEvent(new ValueEventListener()
+                    {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot)
+                        {
+                            if (dataSnapshot.exists())
+                            {
 
-                                    for (DataSnapshot turma : dataSnapshot.getChildren()) {
-                                        Turma t = turma.getValue(Turma.class);
-                                        t.setId(turma.getKey());
+                                for (DataSnapshot turma : dataSnapshot.getChildren())
+                                {
+                                    Turma t = turma.getValue(Turma.class);
+                                    t.setId(turma.getKey());
 
-                                        if(t.getNome().toLowerCase().contains(query.toLowerCase()))
-                                            buscarAdapter.add(t);
+                                    if(t.getNome().toLowerCase().contains(query.toLowerCase()))
+                                        buscarAdapter.add(t);
 
-                                    }
-
-                                    sugestoes.setVisibility(View.GONE);
-                                    busca.setVisibility(View.VISIBLE);
                                 }
+
+                                sugestoes.setVisibility(View.GONE);
+                                busca.setVisibility(View.VISIBLE);
                             }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            sugestoes.setVisibility(View.GONE);
+                            busca.setVisibility(View.VISIBLE);
+                        }
 
-                            }
-                        });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 return true;
             }

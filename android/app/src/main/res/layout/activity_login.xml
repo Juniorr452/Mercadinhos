@@ -32,7 +32,8 @@
         android:orientation="horizontal"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/black">
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -53,10 +54,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:textSize="15dp"/>
-
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
         </android.support.design.widget.TextInputLayout>
-
     </android.support.v7.widget.LinearLayoutCompat>
 
     <android.support.v7.widget.LinearLayoutCompat
@@ -87,7 +87,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:textSize="15dp"/>
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
 
         </android.support.design.widget.TextInputLayout>
     </android.support.v7.widget.LinearLayoutCompat>
@@ -112,6 +113,7 @@
         android:linksClickable="true"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:onClick="esqueciSenha"/>
+        android:onClick="esqueciSenha"
+        android:textColor="@color/black"/>
 
 </android.support.v7.widget.LinearLayoutCompat>

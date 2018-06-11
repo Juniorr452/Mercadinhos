@@ -26,6 +26,7 @@ import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.AvisosFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.MembrosFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.SolicitacoesFragment;
 import com.mobile.pid.pid.login.Usuario;
 
@@ -132,9 +133,9 @@ public class DetalhesTurma extends AppCompatActivity
         public int getCount() {
             switch (USUARIO) {
                 case PROFESSOR:
-                    return 3;
+                    return 4;
                 case ALUNO:
-                    return 2;
+                    return 3;
                 default:
                     return 0;
             }
@@ -161,6 +162,11 @@ public class DetalhesTurma extends AppCompatActivity
 
                     return avisosFragment;
                 case 2:
+                    Fragment membrosFragment = new MembrosFragment();
+                    membrosFragment.setArguments(b);
+
+                    return membrosFragment;
+                case 3:
                     Fragment solicitacoesFragment = new SolicitacoesFragment();
                     solicitacoesFragment.setArguments(b);
 
@@ -181,6 +187,8 @@ public class DetalhesTurma extends AppCompatActivity
                 case 1:
                     return getString(R.string.avisos);
                 case 2:
+                    return getString(R.string.membros);
+                case 3:
                     return getString(R.string.solicitacoes);
                 default:
                     return null;
