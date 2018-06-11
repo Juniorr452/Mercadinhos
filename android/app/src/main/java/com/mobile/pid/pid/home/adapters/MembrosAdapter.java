@@ -1,7 +1,9 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.login.Usuario;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosViewHolder>
@@ -25,9 +29,10 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
     private Context c;
     private List<Usuario> membros;
     private Turma turma;
-    private Usuario professor;
 
     private String uidUsuarioLogado;
+
+    private boolean precisaOrdenar;
 
     public MembrosAdapter(Context c, Turma turma)
     {
@@ -36,6 +41,8 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
         this.turma = turma;
 
         this.uidUsuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        this.precisaOrdenar = true;
     }
 
     @NonNull
@@ -58,6 +65,7 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
         {
             holder.linearLayout.setBackgroundColor(c.getResources().getColor(R.color.colorPrimary));
             holder.professor.setVisibility(View.VISIBLE);
+            holder.excluir.setVisibility(View.GONE);
             Log.d("adskaskdas", "aaa" + uid);
         }
 
@@ -68,10 +76,21 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
         if(!turma.getProfessorUid().equals(uidUsuarioLogado))
             holder.excluir.setVisibility(View.GONE);
         else
-            holder.excluir.setOnClickListener(new View.OnClickListener() {
+            holder.excluir.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
-                    // TODO: OnClick
+                public void onClick(View v)
+                {
+                    new AlertDialog.Builder(c)
+                        .setTitle(R.string.warning)
+                        .setMessage("Deseja excluir este membro da turma?")
+                        .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // TODO: OnClick
+                            }
+                        }).setNegativeButton(R.string.cancel, null)
+                        .show();
                 }
             });
     }
@@ -81,18 +100,17 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
         return membros.size();
     }
 
-    public void setProfessor(Usuario professor){
-        this.professor = professor;
-    }
-
-    public void add(Usuario u){
+    public void add(Usuario u)
+    {
         membros.add(u);
+        precisaOrdenar = true;
         notifyDataSetChanged();
     }
 
-    public void setMembros(List<Usuario> membros){
-        this.membros = membros;
-
+    public void setMembros(List<Usuario> membros)
+    {
+        this.membros   = membros;
+        precisaOrdenar = true;
         ordenarMembros();
     }
 
@@ -101,10 +119,21 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
         notifyDataSetChanged();
     }
 
-    private void ordenarMembros()
+    public void ordenarMembros()
     {
-        membros.add(0, professor);
-        notifyDataSetChanged();
+        if(precisaOrdenar)
+        {
+            Collections.sort(membros, new Comparator<Usuario>() {
+                @Override
+                public int compare(Usuario o1, Usuario o2) {
+                    return o1.getNome().compareTo(o2.getNome());
+                }
+            });
+
+            precisaOrdenar = false;
+
+            notifyDataSetChanged();
+        }
     }
 
     public class MembrosViewHolder extends RecyclerView.ViewHolder

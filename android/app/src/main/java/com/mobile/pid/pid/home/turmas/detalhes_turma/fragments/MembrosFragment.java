@@ -69,6 +69,13 @@ public class MembrosFragment extends Fragment
         return v;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        membrosAdapter.ordenarMembros();
+    }
+
     private void pegarMembrosTurma()
     {
         professorReference.addListenerForSingleValueEvent(new ValueEventListener()
@@ -79,7 +86,7 @@ public class MembrosFragment extends Fragment
                 professor = dataSnapshot.getValue(Usuario.class);
                 professor.setUid(dataSnapshot.getKey());
 
-                membrosAdapter.setProfessor(professor);
+                membrosAdapter.add(professor);
             }
 
             @Override
