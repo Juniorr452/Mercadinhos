@@ -46,6 +46,38 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
 
+        <LinearLayout
+            android:id="@+id/ll_mensagem_busca_sem_sugestoes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/icon_search"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mensagem_encontre_turmas_pessoas"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:maxWidth="330dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mensagem_recomendacoes_dica"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:textSize="16dp"/>
+        </LinearLayout>
+
         <ScrollView
             android:id="@+id/sv_usuarios_sugeridos"
             android:layout_width="match_parent"

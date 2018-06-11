@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -62,6 +63,7 @@ public class BuscarFragment extends Fragment
     private DatabaseReference  turmasRef;
     private ChildEventListener turmasChildEventListener;
 
+    private LinearLayout    mensagemBuscaSemSugestoes;
     private BuscarAdapter   buscarAdapter;
     private SugestaoAdapter sugestaoAdapter_turmas;
     private SugestaoAdapter sugestaoAdapter_usuarios;
@@ -101,11 +103,13 @@ public class BuscarFragment extends Fragment
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_buscar, container, false);
 
+        mensagemBuscaSemSugestoes = v.findViewById(R.id.ll_mensagem_busca_sem_sugestoes);
         sv_usuarios_sugeridos = v.findViewById(R.id.sv_usuarios_sugeridos);
         progressBar           = v.findViewById(R.id.progress_bar);
 
         progressBar.setVisibility(View.VISIBLE);
         sv_usuarios_sugeridos.setVisibility(View.GONE);
+        mensagemBuscaSemSugestoes.setVisibility(View.GONE);
 
         // Recycler View
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
@@ -133,7 +137,6 @@ public class BuscarFragment extends Fragment
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
         }
 
         return v;
@@ -159,11 +162,17 @@ public class BuscarFragment extends Fragment
                 {
                     List<Usuario> usuariosRecomendados = response.body();
 
-                    sugestaoAdapter_usuarios.setSugestoes(usuariosRecomendados);
+                    if(usuariosRecomendados.size() <= 0)
+                        mensagemBuscaSemSugestoes.setVisibility(View.VISIBLE);
+                    else
+                    {
+                        sugestaoAdapter_usuarios.setSugestoes(usuariosRecomendados);
+                        sv_usuarios_sugeridos.setVisibility(View.VISIBLE);
+                    }
+
                     //sugestaoAdapter_usuarios.setSugestoes(new ArrayList<Object>(usuariosRecomendados));
 
                     progressBar.setVisibility(View.GONE);
-                    sv_usuarios_sugeridos.setVisibility(View.VISIBLE);
                 }
                 else
                     Log.i(TAG, response.errorBody().toString());
