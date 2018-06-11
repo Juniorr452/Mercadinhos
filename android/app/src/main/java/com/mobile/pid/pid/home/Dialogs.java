@@ -81,7 +81,8 @@ public class Dialogs
         etAviso.addTextChangedListener(textWatcher);
     }
 
-    public void dialogUsuario(final Usuario u, final Context context) {
+    public void dialogUsuario(final Usuario u, final Context context)
+    {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_perfil_usuario, null);
         final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -261,23 +262,24 @@ public class Dialogs
                     if(t.getPin().equals(""))
                     {
                         new android.support.v7.app.AlertDialog.Builder(context)
-                                .setTitle(R.string.warning)
-                                .setMessage(R.string.deseja_solicitacao)
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                            .setTitle(R.string.warning)
+                            .setMessage(R.string.deseja_solicitacao)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i)
                                 {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i)
-                                    {
-                                        enviarSolicitacaoTurma(t, uid);
+                                    enviarSolicitacaoTurma(t, uid);
+                                    desabilitarBotaoSolicitar(solicitar);
 
-                                        new android.support.v7.app.AlertDialog.Builder(context)
-                                                .setMessage(R.string.solicitacao_sucesso)
-                                                .setPositiveButton(R.string.Ok, null)
-                                                .show();
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, null)
-                                .show();
+                                    new android.support.v7.app.AlertDialog.Builder(context)
+                                            .setMessage(R.string.solicitacao_sucesso)
+                                            .setPositiveButton(R.string.Ok, null)
+                                            .show();
+                                }
+                            })
+                            .setNegativeButton(R.string.no, null)
+                            .show();
                     }
                     else
                     {
@@ -308,6 +310,7 @@ public class Dialogs
                                 if(pin.equals(t.getPin()))
                                 {
                                     enviarSolicitacaoTurma(t, uid);
+                                    desabilitarBotaoSolicitar(solicitar);
                                     alerta.setMessage(R.string.solicitacao_sucesso);
                                     dialog.dismiss();
                                 }
