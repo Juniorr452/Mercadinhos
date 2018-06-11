@@ -91,11 +91,6 @@ public class BuscarFragment extends Fragment
         sugestaoAdapter_usuarios = new SugestaoAdapter(getActivity());
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         carregarRecomendacoesUsuarios();
     }
