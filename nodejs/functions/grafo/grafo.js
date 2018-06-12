@@ -18,13 +18,13 @@ Grafo.prototype.bfs = function(uid)
 
     // Ignorar vértice atual (você) e seus vizinhos (seus seguidores)
     // para recomendar apenas quem você não conhece
-    let verticeAtual = this.vertices[uid];
+    let verticeAtual     = this.vertices[uid];
     verticeAtual.ignorar = true;
 
     verticeAtual.vizinhos.forEach(vizinhoid => {
         verticeVizinho = this.vertices[vizinhoid];
 
-        verticeVizinho.ignorar = true;
+        verticeVizinho.ignorar   = true;
         verticeVizinho.pontuacao = 1;
 
         filaVertices.push(verticeVizinho);
@@ -54,9 +54,43 @@ Grafo.prototype.bfs = function(uid)
     }
 }
 
-// Ler o grafo recursivamente do db até uma certa profundidade
-// Retorna uma promise ou falso, se a profundidade já for máxima
-// Promises - https://www.youtube.com/watch?v=726GW5bg3OY 
+// Função de início do DFS
+// 
+Grafo.prototype.dfs = function(uid)
+{
+    let verticeAtual     = this.vertices[uid];
+    verticeAtual.ignorar = true;
+
+    verticeAtual.vizinhos.forEach(vizinhoid => 
+    {
+        verticeVizinho = this.vertices[vizinhoid];
+
+        verticeVizinho.ignorar   = true;
+        verticeVizinho.pontuacao = 1;
+
+        this.dfsRecursivo(verticeVizinho);
+    });
+}
+
+Grafo.prototype.dfsRecursivo = function(verticeAtual)
+{
+    verticeAtual.vizinhos.forEach(vizinhoid => 
+    {
+        verticeVizinho = this.vertices[vizinhoid];
+
+        if(!verticeVizinho.ignorar)
+        {
+            verticeVizinho.pontuacao += verticeAtual.pontuacao;
+
+            if(!verticeVizinho.visitado)
+            {
+                verticeVizinho.visitado = true;
+                this.dfsRecursivo(verticeVizinho);
+            }
+        }
+    });
+}
+
 Grafo.prototype.lerGrafo = function(uid, profundidade)
 {
     // Talvez depois eu tire esse vertices.hasOwnProperty, mas vou deixar pra não estragar o que já tá funcionando
