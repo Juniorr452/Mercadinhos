@@ -57,6 +57,27 @@ public class CurtidasPerfilFragment extends Fragment {
 
         likesRef = FirebaseDatabase.getInstance().getReference("userLikes").child(usuario).orderByChild("postData");
 
+        /*likesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                postAdapter.clear();
+                postAdapter.notifyDataSetChanged();
+
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot data : dataSnapshot.getChildren()) {
+                        Post post = data.getValue(Post.class);
+                        post.setId(data.getKey());
+                        postAdapter.add(post);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };*/
+
         likesListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

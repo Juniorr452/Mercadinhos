@@ -181,7 +181,7 @@ public class FeedFragment extends Fragment {
     private void criarPost(View view)
     {
         final View mView = getLayoutInflater().inflate(R.layout.dialog_criar_post, null);
-        final AlertDialog dialog = new AlertDialog.Builder(getContext())
+        final AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.DialogTheme)
                 .setView(mView)
                 .setPositiveButton(R.string.postar, null)
                 .setNegativeButton(R.string.cancel, null)
