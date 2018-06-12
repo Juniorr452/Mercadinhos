@@ -72,8 +72,6 @@ public class ChatsFragment extends Fragment
         fabCriarChat = v.findViewById(R.id.fab_criar_chat);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setReverseLayout(true);
-        mLayoutManager.setStackFromEnd(true);
 
         recyclerView = v.findViewById(R.id.rv_chats);
         recyclerView.setLayoutManager(mLayoutManager);
