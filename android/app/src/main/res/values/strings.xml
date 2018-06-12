@@ -135,4 +135,7 @@
     <string name="membros">Membros</string>
     <string name="mensagem_encontre_turmas_pessoas">Encontre turmas e pessoas para seguir!</string>
     <string name="mensagem_recomendacoes_dica">Recomendações surgirão quando você começar a seguir outros usuários.</string>
+    <string name="trans_turma_capa">trans_turma_capa</string>
+    <string name="trans_turma_foto">trans_turma_foto</string>
+    <string name="trans_turma_nome">trans_turma_nome</string>
 </resources>

@@ -1,10 +1,15 @@
 package com.mobile.pid.pid.home.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +37,10 @@ import com.mobile.pid.pid.login.Usuario;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAnimation;
+
 /**
  * Created by junio on 12/03/2018.
  */
@@ -43,11 +52,13 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
     private List<Turma>    listaTurmas;
     private LayoutInflater layoutInflater;
+    Activity activity;
 
-    public TurmaAdapter(Context c, List<Turma> l)
+    public TurmaAdapter(Activity activity, List<Turma> l)
     {
+        this.activity  = activity;
         listaTurmas    = l;
-        layoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -165,7 +176,16 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 // Se o usuário está na turma.
                 if (t.estaNaTurma(uid))
                 {
+                    // https://www.youtube.com/watch?v=BF4yvhpMPcg&t=494s
                     Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
+
+                    Pair[] views = new Pair[3];
+
+                    views[0] = new Pair<View, String>(holder.cardViewFotoProf, holder.cardViewFotoProf.getTransitionName());
+                    views[1] = new Pair<View, String>(holder.capa, holder.capa.getTransitionName());
+                    views[2] = new Pair<View, String>(holder.nome, holder.nome.getTransitionName());
+
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(activity, views);
 
                     i.putExtra("turma", t);
 
@@ -174,7 +194,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                     else
                         i.putExtra("usuario", ALUNO);
 
-                    layoutInflater.getContext().startActivity(i);
+                    layoutInflater.getContext().startActivity(i, options.toBundle());
                 }
                 else
                 {
@@ -260,8 +280,9 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         return listaTurmas.size();
     }
 
-    public class TurmaViewHolder extends RecyclerView.ViewHolder //implements View.OnClickListener, View.OnLongClickListener
+    public class TurmaViewHolder extends RecyclerView.ViewHolder
     {
+        public CardView  cardViewFotoProf;
         public ImageView fotoProf;
         public ImageView capa;
         public ImageView excluir;
@@ -272,11 +293,12 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         {
             super(itemView);
 
-            fotoProf = itemView.findViewById(R.id.icon_turma_professor);
-            capa   = itemView.findViewById(R.id.turma_capa);
-            excluir = itemView.findViewById(R.id.turma_excluir);
-            nome   = itemView.findViewById(R.id.turma_nome);
-            dia    = itemView.findViewById(R.id.turma_dia);
+            cardViewFotoProf = itemView.findViewById(R.id.cardview_foto_turma);
+            fotoProf         = itemView.findViewById(R.id.icon_turma_professor);
+            capa             = itemView.findViewById(R.id.turma_capa);
+            excluir          = itemView.findViewById(R.id.turma_excluir);
+            nome             = itemView.findViewById(R.id.turma_nome);
+            dia              = itemView.findViewById(R.id.turma_dia);
         }
     }
 
