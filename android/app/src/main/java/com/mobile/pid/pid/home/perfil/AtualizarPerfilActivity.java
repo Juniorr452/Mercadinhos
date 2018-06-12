@@ -182,7 +182,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                             startActivityForResult(takePicture, RC_CAMERA);
                         } else {
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            intent.setType("image/jpeg");
+                            intent.setType("image/*");
                             intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                             startActivityForResult(Intent.createChooser(intent, getString(R.string.completar_acao)), RC_PHOTO_PICKER);
                         }
