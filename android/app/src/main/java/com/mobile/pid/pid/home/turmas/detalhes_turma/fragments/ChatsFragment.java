@@ -123,7 +123,7 @@ public class ChatsFragment extends Fragment
                     }
                 };
 
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(getContext(), R.style.DialogTheme)
                         .setView(d)
                         .setPositiveButton("Criar", criarConta)
                         .setNegativeButton(R.string.cancel, null)

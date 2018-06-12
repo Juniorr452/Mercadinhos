@@ -20,8 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
-import com.mobile.pid.pid.home.feed.Post;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Post;
+import com.mobile.pid.pid.objetos.Usuario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

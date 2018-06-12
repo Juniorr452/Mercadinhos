@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
 import com.mobile.pid.pid.home.adapters.AvisosTurmaAdapter;
@@ -28,14 +29,16 @@ public class AvisosFragment extends Fragment
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
-    RecyclerView recyclerView;
-    FloatingActionButton floatingActionButton;
+    private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
 
-    Turma turma;
+    private Turma turma;
     int   usuario;
 
-    AvisosTurmaAdapter avisosTurmaAdapter;
-    DatabaseReference  avisosReference;
+    private AvisosTurmaAdapter avisosTurmaAdapter;
+
+    private DatabaseReference  avisosReference;
+    private ChildEventListener avisosListener;
 
     public AvisosFragment() {
         // Required empty public constructor
@@ -76,7 +79,7 @@ public class AvisosFragment extends Fragment
         avisosTurmaAdapter = new AvisosTurmaAdapter(getContext());
         avisosReference = FirebaseDatabase.getInstance().getReference().child("avisos").child(turma.getId());
 
-        avisosReference.addChildEventListener(new ChildEventListener() {
+        avisosListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 AvisoTurma aviso = dataSnapshot.getValue(AvisoTurma.class);
@@ -103,8 +106,21 @@ public class AvisosFragment extends Fragment
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        avisosReference.addChildEventListener(avisosListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        avisosReference.removeEventListener(avisosListener);
     }
 
     public void novoAviso() {

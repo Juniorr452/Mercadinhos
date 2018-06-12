@@ -5,10 +5,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mobile.pid.pid.objetos.Post;
 
-public class Feed {
+public class FeedFunctions {
 
-    public Feed() {}
+    public FeedFunctions() {}
 
     public static void criarPost(final Post p) {
         final DatabaseReference dbPosts = FirebaseDatabase.getInstance().getReference("posts").child(p.getUserId());
@@ -39,7 +40,7 @@ public class Feed {
     }
 
     public static void excluirPost(Post p) {
-
+        
     }
 
     public static void excluirPostsFollow(String user, final String userUnfollow) {

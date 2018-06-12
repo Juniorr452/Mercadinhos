@@ -2,7 +2,6 @@ package com.mobile.pid.pid.home.feed;
 
 
 import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -22,20 +21,16 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
+import com.mobile.pid.pid.objetos.Post;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -189,6 +184,7 @@ public class FeedFragment extends Fragment {
 
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.gray_font));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.gray_font));
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
@@ -197,7 +193,7 @@ public class FeedFragment extends Fragment {
             public void onClick(View view)
             {
                 Post post = new Post(null, usuario.getUid(), edit_post.getText().toString());
-                Feed.criarPost(post);
+                FeedFunctions.criarPost(post);
                 dialog.dismiss();
             }
         });
@@ -215,13 +211,15 @@ public class FeedFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2)
             {
-                if(s.length() <= 200 && s.length() >= 0) {
+                if(s.length() <= 200 && s.length() > 0) {
                     countChars.setTextColor(getResources().getColor(R.color.gray_font));
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.white));
                 }
                 else {
                     countChars.setTextColor(getResources().getColor(R.color.colorAccent));
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.gray_font));
                 }
 
                 countChars.setText(String.valueOf(s.length()) + "/" + getText(R.string.limit_chars_post));
@@ -235,82 +233,5 @@ public class FeedFragment extends Fragment {
         };
 
         edit_post.addTextChangedListener(textWatcher);
-    }
-
-    private String calcularData() {
-
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
-        return sdf.format(c.getTime());
-    }
-
-    private void getPosts() {
-
-        postAdapter.clear();
-
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("seguindo")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
-                            for(DataSnapshot user : dataSnapshot.getChildren()) {
-
-                                FirebaseDatabase.getInstance().getReference("usuarios").child(user.getKey()).child("posts")
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                if(dataSnapshot.exists()) {
-                                                    for(DataSnapshot post : dataSnapshot.getChildren()) {
-                                                        Post p = post.getValue(Post.class);
-                                                        p.setId(post.getKey());
-                                                        postAdapter.add(p);
-                                                        sadFace.setVisibility(View.GONE);
-                                                        sadMessage.setVisibility(View.GONE);
-                                                    }
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-
-                                            }
-                                        });
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        FirebaseDatabase.getInstance().getReference("usuarios").child(usuario.getUid()).child("posts")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        if(dataSnapshot.exists()) {
-                            for(DataSnapshot db : dataSnapshot.getChildren()) {
-                                Post post = db.getValue(Post.class);
-                                post.setId(db.getKey());
-                                postAdapter.add(post);
-                                sadFace.setVisibility(View.GONE);
-                                sadMessage.setVisibility(View.GONE);
-                            }
-
-                            progressBar.setVisibility(View.GONE);
-                            conteudo.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-        //postAdapter.ordenar();
     }
 }

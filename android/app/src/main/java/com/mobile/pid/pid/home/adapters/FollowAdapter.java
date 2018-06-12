@@ -16,8 +16,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.feed.Post;
+import com.mobile.pid.pid.home.Dialogs;
+import com.mobile.pid.pid.objetos.Post;
 import com.mobile.pid.pid.home.perfil.FollowItem;
+import com.mobile.pid.pid.objetos.Usuario;
 
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     public static final int SEGUIDORES_CONTEXT = 0;
 
     private Context context;
-    private List<FollowItem> follow;
+    private List<Usuario> follow;
     private int context_cod;
 
     private final String FOLLOW_STRING;
@@ -62,10 +64,10 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position)
     {
-        final FollowItem followItem = follow.get(position);
+        final Usuario usuario = follow.get(position);
 
-        holder.usuario.setText(followItem.getNome());
-        Glide.with(context).load(followItem.getFoto()).into(holder.foto);
+        holder.usuario.setText(usuario.getNome());
+        Glide.with(context).load(usuario.getFotoUrl()).into(holder.foto);
 
         if(context_cod == 0)
             FirebaseDatabase.getInstance().getReference("userSeguindo").child(uid)
@@ -74,7 +76,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
-                        if(dataSnapshot.exists() && dataSnapshot.hasChild(followItem.getUid()))
+                        if(dataSnapshot.exists() && dataSnapshot.hasChild(usuario.getUid()))
                             holder.botaoSeguir.setChecked(true);
                         else
                             holder.botaoSeguir.setChecked(false);
@@ -84,7 +86,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                     public void onCancelled(DatabaseError databaseError) {}
                 });
 
-        if(followItem.getUid().equals(uid))
+        if(usuario.getUid().equals(uid))
             holder.botaoSeguir.setVisibility(View.INVISIBLE);
         else
         holder.botaoSeguir.setOnClickListener(new View.OnClickListener()
@@ -95,16 +97,16 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                 if(holder.botaoSeguir.isChecked())
                 {
                     // ACRESCENTA NOS SEGUIDORES DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(followItem.getUid())
+                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario.getUid())
                             .child(uid).setValue(true);
 
                     // ACRESCENTA NOS USUARIOS QUE ESTOU SEGUINDO
                     FirebaseDatabase.getInstance().getReference("userSeguindo").child(uid)
-                            .child(followItem.getUid()).setValue(true);
+                            .child(usuario.getUid()).setValue(true);
 
                     if(context_cod == SEGUINDO_CONTEXT)
                     {
-                        follow.add(followItem);
+                        follow.add(usuario);
                         notifyDataSetChanged();
                     }
 
@@ -113,12 +115,12 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                 else
                 {
                     // REMOVE DOS SEGUIDORES DO USUARIO
-                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(followItem.getUid())
+                    FirebaseDatabase.getInstance().getReference("userSeguidores").child(usuario.getUid())
                             .child(uid).removeValue();
 
                     // REMOVE DOS USUARIOS QUE ESTOU SEGUINDO
                     FirebaseDatabase.getInstance().getReference("userSeguindo").child(uid)
-                            .child(followItem.getUid()).removeValue();
+                            .child(usuario.getUid()).removeValue();
 
                     // REMOVE TODOS OS POSTS DO USUARIO DO MEU FEED
                     FirebaseDatabase.getInstance().getReference("feed").child(uid)
@@ -133,7 +135,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
                                     {
                                         Post p = post.getValue(Post.class);
 
-                                        if(p.getUserId().equals(followItem.getUid()))
+                                        if(p.getUserId().equals(usuario.getUid()))
                                             post.getRef().removeValue();
                                     }
                                 }
@@ -145,12 +147,19 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
 
                     if(context_cod == SEGUINDO_CONTEXT)
                     {
-                        follow.remove(followItem);
+                        follow.remove(usuario);
                         notifyDataSetChanged();
                     }
 
                     holder.botaoSeguir.setChecked(false);
                 }
+            }
+        });
+
+        holder.foto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Dialogs().dialogUsuario(usuario, context);
             }
         });
     }
@@ -160,13 +169,13 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
         return follow.size();
     }
 
-    public void add(FollowItem item) {
+    public void add(Usuario item) {
         follow.add(item);
         notifyDataSetChanged();
     }
 
     public void remove(FollowItem item) {
-        for (FollowItem followItem: follow) {
+        for (Usuario followItem: follow) {
             if(followItem.getUid().equals(item.getUid())) {
                 follow.remove(followItem);
                 notifyDataSetChanged();

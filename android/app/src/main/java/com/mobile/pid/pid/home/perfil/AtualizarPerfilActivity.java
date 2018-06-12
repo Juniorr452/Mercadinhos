@@ -3,21 +3,16 @@ package com.mobile.pid.pid.home.perfil;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,7 +25,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,13 +38,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Usuario;
 
-import java.io.File;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class AtualizarPerfilActivity extends AppCompatActivity
 {
@@ -81,6 +72,8 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
     DatabaseReference usuarioDatabaseRef;
     StorageReference usuarioStorageRef;
+
+    private ValueEventListener userListener;
 
     ProgressDialog progressDialog;
 
@@ -124,11 +117,9 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         usuarioStorageRef  = FirebaseStorage.getInstance().getReference().child("usuarios").child(user_id).child("fotoPerfil");
 
         // Pegar os dados do usuário
-        usuarioDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener()
-        {
+        userListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 Usuario user_logado = dataSnapshot.getValue(Usuario.class);
                 sexo = user_logado.getSexo();
                 dataNasc = user_logado.getDataNascimento();
@@ -143,9 +134,18 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                 }
                 else
                     rbMasculino.setChecked(true);
-                
+
                 if (dataNasc != null)
                     btnData.setText(dataNasc);
+
+                // adiciona a foto com efeito embaçado
+                Glide.with(getApplicationContext()).load(user_logado.getFotoUrl())
+                        .apply(new RequestOptions()
+                                .override(20,20)
+                                .error(android.R.drawable.dark_header))
+                        .into(imageView_user_blur);
+
+                Glide.with(getApplicationContext()).load(user_logado.getFotoUrl()).into(imageView_user);
 
                 progressBar.setVisibility(View.GONE);
                 conteudo.setVisibility(View.VISIBLE);
@@ -155,45 +155,60 @@ public class AtualizarPerfilActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
-
-        // adiciona a foto com efeito embaçado
-        Glide.with(this).load(user.getPhotoUrl())
-                .apply(new RequestOptions()
-                        .override(20,20)
-                        .error(android.R.drawable.dark_header))
-                .into(imageView_user_blur);
-
-        Glide.with(this).load(user.getPhotoUrl()).into(imageView_user);
+        };
 
         imageView_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String[] items = new String[] {"Tirar foto", "Escolher na galeria"};
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(AtualizarPerfilActivity.this, android.R.layout.select_dialog_item, items);
-                AlertDialog.Builder builder = new AlertDialog.Builder(AtualizarPerfilActivity.this);
-                builder.setTitle(R.string.select_image);
 
-                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if(i == 0) {
-                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(takePicture, RC_CAMERA);
-                        } else {
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            intent.setType("image/*");
-                            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                            startActivityForResult(Intent.createChooser(intent, getString(R.string.completar_acao)), RC_PHOTO_PICKER);
-                        }
-                    }
-                });
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(AtualizarPerfilActivity.this, R.style.DialogTheme);
+
+                View mView = getLayoutInflater().inflate(R.layout.dialog_selecionar_foto, null);
+                builder.setView(mView);
+
+                final ImageView camera = mView.findViewById(R.id.camera);
+                final ImageView galeria = mView.findViewById(R.id.galeria);
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(takePicture, RC_CAMERA);
+                    }
+                });
+
+                galeria.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                        startActivityForResult(Intent.createChooser(intent, getString(R.string.completar_acao)), RC_PHOTO_PICKER);
+                    }
+                });
+
             }
         });
+
+        usuarioDatabaseRef.addListenerForSingleValueEvent(userListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        usuarioDatabaseRef.removeEventListener(userListener);
     }
 
     @Override
@@ -237,16 +252,16 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         Log.d(TAG, R.string.date + dataNasc);
 
         if (validarCampos(nome, dataNasc))
-            atualizarPerfil(nome, sexo, dataNasc);
+            atualizarPerfil(nome.trim(), sexo.trim(), dataNasc.trim());
         else
             Toast.makeText(this, R.string.fill_fields, Toast.LENGTH_SHORT).show();
     }
 
     public boolean validarCampos(String nome, String data)
     {
-        // TODO: Checar se é null para não dar crash
-        //if(nome.equals("") || data.equals(""))
-        //    return false;
+
+        if(nome.equals("") || data.equals(""))
+            return false;
 
         return true;
     }

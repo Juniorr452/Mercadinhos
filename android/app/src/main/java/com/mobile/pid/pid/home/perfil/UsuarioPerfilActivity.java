@@ -16,9 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,13 +28,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.feed.Feed;
+import com.mobile.pid.pid.home.feed.FeedFunctions;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
 import com.mobile.pid.pid.home.perfil.fragments.TurmasUsuarioFragment;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Usuario;
 
 public class UsuarioPerfilActivity extends AppCompatActivity {
 
@@ -320,7 +318,7 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
                 seguindo.removeValue();
                 seguidores.removeValue();
                 setUnfollow();
-                Feed.excluirPostsFollow(usuarioLogado, usuario);
+                FeedFunctions.excluirPostsFollow(usuarioLogado, usuario);
                 break;
         }
     }

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menu_feed"
-        android:enabled="true"
-        android:icon="@drawable/icon_home"
-        android:title="@string/nav_feed" />
-    <item
-        android:id="@+id/menu_search"
-        android:enabled="true"
-        android:icon="@drawable/icon_search"
-        android:title="@string/nav_search" />
-    <item
-        android:id="@+id/menu_classes"
-        android:enabled="true"
-        android:icon="@drawable/icon_book"
-        android:title="@string/nav_classes" />
-    <item
-        android:id="@+id/menu_profile"
-        android:enabled="true"
-        android:icon="@drawable/icon_user_prof"
-        android:title="@string/nav_profile" />
+xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/menu_feed"
+    android:enabled="true"
+    android:icon="@drawable/icon_home"
+    android:title="@string/nav_feed" />
+<item
+    android:id="@+id/menu_search"
+    android:enabled="true"
+    android:icon="@drawable/icon_search"
+    android:title="@string/nav_search" />
+<item
+    android:id="@+id/menu_classes"
+    android:enabled="true"
+    android:icon="@drawable/icon_book"
+    android:title="@string/nav_classes" />
+<item
+    android:id="@+id/menu_profile"
+    android:enabled="true"
+    android:icon="@drawable/icon_user_prof"
+    android:title="@string/nav_profile" />
 </menu>

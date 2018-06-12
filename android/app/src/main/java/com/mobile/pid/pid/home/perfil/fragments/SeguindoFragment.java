@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,10 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.FollowAdapter;
 import com.mobile.pid.pid.home.perfil.FollowItem;
-import com.mobile.pid.pid.login.Usuario;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.mobile.pid.pid.objetos.Usuario;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,8 +65,8 @@ public class SeguindoFragment extends Fragment {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Usuario user = dataSnapshot.getValue(Usuario.class);
-                                        item = new FollowItem(uid, user.getFotoUrl(), user.getNome());
-                                        followAdapter.add(item);
+                                        user.setUid(uid);
+                                        followAdapter.add(user);
                                     }
 
                                     @Override

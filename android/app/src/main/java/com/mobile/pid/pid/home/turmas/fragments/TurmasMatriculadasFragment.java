@@ -85,7 +85,6 @@ public class TurmasMatriculadasFragment extends Fragment
                                         t.setId(dataSnapshotTurma.getKey());
 
                                         turmaAdapter.add(t);
-                                        turmaAdapter.notifyDataSetChanged();
                                     }
 
                                     @Override

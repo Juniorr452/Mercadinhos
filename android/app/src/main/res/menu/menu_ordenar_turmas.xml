@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mobile.pid.pid.turmas.fragments.TurmasFragment">
+
+    <item android:title="Ordenar"
+        android:icon="@drawable/baseline_reorder_white_24"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/ordenar_data"
+                android:enabled="true"
+                android:title="Ordenar por dia"
+                android:icon="@drawable/baseline_today_white_18"/>
+            <item
+                android:id="@+id/ordenar_alfabetica"
+                android:enabled="true"
+                android:title="Ordenar por alfabeto"
+                android:icon="@drawable/baseline_sort_by_alpha_white_18"/>
+        </menu>
+    </item>
+
+</menu>

@@ -5,7 +5,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,28 +15,20 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.HomeActivity;
-import com.mobile.pid.pid.home.feed.Post;
-import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
-import com.mobile.pid.pid.home.turmas.InfoUsuario;
 import com.mobile.pid.pid.home.turmas.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Usuario;
 
 import java.util.List;
 import java.util.Map;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAnimation;
 
@@ -177,7 +168,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                     // Se a turma não tiver PIN
                     if(t.getPin().equals(""))
                     {
-                        new AlertDialog.Builder(c)
+                        new AlertDialog.Builder(c, R.style.DialogTheme)
                                 .setTitle(R.string.warning)
                                 .setMessage(R.string.deseja_solicitacao)
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
@@ -240,7 +231,8 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
     public void add(Turma t)
     {
-        listaTurmas.add(0, t);
+        listaTurmas.add(t);
+        notifyDataSetChanged();
     }
 
     public void clear()
