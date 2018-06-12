@@ -118,36 +118,12 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                             public void onClick(DialogInterface dialogInterface, int i)
                             {
 
-                                DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
-                                DatabaseReference turmasCriadasRef = rootRef.child("userTurmasCriadas");
-                                DatabaseReference turmasMatriculadasRef = rootRef.child("userTurmasMatriculadas");
-
-
-                                String tuid = t.getId();
-
-                                // Deletar turma.
-                                rootRef.child("turmas")
-                                    .child(tuid)
-                                    .removeValue();
-
-                                // Deletar no turmas_criadas do professor.
-                                turmasCriadasRef.child(t.getProfessorUid())
-                                    .child(tuid)
-                                    .removeValue();
-
-                                // TODO: Verificar se está funcionando
-                                // Deletar no turmas_matriculadas dos alunos.
-                                if(t.getAlunos() != null)
-                                    for(String auid : t.getAlunos().keySet())
-                                        turmasMatriculadasRef.child(auid)
-                                            .child(tuid)
-                                            .removeValue();
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                t.excluir();
                             }
                         })
                         .show();
