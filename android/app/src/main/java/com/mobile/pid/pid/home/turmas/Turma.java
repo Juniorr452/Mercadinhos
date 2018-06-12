@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,6 +44,33 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         this.pin          = pin;
         this.diasDaSemana = diasDaSemana;
         this.professorUid = professorUid;
+    }
+
+    public void excluir()
+    {
+        DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference turmasCriadasRef = rootRef.child("userTurmasCriadas");
+        DatabaseReference turmasMatriculadasRef = rootRef.child("userTurmasMatriculadas");
+
+        String tuid = getId();
+
+        // Deletar turma.
+        rootRef.child("turmas")
+                .child(tuid)
+                .removeValue();
+
+        // Deletar no turmas_criadas do professor.
+        turmasCriadasRef.child(getProfessorUid())
+                .child(tuid)
+                .removeValue();
+
+        // TODO: Verificar se está funcionando
+        // Deletar no turmas_matriculadas dos alunos.
+        if(getAlunos() != null)
+            for(String auid : getAlunos().keySet())
+                turmasMatriculadasRef.child(auid)
+                        .child(tuid)
+                        .removeValue();
     }
 
     public String getId() {
