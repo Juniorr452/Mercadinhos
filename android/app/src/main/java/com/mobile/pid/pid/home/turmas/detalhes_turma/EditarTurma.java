@@ -37,7 +37,7 @@ public class EditarTurma extends AppCompatActivity {
         setContentView(R.layout.activity_editar_turma);
 
         Intent i = getIntent();
-        t = i.getParcelableExtra("turma");
+        t        = (Turma) i.getSerializableExtra("turma");
 
         capa          = findViewById(R.id.turma_capa);
         nome          = findViewById(R.id.editar_turma_nome);
@@ -78,7 +78,7 @@ public class EditarTurma extends AppCompatActivity {
         builder.setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //TODO EXCLUIR TURMA DO FIREBASE
+               
             }
         });
 

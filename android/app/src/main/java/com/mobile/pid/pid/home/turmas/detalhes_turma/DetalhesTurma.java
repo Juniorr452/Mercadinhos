@@ -35,8 +35,8 @@ public class DetalhesTurma extends AppCompatActivity
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
-    Turma turma;;
-    Toolbar toolbar_detalhes;
+    Turma     turma;;
+    Toolbar   toolbar_detalhes;
     ImageView capa;
     TextView  nomeTurma;
     ImageView editarTurma;
@@ -120,6 +120,14 @@ public class DetalhesTurma extends AppCompatActivity
         detalhesViewPager.setOffscreenPageLimit(4);
 
         turmasTabLayout.setupWithViewPager(detalhesViewPager);
+    }
+
+    public void irParaEditarTurma(View v){
+        Intent i = new Intent(this, EditarTurma.class);
+
+        i.putExtra("turma", turma);
+
+        startActivity(i);
     }
 
     // Tabs and ViewPager - https://www.youtube.com/watch?v=zQekzaAgIlQ

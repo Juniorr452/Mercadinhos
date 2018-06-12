@@ -73,6 +73,7 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma">
                             android:layout_marginTop="8dp"
                             android:layout_marginRight="15dp"
                             android:clickable="true"
+                            android:onClick="irParaEditarTurma"
                             android:src="@drawable/icon_settings" />
                     </RelativeLayout>
 
