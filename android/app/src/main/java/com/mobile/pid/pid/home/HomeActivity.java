@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        //TesteAlgoritmosOrdenacao.testarInsertQuick(this);
+        TesteAlgoritmosOrdenacao.testarOrdenacao(this);
     }
 
     private void setFragment(Fragment fragment)

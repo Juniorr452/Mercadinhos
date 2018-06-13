@@ -18,9 +18,9 @@ public class TesteAlgoritmosOrdenacao
 {
     private static int[] qtdTurmasTeste = {2, 5, 10, 50, 100, 500, 1000};
     static long tInicial, tFinal;
-    static final int QTD_ALGORITMOS = 3;
+    static final int QTD_ALGORITMOS = 4;
 
-    public static void testarInsertQuick(Context c)
+    public static void testarOrdenacao(Context c)
     {
         Queue<String> resultados = new LinkedList<>();
 
@@ -31,6 +31,7 @@ public class TesteAlgoritmosOrdenacao
             List<Turma> turmasInsert = gerarTurmas(qtdTurmas);
             List<Turma> turmasQuick  = new ArrayList<>(turmasInsert);
             List<Turma> turmasSelect = new ArrayList<>(turmasInsert);
+            List<Turma> turmasMerge  = new ArrayList<>(turmasInsert);
 
             tInicial = System.nanoTime();
             PidSort.insertionSort(turmasInsert, Turma.compararPorNome);
@@ -39,16 +40,22 @@ public class TesteAlgoritmosOrdenacao
             adicionarResultado(resultados, "InsertionSort");
 
             tInicial = System.nanoTime();
+            PidSort.selectionSort(turmasSelect, Turma.compararPorNome);
+            tFinal   = System.nanoTime();
+
+            adicionarResultado(resultados, "SelectionSort");
+
+            tInicial = System.nanoTime();
             PidSort.quicksort(turmasQuick, Turma.compararPorNome);
             tFinal   = System.nanoTime();
 
             adicionarResultado(resultados, "QuickSort");
 
             tInicial = System.nanoTime();
-            PidSort.selectionSort(turmasSelect, Turma.compararPorNome);
+            PidSort.mergeSort(turmasMerge, new ArrayList(turmasMerge.size()), 0, turmasMerge.size(), Turma.compararPorNome);
             tFinal   = System.nanoTime();
 
-            adicionarResultado(resultados, "SelectionSort");
+            adicionarResultado(resultados, "MergeSort");
         }
 
         Log.e("Teste", "asdasd");
