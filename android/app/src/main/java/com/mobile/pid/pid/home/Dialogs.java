@@ -22,10 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.feed.FeedFunctions;
+import com.mobile.pid.pid.home.feed.Feed;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
 import com.mobile.pid.pid.home.turmas.AvisoTurma;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 import com.mobile.pid.pid.objetos.Usuario;
 
 public class Dialogs
@@ -185,7 +185,7 @@ public class Dialogs
                                     // EXCLUI NOS "SEGUIDORES" DO USUARIO
                                     dbSeguidores.child(u.getUid()).child(usuario).removeValue();
                                     // REMOVE TODOS OS POSTS DO USUARIO UNFOLLOW
-                                    FeedFunctions.excluirPostsFollow(usuario, u.getUid());
+                                    Feed.excluirPostsFollow(usuario, u.getUid());
 
                                     seguir.setText(context.getText(R.string.follow));
                                 }

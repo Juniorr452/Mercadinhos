@@ -25,6 +25,7 @@ public class Usuario implements Parcelable
     private String nome;
     private String email;
     private String fotoUrl;
+    private int pontuacao;
 
     private String sexo;
     private String dataNascimento;
@@ -144,4 +145,14 @@ public class Usuario implements Parcelable
             return new Usuario[size];
         }
     };
+
+    @Exclude
+    public int getPontuacao() {
+        return pontuacao;
+    }
+
+    @Exclude
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
+    }
 }

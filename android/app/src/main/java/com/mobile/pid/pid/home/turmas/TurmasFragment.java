@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,20 +53,8 @@ public class TurmasFragment extends Fragment
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
-        setHasOptionsMenu(true);
-
         return v;
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        inflater.inflate(R.menu.menu_ordenar_turmas, menu);
-
-        super.onCreateOptionsMenu(menu, inflater);
-
-    }
-
 
 
     // Tabs and ViewPager - https://www.youtube.com/watch?v=zQekzaAgIlQ

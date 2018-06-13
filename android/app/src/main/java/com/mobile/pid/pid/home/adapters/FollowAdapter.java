@@ -18,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
 import com.mobile.pid.pid.objetos.Post;
-import com.mobile.pid.pid.home.perfil.FollowItem;
 import com.mobile.pid.pid.objetos.Usuario;
 
 
@@ -174,7 +173,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.RecyclerVi
         notifyDataSetChanged();
     }
 
-    public void remove(FollowItem item) {
+    public void remove(Usuario item) {
         for (Usuario followItem: follow) {
             if(followItem.getUid().equals(item.getUid())) {
                 follow.remove(followItem);

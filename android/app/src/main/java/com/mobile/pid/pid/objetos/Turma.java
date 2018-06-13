@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.home.turmas;
+package com.mobile.pid.pid.objetos;
 
 import android.os.Parcel;
 import android.os.Parcelable;

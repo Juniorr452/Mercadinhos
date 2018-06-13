@@ -23,7 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 import com.mobile.pid.pid.objetos.Usuario;
 
@@ -246,6 +246,11 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     @Override
     public int getItemCount() {
         return listaTurmas.size();
+    }
+
+    public void ordenar(List<Turma> turmas) {
+        listaTurmas = turmas;
+        notifyDataSetChanged();
     }
 
     public class TurmaViewHolder extends RecyclerView.ViewHolder

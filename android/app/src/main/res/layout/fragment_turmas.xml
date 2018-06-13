@@ -27,7 +27,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:layout_marginLeft="50dp"/>
+                android:layout_marginLeft="55dp"/>
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout

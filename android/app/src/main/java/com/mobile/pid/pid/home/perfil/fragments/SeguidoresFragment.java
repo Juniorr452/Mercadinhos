@@ -17,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.FollowAdapter;
-import com.mobile.pid.pid.home.perfil.FollowItem;
 import com.mobile.pid.pid.objetos.Usuario;
 
 import java.util.List;
@@ -28,9 +27,7 @@ import java.util.List;
 public class SeguidoresFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private List<FollowItem> follow;
     private FollowAdapter followAdapter;
-    private FollowItem item;
     private String usuario;
 
     private ValueEventListener followListener;

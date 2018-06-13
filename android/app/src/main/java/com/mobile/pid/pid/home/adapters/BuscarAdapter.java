@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 import com.mobile.pid.pid.objetos.Usuario;
 
 import java.util.ArrayList;

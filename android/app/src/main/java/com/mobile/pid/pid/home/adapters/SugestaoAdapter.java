@@ -42,6 +42,7 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
             Usuario user = (Usuario) sugestoes.get(position);
             holder.nome.setText(user.getNome());
+            holder.seguidores.setText(String.valueOf(user.getPontuacao()));
             Glide.with(holder.foto).load(user.getFotoUrl()).into(holder.foto);
 
     }
@@ -65,14 +66,14 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
         TextView nome;
         ImageView foto;
-
-        String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        TextView seguidores;
 
         public SugestaoHolder(View itemView) {
             super(itemView);
 
             nome = itemView.findViewById(R.id.nome);
             foto = itemView.findViewById(R.id.foto);
+            seguidores = itemView.findViewById(R.id.seguidoresComum);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

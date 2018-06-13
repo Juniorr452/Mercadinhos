@@ -17,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.FollowAdapter;
-import com.mobile.pid.pid.home.perfil.FollowItem;
 import com.mobile.pid.pid.objetos.Usuario;
 
 /**
@@ -27,7 +26,6 @@ public class SeguindoFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FollowAdapter followAdapter;
-    private FollowItem item;
 
 
     private DatabaseReference db;

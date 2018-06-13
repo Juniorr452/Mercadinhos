@@ -1,5 +1,7 @@
 package com.mobile.pid.pid.home.turmas;
 
+import android.support.v7.app.AlertDialog;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;

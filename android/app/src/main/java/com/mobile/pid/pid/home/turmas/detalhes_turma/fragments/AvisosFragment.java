@@ -17,12 +17,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
 import com.mobile.pid.pid.home.adapters.AvisosTurmaAdapter;
 import com.mobile.pid.pid.home.turmas.AvisoTurma;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 
 public class AvisosFragment extends Fragment
 {

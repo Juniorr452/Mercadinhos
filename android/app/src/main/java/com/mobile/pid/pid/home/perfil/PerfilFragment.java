@@ -72,7 +72,6 @@ public class PerfilFragment extends Fragment {
     private TextView count_following;
 
     private DatabaseReference userRef;
-    private DatabaseReference postRef;
     private DatabaseReference seguindoRef;
     private DatabaseReference seguidoresRef;
 
