@@ -23,6 +23,46 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
     let uid = request.query.uid;
 
     //let uid = "ECevzocmNxaERZq8KO3lwDiE79Y2";
+    //let uid = "AqL68A2DzQUQ78QHopQCbTS1mfQ2";
+
+    if(uid === undefined)
+        return response.send("ERRO: UID não informado");
+
+    let grafo = new Grafo(PROFUNDIDADE_MAX, userSeguindoRef);
+
+    let listaVertices = [];
+
+    grafo.lerGrafo(uid, 0).then(terminou => 
+    {
+        //grafo.imprimirAdjList();
+
+        grafo.dfs(uid);
+        //console.log("==============================");
+
+        //grafo.imprimirAdjList();
+
+        // Firebase não suporta o Object.values por causa da versão do Node que ele usa. Vou usar essa solução https://stackoverflow.com/questions/38748445/uncaught-typeerror-object-values-is-not-a-function-javascript
+        //let listaVertices = ordenarLista(Object.values(grafo.vertices));
+        let listaVertices = ordenarLista(Object.keys(grafo.vertices).map(chave => {
+            return grafo.vertices[chave];
+        }));
+
+        return pegarUsuarios(listaVertices);
+
+    }).then(lista => {
+        return response.send(lista);
+
+    }).catch(err => {
+        console.log(err);
+        response.send(err);
+    });
+});
+
+/*exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response) => {
+    let uid = request.query.uid;
+
+    //let uid = "ECevzocmNxaERZq8KO3lwDiE79Y2";
+    //let uid = "AqL68A2DzQUQ78QHopQCbTS1mfQ2";
 
     if(uid === undefined)
         return response.send("ERRO: UID não informado");
@@ -55,7 +95,7 @@ exports.getRecomendacoesUsuarios = functions.https.onRequest((request, response)
         console.log(err);
         response.send(err);
     });
-});
+});*/
 
 function ordenarLista(lista)
 {
