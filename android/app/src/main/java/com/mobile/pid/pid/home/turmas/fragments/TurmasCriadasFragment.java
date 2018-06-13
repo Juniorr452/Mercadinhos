@@ -155,7 +155,7 @@ public class TurmasCriadasFragment extends Fragment
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                //turmaAdapter.ordenar(pidSort.ordenarTurmaDia());
+                turmaAdapter.ordenar(Turma.compararPorNome);
                 //Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
                 break;
             default:

@@ -95,8 +95,14 @@ public class PidSort
         return parede;
     }
 
-    //TODO: Mudar mergesort
-    public static void mergeSort(List lista, List temp, int inicio, int fim, Comparator comparator) {
+    public static void mergeSort(List lista, Comparator comparator)
+    {
+        int tamanho = lista.size();
+
+        mergeSort(lista, new ArrayList(tamanho), 0, tamanho, comparator);
+    }
+
+    private static void mergeSort(List lista, List temp, int inicio, int fim, Comparator comparator) {
 
         if(inicio < fim)
         {
