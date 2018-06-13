@@ -16,7 +16,7 @@
             <item
                 android:id="@+id/ordenar_alfabetica"
                 android:enabled="true"
-                android:title="Ordenar por alfabeto"
+                android:title="Ordenar por nome"
                 android:icon="@drawable/baseline_sort_by_alpha_white_18"/>
         </menu>
     </item>
