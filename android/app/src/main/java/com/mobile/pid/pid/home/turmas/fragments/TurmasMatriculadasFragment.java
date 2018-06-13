@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +27,6 @@ import com.mobile.pid.pid.home.adapters.TurmaAdapter;
 import com.mobile.pid.pid.objetos.Turma;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -137,11 +135,8 @@ public class TurmasMatriculadasFragment extends Fragment
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                // turmaAdapter.ordenar(pidSort.ordenarTurmaAlfabeto());
-                PidSort.insertionSort(turmasMatriculadas, Turma.compararOrdemAlfabetica);
-
+                PidSort.insertionSort(turmasMatriculadas, Turma.compararPorNome);
                 turmaAdapter.notifyDataSetChanged();
-                // Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.ordenar_data:

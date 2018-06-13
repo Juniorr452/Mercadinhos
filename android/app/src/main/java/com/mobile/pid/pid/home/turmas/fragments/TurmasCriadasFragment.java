@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -146,11 +145,8 @@ public class TurmasCriadasFragment extends Fragment
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                //turmaAdapter.ordenar(pidSort.ordenarTurmaAlfabeto());
-                PidSort.insertionSort(turmasCriadas, Turma.compararOrdemAlfabetica);
-
+                PidSort.insertionSort(turmasCriadas, Turma.compararPorNome);
                 turmaAdapter.notifyDataSetChanged();
-                //Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.ordenar_data:

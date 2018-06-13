@@ -35,7 +35,7 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
     private Map<String, Boolean> alunosUid;
     private Map<String, Boolean> solicitacoes;
 
-    public static Comparator<Turma> compararOrdemAlfabetica = new Comparator<Turma>() {
+    public static Comparator<Turma> compararPorNome = new Comparator<Turma>() {
         @Override
         public int compare(Turma o1, Turma o2) {
             return o1.getNome().compareTo(o2.getNome());
