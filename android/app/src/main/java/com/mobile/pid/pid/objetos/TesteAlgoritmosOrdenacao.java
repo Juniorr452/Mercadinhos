@@ -2,7 +2,9 @@ package com.mobile.pid.pid.objetos;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 
+import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.PidSort;
 
 import java.util.ArrayList;
@@ -14,7 +16,9 @@ import java.util.concurrent.LinkedTransferQueue;
 
 public class TesteAlgoritmosOrdenacao
 {
-    private static int[] qtdTurmasTeste = {1, 5, 10, 100, 1000, 10000, 100000};
+    private static int[] qtdTurmasTeste = {2, 5, 10, 50, 100, 500, 1000};
+    static long tInicial, tFinal;
+    static final int QTD_ALGORITMOS = 3;
 
     public static void testarInsertQuick(Context c)
     {
@@ -26,21 +30,34 @@ public class TesteAlgoritmosOrdenacao
 
             List<Turma> turmasInsert = gerarTurmas(qtdTurmas);
             List<Turma> turmasQuick  = new ArrayList<>(turmasInsert);
+            List<Turma> turmasSelect = new ArrayList<>(turmasInsert);
 
-            long tempoInsertInicial = System.nanoTime();
+            tInicial = System.nanoTime();
             PidSort.insertionSort(turmasInsert, Turma.compararPorNome);
-            long tempoInsertFinal   = System.nanoTime();
+            tFinal   = System.nanoTime();
 
-            resultados.add("Insert Sort: " + (tempoInsertFinal - tempoInsertInicial) + " ns\n");
+            adicionarResultado(resultados, "InsertionSort");
 
-            long tempoQuickInicial = System.nanoTime();
+            tInicial = System.nanoTime();
             PidSort.quicksort(turmasQuick, Turma.compararPorNome);
-            long tempoQuickFinal   = System.nanoTime();
+            tFinal   = System.nanoTime();
 
-            resultados.add("Quick Sort: " + (tempoQuickFinal - tempoQuickFinal) + " ns\n");
+            adicionarResultado(resultados, "QuickSort");
+
+            tInicial = System.nanoTime();
+            PidSort.selectionSort(turmasSelect, Turma.compararPorNome);
+            tFinal   = System.nanoTime();
+
+            adicionarResultado(resultados, "SelectionSort");
         }
 
+        Log.e("Teste", "asdasd");
+
         apresentarResultados(c, resultados);
+    }
+
+    private static void adicionarResultado(Queue resultados, String nomeAlg) {
+        resultados.add(nomeAlg + ": " + (tFinal - tInicial) + " ns\n");
     }
 
     // Método para gerar uma determinada qtd de turmas
@@ -83,16 +100,21 @@ public class TesteAlgoritmosOrdenacao
 
         for(int i = 0; i < qtdTurmasTeste.length; i++)
         {
-            sb.append("Resultados para " + qtdTurmasTeste[i] + "turmas:\n");
+            sb.append("Resultados para " + qtdTurmasTeste[i] + " turmas:\n");
 
-            sb.append(resultados.remove());
-            sb.append(resultados.remove());
+            for(int j = 0; j < QTD_ALGORITMOS; j++)
+                sb.append(resultados.remove());
+
             sb.append("\n");
         }
+
+        Log.w("Teste da ordenação", sb.toString());
 
         new AlertDialog.Builder(c)
             .setTitle("Resultados")
             .setMessage(sb.toString())
+            .setPositiveButton(R.string.Ok, null)
+            .create()
             .show();
     }
 }

@@ -28,6 +28,7 @@ import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.PidSort;
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
 import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
+import com.mobile.pid.pid.objetos.TesteAlgoritmosOrdenacao;
 import com.mobile.pid.pid.objetos.Turma;
 
 import java.util.ArrayList;
@@ -145,7 +146,8 @@ public class TurmasCriadasFragment extends Fragment
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                PidSort.insertionSort(turmasCriadas, Turma.compararPorNome);
+                PidSort.quicksort(turmasCriadas, Turma.compararPorNome);
+
                 turmaAdapter.notifyDataSetChanged();
                 break;
 
@@ -164,7 +166,6 @@ public class TurmasCriadasFragment extends Fragment
         conteudo.setVisibility(View.VISIBLE);
 
         return true;
-
     }
 
     @Override

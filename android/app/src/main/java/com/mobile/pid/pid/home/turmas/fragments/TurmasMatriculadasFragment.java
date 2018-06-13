@@ -135,7 +135,7 @@ public class TurmasMatriculadasFragment extends Fragment
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                PidSort.insertionSort(turmasMatriculadas, Turma.compararPorNome);
+                PidSort.quicksort(turmasMatriculadas, Turma.compararPorNome);
                 turmaAdapter.notifyDataSetChanged();
                 break;
 

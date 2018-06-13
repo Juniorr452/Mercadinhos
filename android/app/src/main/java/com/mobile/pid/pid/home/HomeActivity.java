@@ -26,6 +26,7 @@ import com.mobile.pid.pid.home.buscar.BuscarFragment;
 import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 import com.mobile.pid.pid.home.turmas.TurmasFragment;
+import com.mobile.pid.pid.objetos.TesteAlgoritmosOrdenacao;
 import com.mobile.pid.pid.objetos.Usuario;
 
 public class HomeActivity extends AppCompatActivity
@@ -108,6 +109,13 @@ public class HomeActivity extends AppCompatActivity
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //TesteAlgoritmosOrdenacao.testarInsertQuick(this);
+    }
+
     private void setFragment(Fragment fragment)
     {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -134,7 +142,6 @@ public class HomeActivity extends AppCompatActivity
                     }
                 })
                 .show();
-
     }
 }
 
