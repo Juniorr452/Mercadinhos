@@ -77,7 +77,7 @@
                             app:cardCornerRadius="55dp"
                             app:cardElevation="7dp"
                             android:layout_gravity="center"
-                            android:backgroundTint="@color/colorAccent"
+                            android:backgroundTint="@color/gray_font"
                             app:cardPreventCornerOverlap="true">
 
                             <ImageView

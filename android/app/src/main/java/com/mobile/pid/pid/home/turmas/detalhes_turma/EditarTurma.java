@@ -3,7 +3,6 @@ package com.mobile.pid.pid.home.turmas.detalhes_turma;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,11 +12,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 
 import static android.support.v7.app.AlertDialog.*;
 

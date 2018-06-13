@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,8 +25,8 @@ import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.Feed;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
 import com.mobile.pid.pid.home.turmas.AvisoTurma;
-import com.mobile.pid.pid.home.turmas.Turma;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Turma;
+import com.mobile.pid.pid.objetos.Usuario;
 
 public class Dialogs
 {
@@ -36,7 +35,7 @@ public class Dialogs
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_criar_aviso_turma, null);
         final EditText etAviso = view.findViewById(R.id.et_aviso);
 
-        final AlertDialog dialog = new AlertDialog.Builder(context)
+        final AlertDialog dialog = new AlertDialog.Builder(context, R.style.DialogTheme)
             .setView(view)
             .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener()
             {
@@ -86,7 +85,7 @@ public class Dialogs
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_perfil_usuario, null);
         final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        final AlertDialog.Builder mBuilderUsuario = new AlertDialog.Builder(context);
+        final AlertDialog.Builder mBuilderUsuario = new AlertDialog.Builder(context, R.style.DialogTheme);
         mBuilderUsuario.setView(view);
 
         final Button seguir = view.findViewById(R.id.seguir);
@@ -172,7 +171,7 @@ public class Dialogs
                 if(seguir.getText().toString().equals(context.getText(R.string.following))) {
                     dialogUsuario.dismiss();
 
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(context, R.style.DialogTheme);
                     mBuilder.setTitle(R.string.confirmacao)
                             .setMessage(context.getText(R.string.unfollow_message) + " "+ u.getNome() + "?")
                             .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
@@ -215,9 +214,12 @@ public class Dialogs
         foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, UsuarioPerfilActivity.class);
-                i.putExtra("usuario", u.getUid());
-                context.startActivity(i);
+                if(!u.getUid().equals(usuario)) {
+                    Intent i = new Intent(context, UsuarioPerfilActivity.class);
+                    i.putExtra("usuario", u.getUid());
+                    context.startActivity(i);
+                }
+
             }
         });
     }
@@ -227,7 +229,7 @@ public class Dialogs
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_detalhe_turma, null);
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        final AlertDialog.Builder mBuilderTurma = new AlertDialog.Builder(context);
+        final AlertDialog.Builder mBuilderTurma = new AlertDialog.Builder(context, R.style.DialogTheme);
         mBuilderTurma.setView(view);
 
         final Button solicitar = view.findViewById(R.id.solicitar);
@@ -261,7 +263,7 @@ public class Dialogs
                     // Se a turma não tiver PIN
                     if(t.getPin().equals(""))
                     {
-                        new android.support.v7.app.AlertDialog.Builder(context)
+                        new android.support.v7.app.AlertDialog.Builder(context, R.style.DialogTheme)
                             .setTitle(R.string.warning)
                             .setMessage(R.string.deseja_solicitacao)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
@@ -272,7 +274,7 @@ public class Dialogs
                                     enviarSolicitacaoTurma(t, uid);
                                     desabilitarBotaoSolicitar(solicitar);
 
-                                    new android.support.v7.app.AlertDialog.Builder(context)
+                                    new android.support.v7.app.AlertDialog.Builder(context, R.style.DialogTheme)
                                             .setMessage(R.string.solicitacao_sucesso)
                                             .setPositiveButton(R.string.Ok, null)
                                             .show();
@@ -288,7 +290,7 @@ public class Dialogs
                         final View v         = layoutInflater.inflate(R.layout.dialog_pin, null);
                         final EditText pinEt = v.findViewById(R.id.dialog_pin);
 
-                        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
+                        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context, R.style.DialogTheme)
                                 .setView(v)
                                 .setPositiveButton(R.string.Ok, null)
                                 .setNegativeButton(R.string.cancel, null)
@@ -303,7 +305,7 @@ public class Dialogs
                             {
                                 String pin = pinEt.getText().toString();
 
-                                android.support.v7.app.AlertDialog.Builder alerta = new android.support.v7.app.AlertDialog.Builder(context)
+                                android.support.v7.app.AlertDialog.Builder alerta = new android.support.v7.app.AlertDialog.Builder(context, R.style.DialogTheme)
                                         .setTitle(R.string.warning)
                                         .setPositiveButton(R.string.Ok, null);
 
@@ -360,4 +362,5 @@ public class Dialogs
         solicitar.setClickable(false);
         solicitar.setTextColor(context.getResources().getColor(R.color.gray_font));
     }
+
 }

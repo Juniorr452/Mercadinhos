@@ -10,11 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.SearchView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +26,7 @@ import com.mobile.pid.pid.home.buscar.BuscarFragment;
 import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 import com.mobile.pid.pid.home.turmas.TurmasFragment;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Usuario;
 
 public class HomeActivity extends AppCompatActivity
 {

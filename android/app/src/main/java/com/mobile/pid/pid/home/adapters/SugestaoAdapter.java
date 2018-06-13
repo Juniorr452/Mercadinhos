@@ -7,15 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
-import com.mobile.pid.pid.home.turmas.Turma;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,7 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
     @NonNull
     @Override
     public SugestaoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_sugestao_buscar, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_sugestao, parent, false);
 
         return new SugestaoHolder(view);
     }
@@ -44,6 +42,7 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
             Usuario user = (Usuario) sugestoes.get(position);
             holder.nome.setText(user.getNome());
+            holder.seguidores.setText(String.valueOf(user.getPontuacao()));
             Glide.with(holder.foto).load(user.getFotoUrl()).into(holder.foto);
 
     }
@@ -67,14 +66,14 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
 
         TextView nome;
         ImageView foto;
-
-        String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        TextView seguidores;
 
         public SugestaoHolder(View itemView) {
             super(itemView);
 
             nome = itemView.findViewById(R.id.nome);
             foto = itemView.findViewById(R.id.foto);
+            seguidores = itemView.findViewById(R.id.seguidoresComum);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -26,7 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.ChatsAdapter;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.Chat;
 
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public class ChatsFragment extends Fragment
                     }
                 };
 
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(getContext(), R.style.DialogTheme)
                         .setView(d)
                         .setPositiveButton("Criar", criarConta)
                         .setNegativeButton(R.string.cancel, null)

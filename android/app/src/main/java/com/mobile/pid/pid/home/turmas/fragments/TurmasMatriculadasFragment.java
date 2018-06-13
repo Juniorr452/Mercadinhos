@@ -1,29 +1,31 @@
 package com.mobile.pid.pid.home.turmas.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.home.PidSort;
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
-import com.mobile.pid.pid.home.turmas.NovaTurmaActivity;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +87,6 @@ public class TurmasMatriculadasFragment extends Fragment
                                         t.setId(dataSnapshotTurma.getKey());
 
                                         turmaAdapter.add(t);
-                                        turmaAdapter.notifyDataSetChanged();
                                     }
 
                                     @Override
@@ -113,6 +114,44 @@ public class TurmasMatriculadasFragment extends Fragment
 
             }
         };
+
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_ordenar_turmas, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        PidSort pidSort = new PidSort(getContext(), turmaAdapter.getLista());
+
+        switch (item.getItemId()) {
+            case R.id.ordenar_alfabetica:
+                progressBar.setVisibility(View.VISIBLE);
+                conteudo.setVisibility(View.GONE);
+                //turmaAdapter.ordenar(pidSort.ordenarTurmaAlfabeto());
+                Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.ordenar_data:
+                progressBar.setVisibility(View.VISIBLE);
+                conteudo.setVisibility(View.GONE);
+                turmaAdapter.ordenar(pidSort.ordenarTurmaDia());
+                break;
+            default:
+                return false;
+        }
+
+        progressBar.setVisibility(View.GONE);
+        conteudo.setVisibility(View.VISIBLE);
+
+        return true;
+
     }
 
     @Override

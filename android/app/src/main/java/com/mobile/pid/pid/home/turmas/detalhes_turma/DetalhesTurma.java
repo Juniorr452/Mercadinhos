@@ -23,29 +23,32 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.AvisosFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.ChatsFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.MembrosFragment;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.fragments.SolicitacoesFragment;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Usuario;
 
 public class DetalhesTurma extends AppCompatActivity
 {
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
-    Turma     turma;;
-    Toolbar   toolbar_detalhes;
-    ImageView capa;
-    TextView  nomeTurma;
-    ImageView editarTurma;
-    ImageView imgProfessor;
+    private Turma     turma;;
+    private Toolbar   toolbar_detalhes;
+    private ImageView capa;
+    private TextView  nomeTurma;
+    private ImageView editarTurma;
+    private ImageView imgProfessor;
 
-    TextView tvQtdAlunos;
-    TextView tvAlunos;
+    private TextView tvQtdAlunos;
+    private TextView tvAlunos;
 
     private int USUARIO;
+
+    private ValueEventListener profListener;
+    private DatabaseReference profRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,7 +56,7 @@ public class DetalhesTurma extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_turma);
 
-        DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference().child("usuarios");
+
 
         PagerAdapter detalhesPageAdapter  = new DetalheTurmasPageAdapter(this.getSupportFragmentManager());
         ViewPager detalhesViewPager       = findViewById(R.id.viewpager_turma);
@@ -66,6 +69,8 @@ public class DetalhesTurma extends AppCompatActivity
         // Pegar os dados
         turma = (Turma) i.getSerializableExtra("turma");
         USUARIO = (int) i.getExtras().get("usuario");
+
+        profRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(turma.getProfessorUid());
 
         switch (USUARIO) {
             case PROFESSOR:
@@ -94,10 +99,9 @@ public class DetalhesTurma extends AppCompatActivity
 
         Glide.with(this).load(turma.getCapaUrl()).into(capa);
 
-        usuariosRef.child(turma.getProfessorUid()).addValueEventListener(new ValueEventListener() {
+        profListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 Usuario professor = dataSnapshot.getValue(Usuario.class);
                 Glide.with(getApplicationContext()).load(professor.getFotoUrl()).into(imgProfessor);
             }
@@ -106,7 +110,7 @@ public class DetalhesTurma extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
 
         nomeTurma.setText(turma.getNome());
 
@@ -120,6 +124,20 @@ public class DetalhesTurma extends AppCompatActivity
         detalhesViewPager.setOffscreenPageLimit(4);
 
         turmasTabLayout.setupWithViewPager(detalhesViewPager);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        profRef.addValueEventListener(profListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        profRef.removeEventListener(profListener);
     }
 
     public void irParaEditarTurma(View v){
@@ -203,4 +221,5 @@ public class DetalhesTurma extends AppCompatActivity
             }
         }
     }
+
 }

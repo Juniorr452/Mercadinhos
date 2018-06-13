@@ -1,7 +1,6 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,10 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
-import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
-import com.mobile.pid.pid.home.turmas.Turma;
-import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Turma;
+import com.mobile.pid.pid.objetos.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

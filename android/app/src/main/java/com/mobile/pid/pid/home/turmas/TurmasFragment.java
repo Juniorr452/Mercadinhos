@@ -2,18 +2,21 @@ package com.mobile.pid.pid.home.turmas;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
 
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.turmas.fragments.TurmasCriadasFragment;
@@ -24,6 +27,8 @@ import com.mobile.pid.pid.home.turmas.fragments.TurmasMatriculadasFragment;
  */
 public class TurmasFragment extends Fragment
 {
+    Toolbar toolbarTurmas;
+
     public TurmasFragment(){
         // Required empty public constructor
     }
@@ -37,12 +42,20 @@ public class TurmasFragment extends Fragment
         PagerAdapter turmasPageAdapter    = new TurmasPageAdapter(getChildFragmentManager());
         ViewPager    turmasViewPager      = v.findViewById(R.id.turmas_view_pager);
         TabLayout    turmasTabLayout      = v.findViewById(R.id.tab_turmas);
+        toolbarTurmas        = v.findViewById(R.id.toolbar_turmas);
 
         turmasViewPager.setAdapter(turmasPageAdapter);
         turmasTabLayout.setupWithViewPager(turmasViewPager);
 
+        if(getActivity() instanceof AppCompatActivity) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbarTurmas);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+
         return v;
     }
+
 
     // Tabs and ViewPager - https://www.youtube.com/watch?v=zQekzaAgIlQ
     private class TurmasPageAdapter extends FragmentPagerAdapter

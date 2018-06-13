@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
 import android.support.v7.widget.Toolbar;
@@ -35,12 +36,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.BuscarAdapter;
 import com.mobile.pid.pid.home.adapters.SugestaoAdapter;
-import com.mobile.pid.pid.home.adapters.TurmaAdapter;
-import com.mobile.pid.pid.home.turmas.Turma;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Turma;
+import com.mobile.pid.pid.objetos.Usuario;
 import com.mobile.pid.pid.login.UsuarioService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -70,7 +69,7 @@ public class BuscarFragment extends Fragment
     private ProgressBar     progressBar;
     private ScrollView      sv_usuarios_sugeridos;
     private RecyclerView    recyclerView_usuarios;
-    private RecyclerView    recycle_busca;
+    private RecyclerView recycler_busca;
     private Toolbar         toolbar;
     private RelativeLayout  sugestoes;
     private FrameLayout     busca;
@@ -113,25 +112,25 @@ public class BuscarFragment extends Fragment
 
         // Recycler View
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
-        recycle_busca         = v.findViewById(R.id.recycle_busca);
-        //searchView = v.findViewById(R.id.search_view);
+        recycler_busca = v.findViewById(R.id.recycle_busca);
 
-        //LinearLayoutManager llm2 = new LinearLayoutManager(getActivity());
-        //llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
+
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         
-        recyclerView_usuarios.setLayoutManager(gridLayoutManager);
+        recyclerView_usuarios.setLayoutManager(staggeredGridLayoutManager);
 
         recyclerView_usuarios.setHasFixedSize(true);
-        recycle_busca.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler_busca.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         toolbar = v.findViewById(R.id.toolbar_buscar);
         sugestoes = v.findViewById(R.id.sugestoes);
         busca = v.findViewById(R.id.busca);
 
         recyclerView_usuarios.setAdapter(sugestaoAdapter_usuarios);
-        recycle_busca.setAdapter(buscarAdapter);
+        recycler_busca.setAdapter(buscarAdapter);
 
         if(getActivity() instanceof AppCompatActivity) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -205,9 +204,6 @@ public class BuscarFragment extends Fragment
             @Override
             public boolean onQueryTextSubmit(final String query)
             {
-
-                //TODO TA RETORNANDO SOMENTE AS TURMAS DUPLICADAS
-
                 FirebaseDatabase.getInstance().getReference("usuarios").orderByChild("nome")
                     .addListenerForSingleValueEvent(new ValueEventListener()
                     {

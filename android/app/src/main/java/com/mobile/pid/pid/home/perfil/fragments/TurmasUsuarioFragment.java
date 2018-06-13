@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.TurmaAdapter;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 
 import java.util.ArrayList;
 import java.util.List;

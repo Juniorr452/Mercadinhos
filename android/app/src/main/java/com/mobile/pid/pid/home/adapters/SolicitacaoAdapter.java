@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,11 +14,10 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.turmas.Turma;
-import com.mobile.pid.pid.login.Usuario;
+import com.mobile.pid.pid.objetos.Turma;
+import com.mobile.pid.pid.objetos.Usuario;
 
 import java.util.List;
-import java.util.Map;
 
 public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.SolicitacaoViewHolder>
 {

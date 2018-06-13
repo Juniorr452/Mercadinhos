@@ -6,7 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
-import com.mobile.pid.pid.home.feed.Post;
+import com.mobile.pid.pid.objetos.Post;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;

@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.turmas.Turma;
+import com.mobile.pid.pid.objetos.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.Chat;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.ChatActivity;
-import com.mobile.pid.pid.login.Usuario;
 
 import java.util.List;
 
