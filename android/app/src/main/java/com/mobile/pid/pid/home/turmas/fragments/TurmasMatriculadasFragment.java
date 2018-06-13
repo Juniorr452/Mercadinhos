@@ -28,6 +28,7 @@ import com.mobile.pid.pid.home.adapters.TurmaAdapter;
 import com.mobile.pid.pid.objetos.Turma;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -126,22 +127,28 @@ public class TurmasMatriculadasFragment extends Fragment
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // TODO: Sort Turmas matriculadas
 
-        PidSort pidSort = new PidSort(getContext(), turmaAdapter.getLista());
-
-        switch (item.getItemId()) {
+        switch (item.getItemId())
+        {
             case R.id.ordenar_alfabetica:
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
-                //turmaAdapter.ordenar(pidSort.ordenarTurmaAlfabeto());
-                Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
+
+                // turmaAdapter.ordenar(pidSort.ordenarTurmaAlfabeto());
+                PidSort.insertionSort(turmasMatriculadas, Turma.compararOrdemAlfabetica);
+
+                turmaAdapter.notifyDataSetChanged();
+                // Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.ordenar_data:
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
-                turmaAdapter.ordenar(pidSort.ordenarTurmaDia());
+
+                //turmaAdapter.ordenar(pidSort.ordenarTurmaDia());
                 break;
             default:
                 return false;

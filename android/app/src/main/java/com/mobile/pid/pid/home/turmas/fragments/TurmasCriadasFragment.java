@@ -136,21 +136,27 @@ public class TurmasCriadasFragment extends Fragment
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // TODO: Sort Turmas criadas
 
-        PidSort pidSort = new PidSort(getContext(), turmaAdapter.getLista());
-
-        switch (item.getItemId()) {
+        switch (item.getItemId())
+        {
             case R.id.ordenar_alfabetica:
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
+
                 //turmaAdapter.ordenar(pidSort.ordenarTurmaAlfabeto());
+                PidSort.insertionSort(turmasCriadas, Turma.compararOrdemAlfabetica);
+
+                turmaAdapter.notifyDataSetChanged();
                 //Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.ordenar_data:
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
+
                 //turmaAdapter.ordenar(pidSort.ordenarTurmaDia());
                 //Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
                 break;

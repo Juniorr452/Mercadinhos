@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,12 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
     private Map<String, Boolean> alunosUid;
     private Map<String, Boolean> solicitacoes;
 
+    public static Comparator<Turma> compararOrdemAlfabetica = new Comparator<Turma>() {
+        @Override
+        public int compare(Turma o1, Turma o2) {
+            return o1.getNome().compareTo(o2.getNome());
+        }
+    };
 
     public Turma() {}
 
