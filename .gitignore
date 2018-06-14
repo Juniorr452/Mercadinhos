@@ -58,3 +58,7 @@ android/google-services.json
 android/freeline.py
 android/freeline/
 android/freeline_project_description.json
+
+android/.idea/misc.xml
+android/.idea/caches/build_file_checksums.ser
+android/app/app.iml
