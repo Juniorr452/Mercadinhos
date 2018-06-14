@@ -37,7 +37,7 @@ import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguindoFragment;
 import com.mobile.pid.pid.home.perfil.fragments.TurmasUsuarioFragment;
 import com.mobile.pid.pid.login.RedesSociaisActivity;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 /**
  * A simple {@link Fragment} subclass.

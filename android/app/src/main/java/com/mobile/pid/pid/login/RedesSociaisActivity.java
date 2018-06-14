@@ -38,7 +38,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 import java.util.Arrays;
 

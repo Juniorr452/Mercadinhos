@@ -28,7 +28,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.PostAdapter;
-import com.mobile.pid.pid.objetos.Post;
+import com.mobile.pid.pid.classes_e_interfaces.Post;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -23,7 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.objetos.Turma;
+import com.mobile.pid.pid.classes_e_interfaces.Turma;
 
 import java.util.Calendar;
 import java.util.HashMap;

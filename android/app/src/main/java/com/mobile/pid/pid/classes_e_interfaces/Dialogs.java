@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.home;
+package com.mobile.pid.pid.classes_e_interfaces;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,9 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.Feed;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
-import com.mobile.pid.pid.home.turmas.AvisoTurma;
-import com.mobile.pid.pid.objetos.Turma;
-import com.mobile.pid.pid.objetos.Usuario;
 
 public class Dialogs
 {

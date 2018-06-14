@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.objetos;
+package com.mobile.pid.pid.classes_e_interfaces;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Usuario implements Parcelable
 {
-    private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/usuarios%2Ffoto_padrao.png?alt=media&token=b7e19e92-04fa-49ba-a4bd-8b8cfd8c79df";
+    private static final String FOTO_PADRAO_URL = "https://firebasestorage.googleapis.com/v0/b/pi-ii-2920c.appspot.com/o/usuarios%2Ffoto_padrao.png?alt=media&token=dd44abf2-63b9-4a14-ba8a-bda7b8687710";
 
     private String uid;
 

@@ -18,10 +18,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.Dialogs;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.home.adapters.AvisosTurmaAdapter;
-import com.mobile.pid.pid.home.turmas.AvisoTurma;
-import com.mobile.pid.pid.objetos.Turma;
+import com.mobile.pid.pid.classes_e_interfaces.AvisoTurma;
+import com.mobile.pid.pid.classes_e_interfaces.Turma;
 
 public class AvisosFragment extends Fragment
 {

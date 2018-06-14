@@ -10,7 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 /**
  * Created by junio on 27/02/2018.

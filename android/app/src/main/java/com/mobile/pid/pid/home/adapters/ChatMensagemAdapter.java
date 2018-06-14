@@ -1,12 +1,9 @@
 package com.mobile.pid.pid.home.adapters;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.ChatMensagem;
+import com.mobile.pid.pid.classes_e_interfaces.ChatMensagem;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapter.ChatMensagemViewHolder>
 {

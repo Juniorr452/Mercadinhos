@@ -26,8 +26,7 @@ import com.mobile.pid.pid.home.buscar.BuscarFragment;
 import com.mobile.pid.pid.home.feed.FeedFragment;
 import com.mobile.pid.pid.home.perfil.PerfilFragment;
 import com.mobile.pid.pid.home.turmas.TurmasFragment;
-import com.mobile.pid.pid.objetos.TesteAlgoritmosOrdenacao;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 public class HomeActivity extends AppCompatActivity
 {

@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.home.turmas.detalhes_turma.chat;
+package com.mobile.pid.pid.classes_e_interfaces;
 
 public class ChatMensagem
 {

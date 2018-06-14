@@ -23,10 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.PidSort;
-import com.mobile.pid.pid.objetos.Turma;
+import com.mobile.pid.pid.classes_e_interfaces.PidSort;
+import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 import java.util.Comparator;
 import java.util.List;

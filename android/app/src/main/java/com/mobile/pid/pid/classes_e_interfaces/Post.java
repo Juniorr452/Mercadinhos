@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.objetos;
+package com.mobile.pid.pid.classes_e_interfaces;
 
 import android.os.Parcel;
 import android.os.Parcelable;

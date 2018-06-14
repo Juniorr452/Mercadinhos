@@ -1,4 +1,4 @@
-package com.mobile.pid.pid.home.turmas.detalhes_turma.chat;
+package com.mobile.pid.pid.classes_e_interfaces;
 
 import android.os.Parcel;
 import android.os.Parcelable;

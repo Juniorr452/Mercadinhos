@@ -17,9 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.FollowAdapter;
-import com.mobile.pid.pid.objetos.Usuario;
-
-import java.util.List;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 /**
  * A simple {@link Fragment} subclass.

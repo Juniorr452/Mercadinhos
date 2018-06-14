@@ -19,8 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.SolicitacaoAdapter;
-import com.mobile.pid.pid.objetos.Turma;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Turma;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

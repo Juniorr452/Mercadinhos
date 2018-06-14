@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.objetos.Turma;
-import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.Chat;
+import com.mobile.pid.pid.classes_e_interfaces.Turma;
+import com.mobile.pid.pid.classes_e_interfaces.Chat;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.ChatActivity;
 
 import java.util.List;

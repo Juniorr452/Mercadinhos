@@ -1,6 +1,4 @@
-package com.mobile.pid.pid.login;
-
-import com.mobile.pid.pid.objetos.Usuario;
+package com.mobile.pid.pid.classes_e_interfaces;
 
 import java.util.List;
 

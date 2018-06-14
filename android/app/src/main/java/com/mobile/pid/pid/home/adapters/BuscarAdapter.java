@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.Dialogs;
-import com.mobile.pid.pid.objetos.Turma;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
+import com.mobile.pid.pid.classes_e_interfaces.Turma;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

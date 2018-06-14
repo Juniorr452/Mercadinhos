@@ -10,10 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.Dialogs;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.turmas.AvisoTurma;
-
-import org.w3c.dom.Text;
+import com.mobile.pid.pid.classes_e_interfaces.AvisoTurma;
 
 import java.util.ArrayList;
 import java.util.List;

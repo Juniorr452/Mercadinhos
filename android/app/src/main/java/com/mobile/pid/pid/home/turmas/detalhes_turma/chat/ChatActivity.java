@@ -20,9 +20,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Chat;
+import com.mobile.pid.pid.classes_e_interfaces.ChatMensagem;
 import com.mobile.pid.pid.home.adapters.ChatMensagemAdapter;
-import com.mobile.pid.pid.objetos.Turma;
-import com.mobile.pid.pid.objetos.Usuario;
+import com.mobile.pid.pid.classes_e_interfaces.Turma;
+import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 import java.util.ArrayList;
 
@@ -32,7 +34,7 @@ public class ChatActivity extends AppCompatActivity
     private static final int ALUNO = 1;
 
     private Turma        turma;
-    private Chat         chat;
+    private Chat chat;
     private FirebaseUser user;
     private String       fotoPerfil;
     private boolean      professor;

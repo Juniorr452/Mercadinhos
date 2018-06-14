@@ -1,7 +1,5 @@
-package com.mobile.pid.pid.objetos;
+package com.mobile.pid.pid.classes_e_interfaces;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.google.firebase.database.DatabaseReference;
@@ -9,10 +7,8 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

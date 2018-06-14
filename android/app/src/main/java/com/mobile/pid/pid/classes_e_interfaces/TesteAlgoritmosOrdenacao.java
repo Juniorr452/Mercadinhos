@@ -1,18 +1,16 @@
-package com.mobile.pid.pid.objetos;
+package com.mobile.pid.pid.classes_e_interfaces;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
 import com.mobile.pid.pid.R;
-import com.mobile.pid.pid.home.PidSort;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.LinkedTransferQueue;
 
 public class TesteAlgoritmosOrdenacao
 {
