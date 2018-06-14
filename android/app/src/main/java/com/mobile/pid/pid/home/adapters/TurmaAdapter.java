@@ -108,17 +108,11 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                         .setMessage("Deseja realmente excluir a turma?")
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i)
-                            {
-
-                            }
-                        })
-                        .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 t.excluir();
                             }
                         })
+                        .setNegativeButton("Não", null)
                         .show();
                 }
             });
