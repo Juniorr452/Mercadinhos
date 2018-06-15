@@ -99,12 +99,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             {
                 Usuario user = new Usuario(p.getUserId(), p.getNomeUser(), null, p.getPhotoUrl());
 
-                if(p.getUserId().equals(usuarioLogado)) 
-                {
-                    //TODO ENVIAR PARA O PERFIL FRAGMENT
-                    new Dialogs().dialogUsuario(user, context);
-                } else
-                    new Dialogs().dialogUsuario(user, context);
+                new Dialogs().dialogUsuario(user, context);
 
             }
         });

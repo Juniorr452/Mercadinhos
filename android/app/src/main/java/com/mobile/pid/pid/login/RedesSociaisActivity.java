@@ -1,6 +1,7 @@
 package com.mobile.pid.pid.login;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -70,7 +71,7 @@ public class RedesSociaisActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_redes_sociais);
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.DialogTheme);
         progressDialog.setTitle(getString(R.string.entrando));
         progressDialog.setMessage(getString(R.string.fazendo_login));
 
@@ -165,7 +166,7 @@ public class RedesSociaisActivity extends AppCompatActivity
 
     public void dialogCriarConta(View v)
     {
-        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this);
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(RedesSociaisActivity.this, R.style.DialogTheme);
         View mView = getLayoutInflater().inflate(R.layout.dialog_criar_conta, null);
 
         final EditText dialog_username         = mView.findViewById(R.id.dialog_username);
@@ -179,7 +180,7 @@ public class RedesSociaisActivity extends AppCompatActivity
 
         mBuilder.setNegativeButton(R.string.cancel, null);
 
-        AlertDialog dialog = mBuilder.create();
+        final AlertDialog dialog = mBuilder.create();
         dialog.show();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
@@ -234,10 +235,17 @@ public class RedesSociaisActivity extends AppCompatActivity
                 catch(NoSuchFieldException e)
                 {
                     progressDialog.dismiss();
+                    dialog.dismiss();
 
-                    new AlertDialog.Builder(RedesSociaisActivity.this)
+                    new AlertDialog.Builder(RedesSociaisActivity.this, R.style.DialogTheme)
                             .setTitle(R.string.warning)
                             .setMessage(e.getMessage())
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface d, int which) {
+                                    dialog.show();
+                                }
+                            })
                             .show();
                 }
             }

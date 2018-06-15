@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.home;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -117,23 +118,32 @@ public class HomeActivity extends AppCompatActivity
 
     private void checarUsuarioNovo(Usuario user)
     {
-        if (user.getSexo() == null)
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.atualizar_perfil)
-                .setMessage(R.string.message_update_profile)
-                .setPositiveButton(R.string.letsgo, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivity(new Intent(HomeActivity.this, AtualizarPerfilActivity.class));
-                    }
-                })
-                .setNegativeButton(R.string.notnow, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                })
-                .show();
+        AlertDialog.Builder builder;
+
+        if (user.getSexo() == null) {
+            builder = new AlertDialog.Builder(this, R.style.DialogTheme);
+            builder.setTitle(R.string.atualizar_perfil)
+                    .setMessage(R.string.message_update_profile)
+                    .setPositiveButton(R.string.letsgo, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(HomeActivity.this, AtualizarPerfilActivity.class));
+                        }
+                    })
+                    .setNegativeButton(R.string.notnow, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.gray_font));
+        }
+
 
     }
 }

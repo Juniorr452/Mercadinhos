@@ -193,7 +193,7 @@ public class FeedFragment extends Fragment {
             public void onClick(View view)
             {
                 Post post = new Post(null, usuario.getUid(), edit_post.getText().toString());
-                Feed.criarPost(post);
+                FeedFunctions.criarPost(post);
                 dialog.dismiss();
             }
         });
