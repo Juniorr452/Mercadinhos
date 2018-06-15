@@ -62,39 +62,11 @@ public class PidSort
     {
         if(inicio < fim)
         {
-            int pivoIndice = intercalar(lista, inicio, fim, comparator);
+            int pivoIndice = particionar(lista, inicio, fim, comparator);
             quickSortRecursivo(lista, inicio, pivoIndice - 1, comparator);
             quickSortRecursivo(lista, pivoIndice + 1, fim, comparator);
         }
     }
-
-    // https://www.youtube.com/watch?v=MVZTDkucIro
-    private static int intercalar(List lista, int inicio, int fim, Comparator comparator)
-    {
-        int i = inicio, j = fim;
-
-        while(i < j)
-        {
-            while(i < fim && comparator.compare(lista.get(i), lista.get(inicio)) <= 0) i++;
-            while(j > inicio && comparator.compare(lista.get(j), lista.get(inicio)) >= 0) j--;
-
-            if(i < j)
-                trocar(lista, i, j);
-        }
-
-        trocar(lista, inicio, j);
-
-        return j;
-    }
-
-    /*private static int mediano(List lista, int i, int j, int k, Comparator comparator)
-    {
-        Object[] array = {lista.get(i), lista.get(j), lista.get(k)};
-
-        selectionSort(lista, comparator);
-
-        if(array[1] == lista)
-    }*/
 
     private static int particionar(List lista, int inicio, int fim, Comparator comparator)
     {
@@ -108,7 +80,7 @@ public class PidSort
 
             if(comparator.compare(selecionado, pivo) <= 0)
             {
-                trocar(lista, i, fim);
+                trocar(lista, i, parede);
                 parede++;
             }
         }
@@ -119,15 +91,9 @@ public class PidSort
         return parede;
     }
 
-    public static List mergeSort(List lista, Comparator comparator)
+    public static void mergeSort(List lista, Object[] temp, Comparator comparator)
     {
-        int tamanho = lista.size();
-
-        Object[] temp = new Object[tamanho];
-
-        mergeSort(lista, temp, 0, tamanho - 1, comparator);
-
-        return lista;
+        mergeSort(lista, temp, 0, lista.size() - 1, comparator);
     }
 
     public static void mergeSort(List lista, Object[] temp, int inicio, int fim, Comparator comparator)

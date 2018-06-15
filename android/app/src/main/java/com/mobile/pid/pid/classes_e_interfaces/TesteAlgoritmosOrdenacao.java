@@ -67,8 +67,10 @@ public class TesteAlgoritmosOrdenacao
 
             //adicionarResultado(resultados, "QuickSort");
 
+            Object[] temp = new Object[turmasMerge.size()];
+
             tInicial = System.nanoTime();
-            PidSort.mergeSort(turmasMerge, Turma.compararPorNome);
+            PidSort.mergeSort(turmasMerge, temp, Turma.compararPorNome);
             tFinal   = System.nanoTime();
 
             resultados.add(tFinal - tInicial);

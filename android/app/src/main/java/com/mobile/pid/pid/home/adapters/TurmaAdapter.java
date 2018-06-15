@@ -247,7 +247,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     }
 
     public void ordenar(Comparator comparator) {
-        listaTurmas = PidSort.mergeSort(listaTurmas, comparator);
+        PidSort.quicksort(listaTurmas, comparator);
         notifyDataSetChanged();
     }
 
