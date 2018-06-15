@@ -119,18 +119,18 @@ public class PidSort
         return parede;
     }
 
-    public static List mergeSort(List l, Comparator comparator)
+    public static List mergeSort(List lista, Comparator comparator)
     {
-        Object[] lista = l.toArray();
+        int tamanho = lista.size();
 
-        Object[] temp = new Object[lista.length];
+        Object[] temp = new Object[tamanho];
 
-        mergeSort(lista, temp, 0, lista.length - 1, comparator);
+        mergeSort(lista, temp, 0, tamanho - 1, comparator);
 
-        return Arrays.asList(lista);
+        return lista;
     }
 
-    public static void mergeSort(Object[] lista, Object[] temp, int inicio, int fim, Comparator comparator)
+    public static void mergeSort(List lista, Object[] temp, int inicio, int fim, Comparator comparator)
     {
         if(inicio < fim)
         {
@@ -142,23 +142,23 @@ public class PidSort
         }
     }
 
-    private static void merge(Object[] lista, Object[] temp, int inicio, int meio, int fim, Comparator comparator)
+    private static void merge(List lista, Object[] temp, int inicio, int meio, int fim, Comparator comparator)
     {
         for(int k = inicio; k <= fim; k++)
-            temp[k] = lista[k];
+            temp[k] = lista.get(k);
 
         int i = inicio, j = meio + 1;
 
         for(int k = inicio; k <= fim; k++)
         {
             if(i > meio)
-                lista[k] = temp[j++];
+                lista.set(k, temp[j++]);
             else if(j > fim)
-                lista[k] =  temp[i++];
+                lista.set(k, temp[i++]);
             else if(comparator.compare(temp[i], temp[j]) < 0)
-                lista[k] =  temp[i++];
+                lista.set(k, temp[i++]);
             else
-                lista[k] =  temp[j++];
+                lista.set(k, temp[j++]);
         }
     }
 
