@@ -1,6 +1,7 @@
 package com.mobile.pid.pid.classes_e_interfaces;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
@@ -33,7 +34,14 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
 
     public static Comparator<Turma> compararPorNome = new Comparator<Turma>() {
         @Override
-        public int compare(Turma o1, Turma o2) {
+        public int compare(Turma o1, Turma o2)
+        {
+            if(o1 == null)
+                return 1;
+
+            if(o2 == null)
+                return -1;
+
             return o1.getNome().compareTo(o2.getNome());
         }
     };

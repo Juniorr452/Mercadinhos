@@ -137,16 +137,13 @@ public class TurmasCriadasFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // TODO: Sort Turmas criadas
-
         switch (item.getItemId())
         {
             case R.id.ordenar_alfabetica:
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                PidSort.quicksort(turmasCriadas, Turma.compararPorNome);
-
+                turmaAdapter.ordenar(Turma.compararPorNome);
                 turmaAdapter.notifyDataSetChanged();
                 break;
 

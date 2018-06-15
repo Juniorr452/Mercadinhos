@@ -1,6 +1,9 @@
 package com.mobile.pid.pid.classes_e_interfaces;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -59,11 +62,39 @@ public class PidSort
     {
         if(inicio < fim)
         {
-            int pivoIndice = particionar(lista, inicio, fim, comparator);
+            int pivoIndice = intercalar(lista, inicio, fim, comparator);
             quickSortRecursivo(lista, inicio, pivoIndice - 1, comparator);
             quickSortRecursivo(lista, pivoIndice + 1, fim, comparator);
         }
     }
+
+    // https://www.youtube.com/watch?v=MVZTDkucIro
+    private static int intercalar(List lista, int inicio, int fim, Comparator comparator)
+    {
+        int i = inicio, j = fim;
+
+        while(i < j)
+        {
+            while(i < fim && comparator.compare(lista.get(i), lista.get(inicio)) <= 0) i++;
+            while(j > inicio && comparator.compare(lista.get(j), lista.get(inicio)) >= 0) j--;
+
+            if(i < j)
+                trocar(lista, i, j);
+        }
+
+        trocar(lista, inicio, j);
+
+        return j;
+    }
+
+    /*private static int mediano(List lista, int i, int j, int k, Comparator comparator)
+    {
+        Object[] array = {lista.get(i), lista.get(j), lista.get(k)};
+
+        selectionSort(lista, comparator);
+
+        if(array[1] == lista)
+    }*/
 
     private static int particionar(List lista, int inicio, int fim, Comparator comparator)
     {
@@ -88,39 +119,61 @@ public class PidSort
         return parede;
     }
 
-    public static void mergeSort(List lista, Comparator comparator)
+    public static List mergeSort(List l, Comparator comparator)
     {
-        int tamanho = lista.size();
+        Object[] lista = l.toArray();
 
-        mergeSort(lista, new ArrayList(tamanho), 0, tamanho, comparator);
+        Object[] temp = new Object[lista.length];
+
+        mergeSort(lista, temp, 0, lista.length - 1, comparator);
+
+        return Arrays.asList(lista);
     }
 
-    private static void mergeSort(List lista, List temp, int inicio, int fim, Comparator comparator) {
-
+    public static void mergeSort(Object[] lista, Object[] temp, int inicio, int fim, Comparator comparator)
+    {
         if(inicio < fim)
         {
-            int meio = inicio + (fim - inicio) / 2;
+            int meio = (fim + inicio) / 2;
 
-            mergeSort(lista, temp, inicio, meio, comparator);
-            mergeSort(lista, temp, meio + 1, fim, comparator);
-            merge(lista, temp, inicio, meio, fim, comparator);
+            mergeSort(lista, temp,         inicio,   meio,      comparator);
+            mergeSort(lista, temp, meio + 1,    fim,      comparator);
+            merge    (lista, temp,         inicio,   meio, fim, comparator);
         }
     }
 
-    private static void merge(List lista, List temp, int inicio, int meio, int fim, Comparator comparator)
+    private static void merge(Object[] lista, Object[] temp, int inicio, int meio, int fim, Comparator comparator)
+    {
+        for(int k = inicio; k <= fim; k++)
+            temp[k] = lista[k];
+
+        int i = inicio, j = meio + 1;
+
+        for(int k = inicio; k <= fim; k++)
+        {
+            if(i > meio)
+                lista[k] = temp[j++];
+            else if(j > fim)
+                lista[k] =  temp[i++];
+            else if(comparator.compare(temp[i], temp[j]) < 0)
+                lista[k] =  temp[i++];
+            else
+                lista[k] =  temp[j++];
+        }
+    }
+
+    /*private static void merge(List lista, Object[] temp, int inicio, int meio, int fim, Comparator comparator)
     {
         int esquerda = inicio;
         int direita  = meio + 1;
 
-        if(temp.size() <= 0) return;
-
-        for(int i = inicio; i < fim; i++)
-            temp.set(i, lista.get(i));
+        for(int i = inicio; i <= fim; i++)
+            temp[i] = lista.get(i);
 
         while(esquerda <= meio && direita <= fim)
         {
-            Object o1 = temp.get(esquerda);
-            Object o2 = temp.get(direita);
+            Object o1 = temp[esquerda];
+            Object o2 = temp[direita];
 
             int lado;
 
@@ -133,11 +186,11 @@ public class PidSort
         }
 
         while(esquerda <= meio)
-            lista.set(inicio++, temp.get(esquerda++));
-    }
+            lista.set(inicio++, temp[esquerda++]);
+    }*/
 
     // TODO: REMOVER, O DE CIMA É MELHOR
-    private static void mergeFlavia(List lista, List temp, int inicio, int meio, int fim, Comparator comparator)
+    private static void mergeFlavia(List lista, Object[] temp, int inicio, int meio, int fim, Comparator comparator)
     {
         boolean fim1 = false, fim2 = false;
         int i, j, k;
@@ -146,7 +199,7 @@ public class PidSort
         int esquerda = inicio;
         int direita  = meio + 1;
 
-        if(temp.size() <= 0) return;
+        temp = new Object[fim];
 
         for (i = 0; i < tamanho; i++)
         {
@@ -156,24 +209,24 @@ public class PidSort
                 Object o2 = lista.get(direita);
 
                 if (comparator.compare(o1, o2) < 0)
-                    temp.set(i, lista.get(esquerda++));
+                    temp[i] =  lista.get(esquerda++);
                 else
-                    temp.set(i, lista.get(direita++));
+                    temp[i] = lista.get(direita++);
 
                 if (esquerda > meio) fim1 = true;
-                if (direita > fim)   fim2 = false;
+                if (direita  > fim)  fim2 = false;
             }
             else
             {
                 if (!fim1)
-                    temp.set(i, lista.get(esquerda++));
+                    temp[i] = lista.get(esquerda++);
                 else
-                    temp.set(i, lista.get(direita++));
+                    temp[i] = lista.get(direita++);
             }
         }
 
         for (j = 0, k = inicio; j < tamanho; j++, k++)
-            lista.set(k, temp.get(j));
+            lista.set(k, temp[j]);
     }
 
     private static void trocar(List lista, int index1, int index2)

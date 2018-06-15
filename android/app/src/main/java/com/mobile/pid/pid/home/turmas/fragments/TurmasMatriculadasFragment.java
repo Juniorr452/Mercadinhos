@@ -135,7 +135,6 @@ public class TurmasMatriculadasFragment extends Fragment
                 conteudo.setVisibility(View.GONE);
 
                 turmaAdapter.ordenar(Turma.compararPorNome);
-                turmaAdapter.notifyDataSetChanged();
                 break;
 
             case R.id.ordenar_data:

@@ -28,6 +28,8 @@ import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -245,7 +247,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     }
 
     public void ordenar(Comparator comparator) {
-        PidSort.mergeSort(listaTurmas, comparator);
+        listaTurmas = PidSort.mergeSort(listaTurmas, comparator);
         notifyDataSetChanged();
     }
 
