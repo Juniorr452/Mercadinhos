@@ -1,10 +1,15 @@
 package com.mobile.pid.pid.home.feed;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.objetos.Post;
 
 import java.util.HashMap;
@@ -46,17 +51,56 @@ public class FeedFunctions {
                 });
     }
 
-    public static void excluirPost(Post p) {
+    public static void excluirPost(final Post p, Context context) {
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("/posts/" + p.getUserId() + "/" + p.getId() + "/", null); //REMOVE DOS MEUS POSTS
+        final ProgressDialog progressDialog= new ProgressDialog(context, R.style.DialogTheme);
+        progressDialog.setTitle("Excluir post");
+        progressDialog.setMessage("Excluindo post...");
+        progressDialog.show();
+
+        FirebaseDatabase.getInstance().getReference("posts").child(p.getUserId()).child(p.getId()).removeValue();
 
         final DatabaseReference dbPostFeeds = FirebaseDatabase.getInstance().getReference("postFeeds").child(p.getId());
         final DatabaseReference dbFeed = FirebaseDatabase.getInstance().getReference("feed");
+        final DatabaseReference dbUserLikes = FirebaseDatabase.getInstance().getReference("userLikes");
         final DatabaseReference dbPostLikes = FirebaseDatabase.getInstance().getReference("postLikes").child(p.getId());
-        final DatabaseReference dbUserLikes = FirebaseDatabase.getInstance().getReference();
 
-        // REMOVE DOS MEUS POSTS
+
+        dbPostFeeds.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot data: dataSnapshot.getChildren()) {
+                        dbFeed.child(data.getKey()).child(p.getId()).removeValue();
+                        data.getRef().removeValue();// PEGA O REF DOS FEEDS QUE TEM ESSE POST
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        dbPostLikes.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot data: dataSnapshot.getChildren()) {
+                        dbUserLikes.child(data.getKey()).child(p.getId()).removeValue();
+                        data.getRef().removeValue();// PEGA O REF DOS LIKES DOS USUARIOS QUE TEM ESSE POST
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        progressDialog.dismiss();
     }
 
     public static void excluirPostsFollow(String user, final String userUnfollow) {

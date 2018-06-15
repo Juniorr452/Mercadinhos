@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.Dialogs;
+import com.mobile.pid.pid.home.feed.FeedFunctions;
 import com.mobile.pid.pid.objetos.Post;
 import com.mobile.pid.pid.objetos.Usuario;
 
@@ -240,33 +241,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                                 .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        FirebaseDatabase.getInstance().getReference("posts").child(p.getId()).child("likes")
-                                                .addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                                        //TODO ALTERAR COMO O POST É EXCLUIDO
-                                                        // REMOVE O POST CURTIDO DE TODOS OS USUARIOS QUE CURTIRAM
-                                                        if(dataSnapshot.exists()) {
-                                                            for(DataSnapshot data : dataSnapshot.getChildren()) {
-                                                                FirebaseDatabase.getInstance().getReference("usuarios").child(data.getKey())
-                                                                        .child("posts_like").child(p.getId()).removeValue();
-
-                                                                data.getRef().removeValue();
-                                                            }
-                                                        }
-
-                                                        // REMOVE O POST DO USUARIO QUE CRIOU
-                                                        FirebaseDatabase.getInstance().getReference("usuarios")
-                                                                .child(p.getUserId()).child("posts").child(p.getId()).removeValue();
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
-
-                                                    }
-                                                });
+                                        FeedFunctions.excluirPost(p, context);
+                                        removePost(p);
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)
