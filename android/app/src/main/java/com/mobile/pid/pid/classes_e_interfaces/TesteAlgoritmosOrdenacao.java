@@ -15,12 +15,25 @@ import java.util.Random;
 public class TesteAlgoritmosOrdenacao
 {
     private static int[] qtdTurmasTeste = {2, 5, 10, 50, 100, 500, 1000};
+    private static String[] nomeVarsPython = {
+            "execucao_insert",
+            "execucao_select",
+            "execucao_quick",
+            "execucao_merge"
+    };
+    private static String[] nomeAlgs = {
+            "InsertionSort",
+            "SelectionSort",
+            "QuickSort",
+            "MergeSort"
+    };
+
     static long tInicial, tFinal;
     static final int QTD_ALGORITMOS = 4;
 
     public static void testarOrdenacao(Context c)
     {
-        Queue<String> resultados = new LinkedList<>();
+        Queue<Long> resultados = new LinkedList<>();
 
         for(int i = 0; i < qtdTurmasTeste.length; i++)
         {
@@ -35,25 +48,32 @@ public class TesteAlgoritmosOrdenacao
             PidSort.insertionSort(turmasInsert, Turma.compararPorNome);
             tFinal   = System.nanoTime();
 
-            adicionarResultado(resultados, "InsertionSort");
+            resultados.add(tFinal - tInicial);
+            //adicionarResultado(resultados, "InsertionSort");
 
             tInicial = System.nanoTime();
             PidSort.selectionSort(turmasSelect, Turma.compararPorNome);
             tFinal   = System.nanoTime();
 
-            adicionarResultado(resultados, "SelectionSort");
+            resultados.add(tFinal - tInicial);
+
+            //adicionarResultado(resultados, "SelectionSort");
 
             tInicial = System.nanoTime();
             PidSort.quicksort(turmasQuick, Turma.compararPorNome);
             tFinal   = System.nanoTime();
 
-            adicionarResultado(resultados, "QuickSort");
+            resultados.add(tFinal - tInicial);
+
+            //adicionarResultado(resultados, "QuickSort");
 
             tInicial = System.nanoTime();
             PidSort.mergeSort(turmasMerge, Turma.compararPorNome);
             tFinal   = System.nanoTime();
 
-            adicionarResultado(resultados, "MergeSort");
+            resultados.add(tFinal - tInicial);
+
+            //adicionarResultado(resultados, "MergeSort");
         }
 
         Log.e("Teste", "asdasd");
@@ -61,9 +81,9 @@ public class TesteAlgoritmosOrdenacao
         apresentarResultados(c, resultados);
     }
 
-    private static void adicionarResultado(Queue resultados, String nomeAlg) {
+    /*private static void adicionarResultado(Queue<String> resultados, String nomeAlg) {
         resultados.add(nomeAlg + ": " + (tFinal - tInicial) + " ns\n");
-    }
+    }*/
 
     // Método para gerar uma determinada qtd de turmas
     // com nomes aleatórios.
@@ -99,21 +119,41 @@ public class TesteAlgoritmosOrdenacao
         return aleatoria.toString();
     }
 
-    private static void apresentarResultados(Context c, Queue resultados)
+    private static void apresentarResultados(Context c, Queue<Long> resultados)
     {
         StringBuilder sb = new StringBuilder();
+        StringBuilder[] comandosPython = new StringBuilder[QTD_ALGORITMOS];
+
+        for(int i = 0; i < QTD_ALGORITMOS; i++)
+        {
+            comandosPython[i] = new StringBuilder();
+            comandosPython[i].append(nomeVarsPython[i]).append(" = [");
+        }
 
         for(int i = 0; i < qtdTurmasTeste.length; i++)
         {
             sb.append("Resultados para " + qtdTurmasTeste[i] + " turmas:\n");
 
             for(int j = 0; j < QTD_ALGORITMOS; j++)
-                sb.append(resultados.remove());
+            {
+                Long resultado = resultados.remove();
+
+                comandosPython[j].append(resultado).append(",");
+                sb.append(nomeVarsPython[j]).append(" : ").append(resultado).append(" ns\n");
+            }
 
             sb.append("\n");
         }
 
         Log.w("Teste da ordenação", sb.toString());
+
+        for(int i = 0; i < QTD_ALGORITMOS; i++)
+        {
+            StringBuilder comandoPython = comandosPython[i];
+            comandoPython.setCharAt(comandoPython.length() - 1, ']');
+
+            Log.w("Teste da ordenação", comandoPython.toString());
+        }
 
         new AlertDialog.Builder(c)
             .setTitle("Resultados")
