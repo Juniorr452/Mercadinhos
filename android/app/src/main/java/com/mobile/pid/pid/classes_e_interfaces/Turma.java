@@ -38,6 +38,14 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         }
     };
 
+    // TODO: Comparar por dia
+    public static Comparator<Turma> compararPorDia = new Comparator<Turma>() {
+        @Override
+        public int compare(Turma o1, Turma o2) {
+            return o1.getNome().compareTo(o2.getNome());
+        }
+    };
+
     public Turma() {}
 
     public Turma(String nome, String pin, String capaUrl, String professorUid, Map<String, Integer> diasDaSemana)
@@ -49,9 +57,20 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         this.professorUid = professorUid;
     }
 
+    public void atualizar(String nome, String pin, Map<String, Integer> diasDaSemana)
+    {
+        DatabaseReference turmaRef = FirebaseDatabase.getInstance()
+                .getReference("turmas")
+                .child(id);
+
+        turmaRef.child("nome").setValue(nome);
+        turmaRef.child("pin").setValue(pin);
+        turmaRef.child("diasDaSemana").setValue(diasDaSemana);
+    }
+
     public void excluir()
     {
-        DatabaseReference rootRef     = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference turmasCriadasRef = rootRef.child("userTurmasCriadas");
         DatabaseReference turmasMatriculadasRef = rootRef.child("userTurmasMatriculadas");
 
@@ -176,87 +195,4 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
 
         return false;
     }
-
-
-    /*@Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.capaUrl);
-        dest.writeString(this.nome);
-        dest.writeString(this.pin);
-        dest.writeInt(this.diasDaSemana.size());
-        for (Map.Entry<String, Integer> entry : this.diasDaSemana.entrySet()) {
-            dest.writeString(entry.getKey());
-            dest.writeValue(entry.getValue());
-        }
-        dest.writeString(this.professorUid);
-
-        if(alunosUid != null)
-        {
-            dest.writeInt(this.alunosUid.size());
-            for (Map.Entry<String, Boolean> aluno : this.alunosUid.entrySet()) {
-                dest.writeString(aluno.getKey());
-                dest.writeValue(aluno.getValue());
-            }
-        }
-
-        if(solicitacoes != null)
-        {
-            dest.writeInt(this.solicitacoes.size());
-            for (Map.Entry<String, Boolean> solicitacao : this.solicitacoes.entrySet()) {
-                dest.writeString(solicitacao.getKey());
-                dest.writeValue(solicitacao.getValue());
-            }
-        }
-    }*/
-
-    /*protected Turma(Parcel in) {
-        this.id = in.readString();
-        this.capaUrl = in.readString();
-        this.nome = in.readString();
-        this.pin = in.readString();
-
-        int diasDaSemanaSize = in.readInt();
-        this.diasDaSemana = new HashMap<String, Integer>(diasDaSemanaSize);
-        for (int i = 0; i < diasDaSemanaSize; i++) {
-            String key = in.readString();
-            Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
-            this.diasDaSemana.put(key, value);
-        }
-
-        this.professorUid = in.readString();
-
-        int alunosUidSize = in.readInt();
-        this.alunosUid = new HashMap<String, Boolean>(alunosUidSize);
-        for (int i = 0; i < alunosUidSize; i++) {
-            String key = in.readString();
-            Boolean value = (Boolean) in.readValue(Boolean.class.getClassLoader());
-            this.alunosUid.put(key, value);
-        }
-
-        int solicitacoesSize = in.readInt();
-        this.solicitacoes = new HashMap<String, Boolean>(solicitacoesSize);
-        for (int i = 0; i < solicitacoesSize; i++) {
-            String key = in.readString();
-            Boolean value = (Boolean) in.readValue(Boolean.class.getClassLoader());
-            this.solicitacoes.put(key, value);
-        }
-    }
-
-    public static final Creator<Turma> CREATOR = new Creator<Turma>() {
-        @Override
-        public Turma createFromParcel(Parcel source) {
-            return new Turma(source);
-        }
-
-        @Override
-        public Turma[] newArray(int size) {
-            return new Turma[size];
-        }
-    };*/
 }

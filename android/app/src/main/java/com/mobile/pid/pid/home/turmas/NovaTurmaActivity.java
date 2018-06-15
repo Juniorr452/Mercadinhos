@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.home.turmas;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -43,6 +44,7 @@ public class NovaTurmaActivity extends AppCompatActivity
     EditText pinEditText;
 
     Uri imagemUri;
+    ProgressDialog progressDialog;
     Map<String, Integer> diasDaSemana;
 
     DatabaseReference turmasCriadasDatabaseReference;
@@ -110,6 +112,11 @@ public class NovaTurmaActivity extends AppCompatActivity
         {
             validarCampos(nomeTurma);
 
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Criando turma...");
+            progressDialog.setMessage("Aguarde...");
+            progressDialog.show();
+
             // Pegar o ID da turma e o usuário logado que está criando a turma
             final String turmaId = turmasDatabaseReference.push().getKey();
 
@@ -163,45 +170,48 @@ public class NovaTurmaActivity extends AppCompatActivity
         // Cadastrar referência no turmas_criadas
         turmasCriadasDatabaseReference.child(user.getUid()).child(turmaId).setValue(true);
 
+        progressDialog.dismiss();
         Toast.makeText(this, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     public void onCheckboxClicked(View v)
     {
-        Consumer<String> acao;
         boolean checado = ((CheckBox) v).isChecked();
+        int diaCalendar = 0;
 
         switch(v.getId())
         {
             case R.id.nova_turma_domingo:
-                addOuRemoverDia(checado, (CheckBox) v, Calendar.SUNDAY);
+                diaCalendar = Calendar.SUNDAY;
                 break;
 
             case R.id.nova_turma_segunda:
-                addOuRemoverDia(checado, (CheckBox) v, Calendar.MONDAY);
+                diaCalendar = Calendar.MONDAY;
                 break;
 
             case R.id.nova_turma_terca:
-                addOuRemoverDia(checado, (CheckBox) v, Calendar.TUESDAY);
+                diaCalendar = Calendar.TUESDAY;
                 break;
 
             case R.id.nova_turma_quarta:
-                addOuRemoverDia(checado, (CheckBox) v, Calendar.WEDNESDAY);
+                diaCalendar = Calendar.WEDNESDAY;
                 break;
 
             case R.id.nova_turma_quinta:
-                addOuRemoverDia(checado, (CheckBox) v, Calendar.THURSDAY);
+                diaCalendar = Calendar.THURSDAY;
                 break;
 
             case R.id.nova_turma_sexta:
-                addOuRemoverDia(checado, (CheckBox) v, Calendar.FRIDAY);
+                diaCalendar = Calendar.FRIDAY;
                 break;
 
             case R.id.nova_turma_sabado:
-                addOuRemoverDia(checado, (CheckBox) v, Calendar.SATURDAY);
+                diaCalendar = Calendar.SATURDAY;
                 break;
         }
+
+        addOuRemoverDia(checado, (CheckBox) v, diaCalendar);
     }
 
     private void addOuRemoverDia(boolean checado, CheckBox checkboxDia, int numeroDia)

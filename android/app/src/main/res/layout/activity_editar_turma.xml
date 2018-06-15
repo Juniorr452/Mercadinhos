@@ -139,18 +139,6 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.EditarTurma">
             android:layout_marginTop="16dp">
 
             <Button
-                android:id="@+id/btn_atualizar_turma"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:text="@string/atualizar"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:onClick="atualizarTurma"
-                android:layout_gravity="center"
-                android:foreground="?attr/selectableItemBackgroundBorderless" />
-
-            <Button
                 android:id="@+id/btn_excluir_turma"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,6 +148,18 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.EditarTurma">
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:onClick="excluirTurma"
+                android:foreground="?attr/selectableItemBackgroundBorderless" />
+
+            <Button
+                android:id="@+id/btn_atualizar_turma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="@string/atualizar"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:onClick="atualizarTurma"
+                android:layout_gravity="center"
                 android:foreground="?attr/selectableItemBackgroundBorderless" />
         </LinearLayout>
 

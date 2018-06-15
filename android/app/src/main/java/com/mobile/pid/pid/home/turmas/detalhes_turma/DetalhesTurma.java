@@ -32,6 +32,8 @@ import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 public class DetalhesTurma extends AppCompatActivity
 {
+    public static final int RC_TURMA_EXCLUIDA = 0;
+
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
@@ -56,8 +58,6 @@ public class DetalhesTurma extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_turma);
 
-
-
         PagerAdapter detalhesPageAdapter  = new DetalheTurmasPageAdapter(this.getSupportFragmentManager());
         ViewPager detalhesViewPager       = findViewById(R.id.viewpager_turma);
         TabLayout turmasTabLayout         = findViewById(R.id.tab);
@@ -67,7 +67,7 @@ public class DetalhesTurma extends AppCompatActivity
         imgProfessor                      = findViewById(R.id.icon_turma_professor);
 
         // Pegar os dados
-        turma = (Turma) i.getSerializableExtra("turma");
+        turma   = (Turma) i.getSerializableExtra("turma");
         USUARIO = (int) i.getExtras().get("usuario");
 
         profRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(turma.getProfessorUid());
@@ -140,12 +140,22 @@ public class DetalhesTurma extends AppCompatActivity
         profRef.removeEventListener(profListener);
     }
 
-    public void irParaEditarTurma(View v){
+    public void irParaEditarTurma(View v)
+    {
         Intent i = new Intent(this, EditarTurma.class);
 
         i.putExtra("turma", turma);
 
-        startActivity(i);
+        startActivityForResult(i, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RC_TURMA_EXCLUIDA)
+            finish();
     }
 
     // Tabs and ViewPager - https://www.youtube.com/watch?v=zQekzaAgIlQ
