@@ -144,7 +144,6 @@ public class TurmasCriadasFragment extends Fragment
                 conteudo.setVisibility(View.GONE);
 
                 turmaAdapter.ordenar(Turma.compararPorNome);
-                turmaAdapter.notifyDataSetChanged();
                 break;
 
             case R.id.ordenar_data:
@@ -152,7 +151,6 @@ public class TurmasCriadasFragment extends Fragment
                 conteudo.setVisibility(View.GONE);
 
                 turmaAdapter.ordenar(Turma.compararPorNome);
-                //Toast.makeText(getContext(), String.valueOf(pidSort.ordenarTurmaAlfabeto().size()), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 return false;

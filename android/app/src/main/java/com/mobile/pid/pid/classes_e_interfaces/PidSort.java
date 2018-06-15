@@ -91,9 +91,12 @@ public class PidSort
         return parede;
     }
 
-    public static void mergeSort(List lista, Object[] temp, Comparator comparator)
+    public static void mergeSort(List lista, Comparator comparator)
     {
-        mergeSort(lista, temp, 0, lista.size() - 1, comparator);
+        int tamanho = lista.size();
+        Object[] temp = new Object[tamanho];
+
+        mergeSort(lista, temp, 0, tamanho - 1, comparator);
     }
 
     public static void mergeSort(List lista, Object[] temp, int inicio, int fim, Comparator comparator)
