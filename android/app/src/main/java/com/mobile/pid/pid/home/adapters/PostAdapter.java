@@ -22,6 +22,7 @@ import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.classes_e_interfaces.Post;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
+import com.mobile.pid.pid.home.feed.FeedFunctions;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -99,12 +100,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             {
                 Usuario user = new Usuario(p.getUserId(), p.getNomeUser(), null, p.getPhotoUrl());
 
-                if(p.getUserId().equals(usuarioLogado)) 
-                {
-                    //TODO ENVIAR PARA O PERFIL FRAGMENT
-                    new Dialogs().dialogUsuario(user, context);
-                } else
-                    new Dialogs().dialogUsuario(user, context);
+                new Dialogs().dialogUsuario(user, context);
 
             }
         });
@@ -245,33 +241,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                                 .setPositiveButton(R.string.confirmar, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        FirebaseDatabase.getInstance().getReference("posts").child(p.getId()).child("likes")
-                                                .addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                                        //TODO ALTERAR COMO O POST É EXCLUIDO
-                                                        // REMOVE O POST CURTIDO DE TODOS OS USUARIOS QUE CURTIRAM
-                                                        if(dataSnapshot.exists()) {
-                                                            for(DataSnapshot data : dataSnapshot.getChildren()) {
-                                                                FirebaseDatabase.getInstance().getReference("usuarios").child(data.getKey())
-                                                                        .child("posts_like").child(p.getId()).removeValue();
-
-                                                                data.getRef().removeValue();
-                                                            }
-                                                        }
-
-                                                        // REMOVE O POST DO USUARIO QUE CRIOU
-                                                        FirebaseDatabase.getInstance().getReference("usuarios")
-                                                                .child(p.getUserId()).child("posts").child(p.getId()).removeValue();
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
-
-                                                    }
-                                                });
+                                        FeedFunctions.excluirPost(p, context);
+                                        removePost(p);
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)

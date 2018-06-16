@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity
 
         auth = FirebaseAuth.getInstance();
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.DialogTheme);
         progressDialog.setTitle(getString(R.string.entrando));
         progressDialog.setMessage(getString(R.string.fazendo_login));
         /*tv_remember = (TextView) findViewById(R.id.tv_remember);
@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity
 
     public void esqueciSenha(View v)
     {
-        AlertDialog.Builder mBuilder= new AlertDialog.Builder(LoginActivity.this);
+        AlertDialog.Builder mBuilder= new AlertDialog.Builder(LoginActivity.this, R.style.DialogTheme);
         View mView = getLayoutInflater().inflate(R.layout.dialog_esqueci_senha, null);
 
         final TextInputLayout TIL_dialog_email_remember = (TextInputLayout) mView.findViewById(R.id.TIL_dialog_email_remember);

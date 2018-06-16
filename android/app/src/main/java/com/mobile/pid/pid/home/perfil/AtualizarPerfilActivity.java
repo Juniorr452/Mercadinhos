@@ -133,7 +133,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                         rbFeminino.setChecked(true);
                 }
                 else
-                    rbMasculino.setChecked(true);
+                    rbMasculino.setChecked(false);
 
                 if (dataNasc != null)
                     btnData.setText(dataNasc);
