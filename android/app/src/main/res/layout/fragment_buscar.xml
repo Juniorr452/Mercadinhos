@@ -56,7 +56,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@drawable/icon_search"
+                android:background="@drawable/help_busca"
                 android:layout_gravity="center"/>
 
             <TextView

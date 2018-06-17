@@ -77,7 +77,7 @@
     <string name="trabalhos">Trabalhos</string>
     <string name="entrando">Entrando...</string>
     <string name="fazendo_login">Fazendo o login...</string>
-    <string name="sad_message">Não encontramos nenhuma turma</string>
+    <string name="sad_message_turma_matriculada">As turmas que você entrar ficarão aqui assim que o professor aceitar a solicitação.\n\nBusque sua turma na área de busca!</string>
     <string name="solicitacoes">Solicitações</string>
     <string name="change">Alterar</string>
     <string name="atualizar">Atualizar</string>
@@ -96,7 +96,7 @@
     <string name="postTime">Hora da postagem</string>
     <string name="sad_message_chats">Não encontramos nenhum chat</string>
     <string name="new_chat">Criar Chat</string>
-    <string name="sad_message_feed">Não encontramos nenhum post</string>
+    <string name="sad_message_feed">Posts seus e de quem você segue aparecerão neste lugar.\n\nTente criar um!</string>
     <string name="ir_perfil">Perfil</string>
     <string name="confirmacao">Confirmação</string>
     <string name="unfollow_message">Tem certeza que deseja deixar de seguir?</string>
@@ -134,9 +134,11 @@
     <string name="chat_exibido_como">Seu chat será exibido como: </string>
     <string name="membros">Membros</string>
     <string name="mensagem_encontre_turmas_pessoas">Encontre turmas e pessoas para seguir!</string>
-    <string name="mensagem_recomendacoes_dica">Recomendações surgirão quando você começar a seguir outros usuários.</string>
+    <string name="mensagem_recomendacoes_dica"> Quando disponíveis, recomendações de usuários para seguir surgirão neste lugar.</string>
     <string name="trans_turma_capa">trans_turma_capa</string>
     <string name="trans_turma_foto">trans_turma_foto</string>
     <string name="trans_turma_nome">trans_turma_nome</string>
     <string name="selecionar_imagem">Selecionar imagem</string>
+    <string name="sad_message_turmas_criadas">As turmas que você criar aparecerão aqui.</string>
+    <string name="sad_message_turmas_usuario">Parece que este usuário não criou nenhuma turma.</string>
 </resources>

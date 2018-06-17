@@ -27,6 +27,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -91,7 +92,7 @@ public class BuscarFragment extends Fragment
 
         sugestaoAdapter_usuarios = new SugestaoAdapter(getActivity());
 
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid  = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         carregarRecomendacoesUsuarios();
     }
@@ -114,9 +115,7 @@ public class BuscarFragment extends Fragment
         recyclerView_usuarios = v.findViewById(R.id.rv_usuarios);
         recycler_busca = v.findViewById(R.id.recycle_busca);
 
-
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
-
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         
@@ -180,8 +179,11 @@ public class BuscarFragment extends Fragment
             @Override
             public void onFailure(Call<List<Usuario>> call, Throwable erro)
             {
-                Toast.makeText(getContext(), erro.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e(TAG, erro.getMessage());
+                if(this != null)
+                {
+                    Toast.makeText(getContext(), erro.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, erro.getMessage());
+                }
             }
         });
     }

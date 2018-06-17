@@ -39,24 +39,23 @@
             app:fabSize="normal" />
 
         <LinearLayout
+            android:id="@+id/ll_mensagem_sem_turmas_criadas"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center">
 
             <ImageView
-                android:id="@+id/sad_face"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@drawable/sad_face"
+                android:background="@drawable/help_turma1"
                 android:layout_gravity="center"/>
 
             <TextView
-                android:id="@+id/sad_message"
                 android:layout_width="wrap_content"
-                android:textColor="@color/gray_font"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
-                android:text="@string/sad_message"
+                android:text="@string/sad_message_turmas_criadas"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:textSize="16dp"/>

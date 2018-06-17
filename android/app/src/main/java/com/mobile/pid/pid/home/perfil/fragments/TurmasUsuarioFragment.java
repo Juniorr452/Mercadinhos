@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,8 +32,7 @@ public class TurmasUsuarioFragment extends Fragment
 {
     private ProgressBar progressBar;
     private FrameLayout conteudo;
-    private ImageView sadFace;
-    private TextView sadMessage;
+    private LinearLayout mensagemSemTurma;
 
     private DatabaseReference turmasUsuarioRef;
 
@@ -89,14 +89,10 @@ public class TurmasUsuarioFragment extends Fragment
                                 });
                     }
 
-                    sadFace.setVisibility(View.GONE);
-                    sadMessage.setVisibility(View.GONE);
+                    mensagemSemTurma.setVisibility(View.GONE);
                 }
                 else
-                {
-                    sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.VISIBLE);
-                }
+                    mensagemSemTurma.setVisibility(View.VISIBLE);
 
                 progressBar.setVisibility(View.GONE);
                 conteudo.setVisibility(View.VISIBLE);
@@ -126,11 +122,10 @@ public class TurmasUsuarioFragment extends Fragment
     {
         View v = inflater.inflate(R.layout.fragment_turmas_usuario, container, false);
 
-        recyclerView = v.findViewById(R.id.rv_turmas_usuario);
-        progressBar  = v.findViewById(R.id.pb_turmas_usuario);
-        conteudo     = v.findViewById(R.id.fl_turmas_usuario);
-        sadFace      = v.findViewById(R.id.sad_face);
-        sadMessage   = v.findViewById(R.id.sad_message);
+        mensagemSemTurma = v.findViewById(R.id.ll_mensagem_sem_turmas_usuario);
+        recyclerView     = v.findViewById(R.id.rv_turmas_usuario);
+        progressBar      = v.findViewById(R.id.pb_turmas_usuario);
+        conteudo         = v.findViewById(R.id.fl_turmas_usuario);
         conteudo.setVisibility(View.GONE);
 
         // Recycler View

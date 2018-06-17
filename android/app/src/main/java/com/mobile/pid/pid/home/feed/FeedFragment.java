@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,8 +50,7 @@ public class FeedFragment extends Fragment {
     private FrameLayout conteudo;
 
     private FirebaseUser usuario;
-    private ImageView sadFace;
-    private TextView sadMessage;
+    private LinearLayout mensagemSemPosts;
 
     private PostAdapter postAdapter;
 
@@ -62,73 +62,11 @@ public class FeedFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-
-        posts = new ArrayList<>();
-        postAdapter = new PostAdapter(getActivity(), posts);
-        usuario = FirebaseAuth.getInstance().getCurrentUser();
-
-        postQuery = FirebaseDatabase.getInstance().getReference("feed").child(usuario.getUid()).orderByChild("postData");
-
-        postListener = new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.exists())
-                {
-                    postAdapter.clear();
-
-                    for(DataSnapshot data : dataSnapshot.getChildren())
-                    {
-                        Post p = data.getValue(Post.class);
-                        p.setId(data.getKey());
-                        postAdapter.add(p);
-                    }
-
-                    sadFace.setVisibility(View.GONE);
-                    sadMessage.setVisibility(View.GONE);
-                }
-                else
-                {
-                    sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.VISIBLE);
-                }
-
-                progressBar.setVisibility(View.GONE);
-                conteudo.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        postQuery.addValueEventListener(postListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        postQuery.removeEventListener(postListener);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        sadFace      = view.findViewById(R.id.sad_face);
-        sadMessage   = view.findViewById(R.id.sad_message);
+        mensagemSemPosts = view.findViewById(R.id.ll_mensagem_feed_sem_posts);
         recyclerView = view.findViewById(R.id.recycler_view);
         criarPost    = view.findViewById(R.id.fab_add_post);
         progressBar  = view.findViewById(R.id.pb_feed);
@@ -171,6 +109,62 @@ public class FeedFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        posts = new ArrayList<>();
+        postAdapter = new PostAdapter(getActivity(), posts);
+        usuario = FirebaseAuth.getInstance().getCurrentUser();
+
+        postQuery = FirebaseDatabase.getInstance().getReference("feed").child(usuario.getUid()).orderByChild("postData");
+
+        postListener = new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    postAdapter.clear();
+
+                    for(DataSnapshot data : dataSnapshot.getChildren())
+                    {
+                        Post p = data.getValue(Post.class);
+                        p.setId(data.getKey());
+                        postAdapter.add(p);
+                    }
+
+                    mensagemSemPosts.setVisibility(View.GONE);
+                }
+                else
+                    mensagemSemPosts.setVisibility(View.VISIBLE);
+
+
+                progressBar.setVisibility(View.GONE);
+                conteudo.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        postQuery.addValueEventListener(postListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        postQuery.removeEventListener(postListener);
     }
 
     private void criarPost(View view)

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,8 +36,7 @@ public class TurmasMatriculadasFragment extends Fragment
 {
     private ProgressBar progressBar;
     private FrameLayout conteudo;
-    private ImageView sadFace;
-    private TextView sadMessage;
+    private LinearLayout mensagemSemTurma;
 
     private DatabaseReference turmasMatriculadasRef;
 
@@ -94,14 +94,10 @@ public class TurmasMatriculadasFragment extends Fragment
                                 });
                     }
 
-                    sadFace.setVisibility(View.GONE);
-                    sadMessage.setVisibility(View.GONE);
+                    mensagemSemTurma.setVisibility(View.GONE);
                 }
                 else
-                {
-                    sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.VISIBLE);
-                }
+                    mensagemSemTurma.setVisibility(View.VISIBLE);
 
                 progressBar.setVisibility(View.GONE);
                 conteudo.setVisibility(View.VISIBLE);
@@ -126,8 +122,6 @@ public class TurmasMatriculadasFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // TODO: Sort Turmas matriculadas
-
         switch (item.getItemId())
         {
             case R.id.ordenar_alfabetica:
@@ -171,11 +165,10 @@ public class TurmasMatriculadasFragment extends Fragment
     {
         View v = inflater.inflate(R.layout.fragment_turmas_matriculadas, container, false);
 
-        recyclerView = v.findViewById(R.id.rv_turmas_matriculadas);
-        progressBar  = v.findViewById(R.id.pb_turmas_matriculadas);
-        conteudo     = v.findViewById(R.id.fl_turmas_matriculadas);
-        sadFace      = v.findViewById(R.id.sad_face);
-        sadMessage   = v.findViewById(R.id.sad_message);
+        mensagemSemTurma = v.findViewById(R.id.ll_mensagem_sem_turmas_matriculadas);
+        recyclerView     = v.findViewById(R.id.rv_turmas_matriculadas);
+        progressBar      = v.findViewById(R.id.pb_turmas_matriculadas);
+        conteudo         = v.findViewById(R.id.fl_turmas_matriculadas);
         conteudo.setVisibility(View.GONE);
 
         // Recycler View

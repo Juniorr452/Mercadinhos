@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,10 +41,9 @@ public class TurmasCriadasFragment extends Fragment
 {
     private static final String TAG = "TurmasCriadasFragment";
 
-    private ProgressBar progressBar;
-    private FrameLayout conteudo;
-    private ImageView sadFace;
-    private TextView sadMessage;
+    private ProgressBar  progressBar;
+    private FrameLayout  conteudo;
+    private LinearLayout mensagemSemTurma;
 
     private DatabaseReference turmasCriadasRef;
 
@@ -74,7 +74,8 @@ public class TurmasCriadasFragment extends Fragment
 
         turmasListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 if (dataSnapshot.exists())
                 {
                     recyclerView.getRecycledViewPool().clear();
@@ -105,14 +106,10 @@ public class TurmasCriadasFragment extends Fragment
                                 });
                     }
 
-                    sadFace.setVisibility(View.GONE);
-                    sadMessage.setVisibility(View.GONE);
+                    mensagemSemTurma.setVisibility(View.GONE);
                 }
                 else
-                {
-                    sadFace.setVisibility(View.VISIBLE);
-                    sadMessage.setVisibility(View.VISIBLE);
-                }
+                    mensagemSemTurma.setVisibility(View.VISIBLE);
 
                 progressBar.setVisibility(View.GONE);
                 conteudo.setVisibility(View.VISIBLE);
@@ -179,11 +176,10 @@ public class TurmasCriadasFragment extends Fragment
     {
         View v = inflater.inflate(R.layout.fragment_turmas_criadas, container, false);
 
+        mensagemSemTurma = v.findViewById(R.id.ll_mensagem_sem_turmas_criadas);
         recyclerView = v.findViewById(R.id.rv_turmas_criadas);
-        progressBar = v.findViewById(R.id.pb_turmas_criadas);
-        conteudo    = v.findViewById(R.id.fl_turmas_criadas);
-        sadFace     = v.findViewById(R.id.sad_face);
-        sadMessage  = v.findViewById(R.id.sad_message);
+        progressBar  = v.findViewById(R.id.pb_turmas_criadas);
+        conteudo     = v.findViewById(R.id.fl_turmas_criadas);
         conteudo.setVisibility(View.GONE);
 
         // Recycler View

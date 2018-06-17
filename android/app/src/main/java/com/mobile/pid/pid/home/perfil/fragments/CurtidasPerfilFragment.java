@@ -36,8 +36,6 @@ public class CurtidasPerfilFragment extends Fragment {
     private Query likesRef;
     private ChildEventListener likesListener;
 
-
-
     public CurtidasPerfilFragment() {
 
     }
