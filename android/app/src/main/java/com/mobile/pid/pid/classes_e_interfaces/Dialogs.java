@@ -2,9 +2,11 @@ package com.mobile.pid.pid.classes_e_interfaces;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,6 +16,7 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +42,26 @@ public class Dialogs
 {
     public static final int RC_CAMERA       = 0;
     public static final int RC_PHOTO_PICKER = 1;
+
+    // AO CLICAR NA FOTO DO USUARIO, CRIA UM DIALOG MOSTRANDO ELA EM TAMANHO REAL.
+    public static void mostrarImagem(Activity activity, String fotoUrl)
+    {
+        final Dialog dialog = new Dialog(activity);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+        dialog.setContentView(activity.getLayoutInflater().inflate(R.layout.image_fullsize, null));
+        ImageView image_user_fullsize = dialog.findViewById(R.id.image_user_fullsize);
+
+        Glide.with(activity).load(fotoUrl).into(image_user_fullsize);
+        dialog.show();
+
+        image_user_fullsize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
 
     // https://cursos.alura.com.br/forum/topico-usando-a-camera-22771
     public static void dialogSelecionarImagem(final Activity activity)

@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:onClick="escolherFoto"
                 android:clickable="true"
                 android:background="@drawable/ic_add_black"
                 android:layout_gravity="center"

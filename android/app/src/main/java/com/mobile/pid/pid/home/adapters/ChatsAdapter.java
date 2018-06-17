@@ -20,12 +20,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
     private Context ctx;
     private LayoutInflater layoutInflater;
     private List<Chat> chats;
-    private Turma t;
+    private Turma turma;
     private int usuario;
 
     public ChatsAdapter(Context c, List<Chat> chats, Turma t, int usuario)
     {
         this.ctx       = c;
+        this.turma     = t;
         this.chats     = chats;
         this.usuario   = usuario;
         layoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -52,7 +53,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
             public void onClick(View view)
             {
                 Intent i = new Intent(ctx, ChatActivity.class);
-                i.putExtra("turma",   t);
+                i.putExtra("turma", turma);
                 i.putExtra("chat",    c);
                 i.putExtra("usuario", usuario);
 

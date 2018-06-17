@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.home.feed.FeedFunctions;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
@@ -191,21 +192,7 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
         foto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(UsuarioPerfilActivity.this);
-                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(getLayoutInflater().inflate(R.layout.image_fullsize, null));
-
-                ImageView image_user_fullsize = (ImageView) dialog.findViewById(R.id.image_user_fullsize);
-
-                Glide.with(getApplicationContext()).load(user.getFotoUrl()).into(image_user_fullsize);
-                dialog.show();
-
-                image_user_fullsize.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
+                Dialogs.mostrarImagem(UsuarioPerfilActivity.this, user.getFotoUrl());
             }
         });
 

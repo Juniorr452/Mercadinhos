@@ -1,6 +1,7 @@
 package com.mobile.pid.pid.home.turmas.detalhes_turma.chat;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.classes_e_interfaces.Chat;
 import com.mobile.pid.pid.classes_e_interfaces.ChatMensagem;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.home.adapters.ChatMensagemAdapter;
 import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
@@ -33,8 +35,8 @@ public class ChatActivity extends AppCompatActivity
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
-    private Turma        turma;
-    private Chat chat;
+    private Turma turma;
+    private Chat  chat;
     private FirebaseUser user;
     private String       fotoPerfil;
     private boolean      professor;
@@ -42,9 +44,7 @@ public class ChatActivity extends AppCompatActivity
     private ProgressBar  progressBar;
 
     private Toolbar     toolbar;
-    private ImageButton adicionarArquivo;
     private EditText    etMensagem;
-    private ImageButton enviar;
 
     private DatabaseReference  dbRoot;
     private DatabaseReference chatRef;
@@ -64,19 +64,17 @@ public class ChatActivity extends AppCompatActivity
 
         user      = FirebaseAuth.getInstance().getCurrentUser();
         chat      = i.getParcelableExtra("chat");
-        turma     = i.getParcelableExtra("turma");
+        turma     = (Turma) i.getSerializableExtra("turma");
         professor = i.getIntExtra("usuario", 1) == PROFESSOR;
 
-        toolbar = findViewById(R.id.toolbar_chat);
+        toolbar      = findViewById(R.id.toolbar_chat);
         recyclerView = findViewById(R.id.recycler_view_chat);
-        adicionarArquivo = findViewById(R.id.chat_adicionar_arquivo);
-        etMensagem       = findViewById(R.id.et_chat);
-        enviar           = findViewById(R.id.chat_enviar);
+        etMensagem   = findViewById(R.id.et_chat);
 
         dbRoot  = FirebaseDatabase.getInstance().getReference();
         chatRef = dbRoot.child("chats").child(chat.getId());
 
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager       = new LinearLayoutManager(this);
         chatMensagemAdapter = new ChatMensagemAdapter(this, new ArrayList<ChatMensagem>());
 
         toolbar.setTitle(chat.getNome());
@@ -87,6 +85,8 @@ public class ChatActivity extends AppCompatActivity
                 finish();
             }
         });
+
+        layoutManager.setReverseLayout(true);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatMensagemAdapter);
@@ -128,12 +128,9 @@ public class ChatActivity extends AppCompatActivity
     {
         try
         {
-            String uid  = user.getUid();
-            String msg  = validarMensagem();
-
-            ChatMensagem cm = new ChatMensagem(uid, fotoPerfil, msg, professor);
-
-            chatRef.push().setValue(cm);
+            String msg = validarMensagem();
+            ChatMensagem cm = new ChatMensagem(user.getUid(), fotoPerfil, msg, professor, chatRef);
+            cm.enviar();
         }
         catch(NoSuchFieldException e)
         {
@@ -144,6 +141,10 @@ public class ChatActivity extends AppCompatActivity
                     .setPositiveButton("Ok", null)
                     .show();*/
         }
+    }
+
+    public void escolherFoto(View v) {
+        Dialogs.dialogSelecionarImagem(this);
     }
 
     public String validarMensagem() throws NoSuchFieldException
@@ -157,6 +158,25 @@ public class ChatActivity extends AppCompatActivity
         etMensagem.setText("");
 
         return m;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode == RESULT_OK)
+        {
+            switch(requestCode)
+            {
+                case Dialogs.RC_PHOTO_PICKER:
+                    Uri fotoUri     = data.getData();
+                    String nomeFoto = Long.toString(System.currentTimeMillis());
+                    
+                    ChatMensagem cm = new ChatMensagem(user.getUid(), fotoPerfil, null, professor, chatRef);
+
+                    cm.enviarComFoto(this, fotoUri, turma.getId(), nomeFoto);
+                    break;
+            }
+        }
     }
 
     public void pegarFotoPerfil()

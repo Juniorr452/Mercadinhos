@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.home.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -18,22 +19,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.classes_e_interfaces.ChatMensagem;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 
 import java.util.List;
 
 public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapter.ChatMensagemViewHolder>
 {
-    private Context ctx;
+    private Activity activity;
     private LayoutInflater layoutInflater;
     private List<ChatMensagem> mensagens;
     private FirebaseUser user;
+    private int qtdMensagens;
 
-    public ChatMensagemAdapter(Context c, List<ChatMensagem> mensagens)
+    public ChatMensagemAdapter(Activity activity, List<ChatMensagem> mensagens)
     {
-        this.ctx       = c;
-        this.mensagens = mensagens;
+        this.activity     = activity;
+        this.mensagens    = mensagens;
+        this.qtdMensagens = 0;
 
-        layoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
@@ -57,28 +61,39 @@ public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapte
             holder.ll.setGravity(Gravity.RIGHT);
 
             ((CardView) holder.imagemUsuarioOutro.getParent()).setVisibility(View.GONE);
-            Glide.with(ctx)
-                    .load(m.getFotoUrl())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(holder.imagemUsuario);
+            Glide.with(activity)
+                .load(m.getFotoUrl())
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.imagemUsuario);
         }
         else
         {
             ((CardView) holder.imagemUsuario.getParent()).setVisibility(View.GONE);
-            Glide.with(ctx)
-                    .load(m.getFotoUrl())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(holder.imagemUsuarioOutro);
+            Glide.with(activity)
+                .load(m.getFotoUrl())
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.imagemUsuarioOutro);
         }
-
 
         if(m.isProfessor())
         {
-            holder.llc.setBackgroundTintList(ContextCompat.getColorStateList(ctx, R.color.colorPrimary));
-            holder.mensagem.setTextColor(ContextCompat.getColor(ctx, R.color.white));
+            holder.llc.setBackgroundTintList(ContextCompat.getColorStateList(activity, R.color.colorPrimary));
+            holder.mensagem.setTextColor(ContextCompat.getColor(activity, R.color.white));
         }
 
-        holder.mensagem.setText(m.getMensagem());
+        if(m.getImagemUrl() != null)
+        {
+            Glide.with(activity).load(m.getImagemUrl()).into(holder.imagem);
+            holder.imagem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialogs.mostrarImagem(activity, m.getImagemUrl());
+                }
+            });
+            holder.mensagem.setVisibility(View.GONE);
+        }
+        else if(m.getMensagem() != null)
+            holder.mensagem.setText(m.getMensagem());
     }
 
     @Override
@@ -105,22 +120,23 @@ public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapte
 
             ll                 = itemView.findViewById(R.id.ll_chat_msg);
             llc                = itemView.findViewById(R.id.ll_chat_msg_conteudo);
-            imagemUsuario      = itemView.findViewById(R.id.chat_msg_usuario_imagem);
-            imagemUsuarioOutro = itemView.findViewById(R.id.chat_msg_usuario_imagem_outro);
             imagem             = itemView.findViewById(R.id.chat_msg_imagem);
             mensagem           = itemView.findViewById(R.id.chat_msg_texto);
+            imagemUsuario      = itemView.findViewById(R.id.chat_msg_usuario_imagem);
+            imagemUsuarioOutro = itemView.findViewById(R.id.chat_msg_usuario_imagem_outro);
         }
     }
 
     public void add(ChatMensagem m)
     {
         mensagens.add(m);
-        notifyDataSetChanged();
+        notifyItemInserted(qtdMensagens++);
     }
 
     public void clear()
     {
         mensagens.clear();
+        qtdMensagens = 0;
         notifyDataSetChanged();
     }
 }

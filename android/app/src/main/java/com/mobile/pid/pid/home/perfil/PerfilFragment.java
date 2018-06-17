@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.home.perfil.fragments.CurtidasPerfilFragment;
 import com.mobile.pid.pid.home.perfil.fragments.PostsFragment;
 import com.mobile.pid.pid.home.perfil.fragments.SeguidoresFragment;
@@ -60,8 +61,6 @@ public class PerfilFragment extends Fragment {
     private FloatingActionButton fab_menu_signout;
 
     private Usuario user_logado;
-
-    //firebase
 
     DatabaseReference db;
     private static String user_id;
@@ -177,26 +176,11 @@ public class PerfilFragment extends Fragment {
         viewPager_perfil.setAdapter(pageAdapter_perfil);
         tabLayout_perfil.setupWithViewPager(viewPager_perfil);
 
-        // AO CLICAR NA FOTO DO USUARIO, CRIA UM DIALOG MOSTRANDO ELA EM TAMANHO REAL.
+
         imageView_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(getLayoutInflater().inflate(R.layout.image_fullsize, null));
-
-                ImageView image_user_fullsize = (ImageView) dialog.findViewById(R.id.image_user_fullsize);
-
-                Glide.with(getActivity()).load(user.getFotoUrl()).into(image_user_fullsize);
-                dialog.show();
-
-                image_user_fullsize.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
+                Dialogs.mostrarImagem(getActivity(), user.getFotoUrl());
             }
         });
 

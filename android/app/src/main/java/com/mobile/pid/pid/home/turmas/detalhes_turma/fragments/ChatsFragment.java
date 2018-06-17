@@ -75,7 +75,6 @@ public class ChatsFragment extends Fragment
 
         recyclerView = v.findViewById(R.id.rv_chats);
         recyclerView.setLayoutManager(mLayoutManager);
-
         recyclerView.setAdapter(chatsAdapter);
 
         conteudo.setVisibility(View.INVISIBLE);
