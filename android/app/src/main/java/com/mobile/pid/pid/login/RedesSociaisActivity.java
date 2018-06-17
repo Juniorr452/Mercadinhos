@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.login;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -62,6 +64,7 @@ public class RedesSociaisActivity extends AppCompatActivity
 
     ProgressDialog progressDialog;
 
+    private ImageView logoImagem;
     private ImageView btn_email;
     private TextView tv_criarConta;
 
@@ -70,6 +73,8 @@ public class RedesSociaisActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_redes_sociais);
+
+        logoImagem = findViewById(R.id.iv_logo);
 
         progressDialog = new ProgressDialog(this, R.style.DialogTheme);
         progressDialog.setTitle(getString(R.string.entrando));
@@ -300,6 +305,12 @@ public class RedesSociaisActivity extends AppCompatActivity
     }
 
     public void entrarEmail(View v) {
-        startActivity(new Intent(this, LoginActivity.class));
+        Intent i = new Intent(this, LoginActivity.class);
+
+        Pair<View, String> logo = new Pair(logoImagem, logoImagem.getTransitionName());
+
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, logo);
+
+        startActivity(i, options.toBundle());
     }
 }

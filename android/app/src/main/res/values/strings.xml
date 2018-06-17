@@ -141,4 +141,5 @@
     <string name="selecionar_imagem">Selecionar imagem</string>
     <string name="sad_message_turmas_criadas">As turmas que você criar aparecerão aqui.</string>
     <string name="sad_message_turmas_usuario">Parece que este usuário não criou nenhuma turma.</string>
+    <string name="trans_logo">trans_logo</string>
 </resources>
