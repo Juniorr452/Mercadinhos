@@ -3,7 +3,9 @@ package com.mobile.pid.pid.home.perfil;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -38,17 +40,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
 public class AtualizarPerfilActivity extends AppCompatActivity
 {
     private static final String TAG = "AtualizarPerfilActivity";
-
-    private static final int RC_CAMERA = 0;
-    private static final int RC_PHOTO_PICKER = 1;
 
     ProgressBar  progressBar;
     LinearLayout conteudo;
@@ -160,37 +163,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         imageView_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(AtualizarPerfilActivity.this, R.style.DialogTheme);
-
-                View mView = getLayoutInflater().inflate(R.layout.dialog_selecionar_foto, null);
-                builder.setView(mView);
-
-                final ImageView camera = mView.findViewById(R.id.camera);
-                final ImageView galeria = mView.findViewById(R.id.galeria);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-                camera.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(takePicture, RC_CAMERA);
-                    }
-                });
-
-                galeria.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                        startActivityForResult(Intent.createChooser(intent, getString(R.string.completar_acao)), RC_PHOTO_PICKER);
-                    }
-                });
-
+                Dialogs.dialogSelecionarImagem(AtualizarPerfilActivity.this);
             }
         });
 
@@ -200,8 +173,6 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
@@ -221,27 +192,30 @@ public class AtualizarPerfilActivity extends AppCompatActivity
             Log.d(TAG, "Deu");
             switch (requestCode)
             {
-                case RC_CAMERA:
-                    //TODO tirar foto com a camera e guardar
-                    break;
+                case Dialogs.RC_CAMERA:
+                    Bitmap b = (Bitmap) data.getExtras().get("data");
 
-                case RC_PHOTO_PICKER:
-                    Log.d(TAG, "WOOO");
+                    imageView_user.setImageBitmap(b);
+                case Dialogs.RC_PHOTO_PICKER:
                     imagemUri = data.getData();
-
-                    Glide.with(this).load(imagemUri).into(imageView_user);
-                    Glide.with(this).load(imagemUri)
-                            .apply(new RequestOptions()
-                                    .override(20, 20)
-                                    .error(android.R.drawable.dark_header))
-                            .into(imageView_user_blur);
+                    carregarImagemNasViews(imagemUri);
                     break;
             }
         }
         else
         {
-            Log.d(TAG, resultCode + " Não deu");
+            Log.d(TAG, resultCode + " Não deu " + data.getAction());
         }
+    }
+
+    private void carregarImagemNasViews(Object imagem)
+    {
+        Glide.with(this).load(imagem).into(imageView_user);
+        Glide.with(this).load(imagem)
+                .apply(new RequestOptions()
+                        .override(20, 20)
+                        .error(android.R.drawable.dark_header))
+                .into(imageView_user_blur);
     }
 
     public void botaoAtualizarPerfil(View v)
@@ -259,7 +233,6 @@ public class AtualizarPerfilActivity extends AppCompatActivity
 
     public boolean validarCampos(String nome, String data)
     {
-
         if(nome.equals("") || data.equals(""))
             return false;
 
@@ -311,7 +284,6 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     {
         progressDialog.show();
 
-        // TODO: Atualizar nome em outros lugares
         usuarioDatabaseRef.child("nome").setValue(nome);
         usuarioDatabaseRef.child("sexo").setValue(sexo);
         usuarioDatabaseRef.child("dataNascimento").setValue(dataNasc);

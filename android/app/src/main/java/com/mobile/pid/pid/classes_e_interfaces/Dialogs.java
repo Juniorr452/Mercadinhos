@@ -1,11 +1,17 @@
 package com.mobile.pid.pid.classes_e_interfaces;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,10 +29,78 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.FeedFunctions;
+import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
+
+import java.io.File;
+import java.util.Date;
 
 public class Dialogs
 {
+    public static final int RC_CAMERA       = 0;
+    public static final int RC_PHOTO_PICKER = 1;
+
+    // https://cursos.alura.com.br/forum/topico-usando-a-camera-22771
+    public static void dialogSelecionarImagem(final Activity activity)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogTheme);
+
+        View mView = activity.getLayoutInflater().inflate(R.layout.dialog_selecionar_foto, null);
+        builder.setView(mView);
+
+        final ImageView camera = mView.findViewById(R.id.camera);
+        final ImageView galeria = mView.findViewById(R.id.galeria);
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        camera.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                try
+                {
+                    //File caminhoFoto = new File(activity.getFilesDir(), "imagens");
+                    //File arquivoFoto = new File(caminhoFoto, getNomeArquivo() + ".jpg");
+
+                    //Uri uri = FileProvider.getUriForFile(activity, "com.pid.fileprovider", arquivoFoto);
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    //intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    //intent.putExtra("uri", uri);
+                    //intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    activity.startActivityForResult(intent, RC_CAMERA);
+                }
+                catch(Exception e)
+                {
+                    new AlertDialog.Builder(activity)
+                        .setTitle(R.string.warning)
+                        .setMessage("Erro: " + e.getMessage())
+                        .setPositiveButton(R.string.Ok, null)
+                        .show();
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        galeria.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+                activity.startActivityForResult(Intent.createChooser(intent, activity.getString(R.string.completar_acao)), RC_PHOTO_PICKER);
+                dialog.dismiss();
+            }
+        });
+    }
+
     public static void dialogAvisoTurma(final Context context, final String tid)
     {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_criar_aviso_turma, null);
@@ -360,4 +434,8 @@ public class Dialogs
         solicitar.setTextColor(context.getResources().getColor(R.color.gray_font));
     }
 
+    // https://stackoverflow.com/questions/21388586/get-uri-from-camera-intent-in-android
+    private static String getNomeArquivo() {
+        return DateFormat.format("yyyy-MM-dd_hhmmss", new Date()).toString() + ".jpg";
+    }
 }
