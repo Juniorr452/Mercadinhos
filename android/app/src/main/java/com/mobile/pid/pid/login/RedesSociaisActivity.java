@@ -121,11 +121,13 @@ public class RedesSociaisActivity extends AppCompatActivity
                 @Override
                 public void onCancel() {
                     Log.d(TAG, "facebook:onCancel");
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onError(FacebookException error) {
                     Log.d(TAG, "facebook:onError", error);
+                    progressDialog.dismiss();
                 }
             });
     }
@@ -161,12 +163,12 @@ public class RedesSociaisActivity extends AppCompatActivity
             {
                 Log.e(TAG, "GOOGLE_SIGN_IN ERROR: " + result.getStatus());
                 Toast.makeText(RedesSociaisActivity.this, "Erro ao logar com sua conta do Google. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
         }
         else if (requestCode == FacebookSdk.getCallbackRequestCodeOffset())
-        {
             facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-        }
+
     }
 
     public void dialogCriarConta(View v)

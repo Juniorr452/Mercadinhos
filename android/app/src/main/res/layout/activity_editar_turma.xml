@@ -86,48 +86,56 @@ tools:context="com.mobile.pid.pid.home.turmas.detalhes_turma.EditarTurma">
                 android:layout_marginTop="20dp"
                 android:text="@string/dias_da_semana"/>
 
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/turma_segunda"
+            <LinearLayout
+                android:id="@+id/ll_editar_turma_checkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/segunda_feira"/>
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/turma_terca"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/ter_a_feira"/>
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/turma_quarta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/quarta_feira"/>
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/turma_quinta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/quinta_feira"/>
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/turma_sexta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/sexta_feira"/>
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/turma_sabado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/s_bado"/>
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/turma_domingo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/domingo"/>
+                android:orientation="vertical">
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/turma_domingo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/domingo"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/turma_segunda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/segunda_feira"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/turma_terca"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/ter_a_feira"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/turma_quarta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/quarta_feira"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/turma_quinta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/quinta_feira"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/turma_sexta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/sexta_feira"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/turma_sabado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/s_bado"/>
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <LinearLayout

@@ -99,8 +99,6 @@ public class MembrosFragment extends Fragment
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                final List<Usuario> alunos = new ArrayList<>(30);
-
                 for(final DataSnapshot data : dataSnapshot.getChildren())
                 {
                     String alunoKey = data.getKey();
