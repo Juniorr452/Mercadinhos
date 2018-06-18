@@ -161,7 +161,7 @@ public class DetalhesTurma extends AppCompatActivity
                 turma = (Turma) data.getExtras().getSerializable("turma");
 
                 nomeTurma.setText(turma.getNome());
-                
+
                 Glide.with(this).load(turma.getCapaUrl()).into(capa);
                 break;
 
