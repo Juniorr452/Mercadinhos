@@ -118,7 +118,7 @@ public class AvisosFragment extends Fragment
     @Override
     public void onStop() {
         super.onStop();
-
+        avisosTurmaAdapter.clear();
         avisosReference.removeEventListener(avisosListener);
     }
 

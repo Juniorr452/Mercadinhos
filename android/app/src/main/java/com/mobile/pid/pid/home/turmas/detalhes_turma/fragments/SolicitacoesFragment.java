@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,7 +70,8 @@ public class SolicitacoesFragment extends Fragment
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         Intent i  = getActivity().getIntent();
@@ -78,15 +80,18 @@ public class SolicitacoesFragment extends Fragment
         usuariosRef = FirebaseDatabase.getInstance().getReference().child("usuarios");
         solicRef = FirebaseDatabase.getInstance().getReference("turmas").child(turma.getId()).child("solicitacoes");
 
-        solicListener = new ValueEventListener() {
+        solicListener = new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                rv.getRecycledViewPool().clear();
                 adapter.clear();
 
-                if(dataSnapshot.exists()) {
-                    for(DataSnapshot data : dataSnapshot.getChildren()) {
-
+                if(dataSnapshot.exists())
+                {
+                    for(DataSnapshot data : dataSnapshot.getChildren())
+                    {
                         String uid = data.getKey();
 
                         usuariosRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener()
@@ -112,8 +117,6 @@ public class SolicitacoesFragment extends Fragment
 
             }
         };
-
-
     }
 
     @Override
@@ -127,7 +130,7 @@ public class SolicitacoesFragment extends Fragment
     @Override
     public void onStop() {
         super.onStop();
-
+        adapter.clear();
         solicRef.removeEventListener(solicListener);
     }
 }

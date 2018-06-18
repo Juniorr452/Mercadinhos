@@ -95,22 +95,26 @@ public class MembrosFragment extends Fragment
             }
         });
 
-        alunosReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        alunosReference.addValueEventListener(new ValueEventListener()
+        {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
+                recyclerView.getRecycledViewPool().clear();
+                membrosAdapter.clear();
+
                 for(final DataSnapshot data : dataSnapshot.getChildren())
                 {
-                    String alunoKey = data.getKey();
+                    final String alunoKey = data.getKey();
 
-                    usuariosReference.child(alunoKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                    usuariosReference.child(alunoKey).addListenerForSingleValueEvent(new ValueEventListener()
+                    {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot)
                         {
                             Usuario aluno = dataSnapshot.getValue(Usuario.class);
-                            aluno.setUid(dataSnapshot.getKey());
+                            aluno.setUid(alunoKey);
                             membrosAdapter.add(aluno);
-                            //.add(aluno);
                         }
 
                         @Override

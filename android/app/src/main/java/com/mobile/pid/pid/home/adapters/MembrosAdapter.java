@@ -59,8 +59,8 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
     @Override
     public void onBindViewHolder(@NonNull MembrosViewHolder holder, int position)
     {
-        Usuario membro = membros.get(position);
-        String     uid = membro.getUid();
+        final Usuario membro = membros.get(position);
+        final String     uid = membro.getUid();
 
         if(turma.getProfessorUid().equals(uid))
         {
@@ -85,10 +85,11 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
                     new AlertDialog.Builder(c)
                         .setTitle(R.string.warning)
                         .setMessage("Deseja excluir este membro da turma?")
-                        .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener()
+                        {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // TODO: OnClick
+                                turma.desmatricularAluno(uid);
                             }
                         }).setNegativeButton(R.string.cancel, null)
                         .show();
@@ -115,7 +116,7 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
         ordenarMembros();
     }
 
-    public void clear(Usuario u){
+    public void clear(){
         membros.clear();
         notifyDataSetChanged();
     }

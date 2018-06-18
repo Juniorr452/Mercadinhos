@@ -145,16 +145,16 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         DatabaseReference turmasCriadasRef = rootRef.child("userTurmasCriadas");
         DatabaseReference turmasMatriculadasRef = rootRef.child("userTurmasMatriculadas");
 
-        String tuid = getId();
+        String tid = getId();
 
         // Deletar turma.
         rootRef.child("turmas")
-                .child(tuid)
+                .child(tid)
                 .removeValue();
 
         // Deletar no turmas_criadas do professor.
         turmasCriadasRef.child(getProfessorUid())
-                .child(tuid)
+                .child(tid)
                 .removeValue();
 
         // TODO: Verificar se está funcionando
@@ -162,8 +162,30 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         if(getAlunos() != null)
             for(String auid : getAlunos().keySet())
                 turmasMatriculadasRef.child(auid)
-                        .child(tuid)
+                        .child(tid)
                         .removeValue();
+    }
+
+    public void desmatricularAluno(String uid)
+    {
+        if(!alunosUid.containsKey(uid))
+            return;
+
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference alunosRef = rootRef
+                .child("turmas")
+                .child(id)
+                .child("alunos")
+                .child(uid);
+
+        DatabaseReference alunoTurmaMatriculada = rootRef
+                .child("userTurmasMatriculadas")
+                .child(uid)
+                .child(id);
+
+        alunosRef.removeValue();
+        alunoTurmaMatriculada.removeValue();
+        alunosUid.remove(uid);
     }
 
     public String getId() {

@@ -22,14 +22,16 @@ import java.util.List;
 public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.SolicitacaoViewHolder>
 {
     private Turma   t;
-    private Context c;
     private List<Usuario> solicitacoes;
     private LayoutInflater layoutInflater;
+
+    private int qtdSolicitacoes;
 
     public SolicitacaoAdapter(Context c, Turma t, List<Usuario> solicitacoes)
     {
         this.t = t;
         this.solicitacoes = solicitacoes;
+        this.qtdSolicitacoes = 0;
 
         layoutInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -53,6 +55,7 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
         Glide.with(holder.foto).load(u.getFotoUrl()).into(holder.foto);
         holder.nome.setText(u.getNome());
 
+        holder.aceitar.setChecked(true);
         holder.aceitar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -64,12 +67,12 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
             }
         });
 
+        holder.recusar.setChecked(false);
         holder.recusar.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                String uid = u.getUid();
                 excluirSolicitacao(u);
             }
         });
@@ -78,11 +81,26 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
     public void add(Usuario u)
     {
         solicitacoes.add(u);
-        notifyDataSetChanged();
+        notifyItemInserted(qtdSolicitacoes++);
+    }
+
+    public void remove(String uid)
+    {
+        qtdSolicitacoes--;
+
+        int i;
+
+        for(i = 0; i < solicitacoes.size(); i++)
+            if(uid.equals(solicitacoes.get(i).getUid()))
+                break;
+
+        solicitacoes.remove(i);
+        notifyItemRemoved(i);
     }
 
     public void clear()
     {
+        qtdSolicitacoes = 0;
         solicitacoes.clear();
         notifyDataSetChanged();
     }
@@ -129,8 +147,8 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
     {
         ImageView foto;
         TextView  nome;
-        CheckBox aceitar;
-        CheckBox    recusar;
+        CheckBox  aceitar;
+        CheckBox  recusar;
 
         public SolicitacaoViewHolder(View itemView)
         {
