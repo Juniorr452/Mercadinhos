@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.classes_e_interfaces.Turma;
@@ -69,6 +72,13 @@ public class EditarTurma extends AppCompatActivity
         btn_atualizar = findViewById(R.id.btn_atualizar_turma);
         btn_excluir   = findViewById(R.id.btn_excluir_turma);
 
+        capa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialogs.dialogSelecionarImagem(EditarTurma.this);
+            }
+        });
+
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,12 +117,14 @@ public class EditarTurma extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         if(resultCode == RESULT_OK)
         {
             if(requestCode == Dialogs.RC_PHOTO_PICKER)
             {
-                Uri uri =
+                capaUri = data.getData();
+                capa.setImageURI(capaUri);
             }
         }
     }
@@ -171,11 +183,28 @@ public class EditarTurma extends AppCompatActivity
         String nome = nomeEditText.getText().toString();
         String pin  = pinEditText.getText().toString();
 
+        Intent i = new Intent();
+        i.putExtra("turma", turma);
+        setResult(DetalhesTurma.RC_TURMA_ATUALIZADA, i);
+
         try
         {
             validarCampos(nome);
-            turma.atualizar(nome, pin, diasDaSemana);
-            finish();
+
+            if(capaUri == null)
+            {
+                turma.atualizar(nome, pin, diasDaSemana);
+                finish();
+            }
+            else
+            {
+                turma.atualizar(this, nome, pin, capaUri, diasDaSemana).addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        finish();
+                    }
+                });
+            }
         }
         catch(NoSuchFieldException e)
         {

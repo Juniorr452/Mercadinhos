@@ -54,10 +54,7 @@ public class ChatMensagem
             .child("imagens")
             .child(nome);
 
-        final ProgressDialog progressDialog = new ProgressDialog(c);
-        progressDialog.setTitle("Enviando imagem...");
-        progressDialog.setMessage("Aguarde...");
-        progressDialog.show();
+        final ProgressDialog progressDialog = Dialogs.dialogEnviandoImagem(c);
 
         chatStorageRef.putFile(fotoUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
         {

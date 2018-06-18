@@ -1,11 +1,25 @@
 package com.mobile.pid.pid.classes_e_interfaces;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.mobile.pid.pid.R;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -65,8 +79,12 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         this.professorUid = professorUid;
     }
 
-    public void atualizar(String nome, String pin, Map<String, Integer> diasDaSemana)
+    public DatabaseReference atualizar(String nome, String pin, Map<String, Integer> diasDaSemana)
     {
+        this.nome = nome;
+        this.pin  = pin;
+        this.diasDaSemana = diasDaSemana;
+
         DatabaseReference turmaRef = FirebaseDatabase.getInstance()
                 .getReference("turmas")
                 .child(id);
@@ -74,6 +92,51 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         turmaRef.child("nome").setValue(nome);
         turmaRef.child("pin").setValue(pin);
         turmaRef.child("diasDaSemana").setValue(diasDaSemana);
+
+        return turmaRef;
+    }
+
+    public StorageTask atualizar(final Context c, String nome, String pin, Uri capaUri, Map<String, Integer> diasDaSemana)
+    {
+        final DatabaseReference turmaRef = atualizar(nome, pin, diasDaSemana);
+
+        final ProgressDialog progressDialog = Dialogs.dialogEnviandoImagem(c);
+
+        return enviarFotoCapa(capaUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
+            {
+                progressDialog.dismiss();
+
+                if(task.isSuccessful())
+                {
+                    Turma.this.capaUrl = task.getResult().getDownloadUrl().toString();
+                    turmaRef.child("capaUrl").setValue(Turma.this.capaUrl);
+                }
+
+                else
+                    Dialogs.mensagem(c, R.string.warning, "Erro ao enviar imagem: " + task.getException().getMessage());
+            }
+        }).addOnFailureListener(new OnFailureListener()
+        {
+            @Override
+            public void onFailure(@NonNull Exception e)
+            {
+                progressDialog.dismiss();
+                Dialogs.mensagem(c, R.string.warning, "Erro ao enviar imagem: " + e.getMessage());
+            }
+        });
+    }
+
+    private UploadTask enviarFotoCapa(Uri capaUri)
+    {
+        StorageReference turmaStorageRef = FirebaseStorage.getInstance()
+                .getReference("turmas")
+                .child(id)
+                .child("capa");
+
+        return turmaStorageRef.putFile(capaUri);
     }
 
     public void excluir()

@@ -32,12 +32,13 @@ import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
 public class DetalhesTurma extends AppCompatActivity
 {
-    public static final int RC_TURMA_EXCLUIDA = 0;
+    public static final int RC_TURMA_EXCLUIDA   = 0;
+    public static final int RC_TURMA_ATUALIZADA = 1;
 
     private static final int PROFESSOR = 0;
     private static final int ALUNO = 1;
 
-    private Turma     turma;;
+    private Turma     turma;
     private Toolbar   toolbar_detalhes;
     private ImageView capa;
     private TextView  nomeTurma;
@@ -154,8 +155,20 @@ public class DetalhesTurma extends AppCompatActivity
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RC_TURMA_EXCLUIDA)
-            finish();
+        switch(resultCode)
+        {
+            case RC_TURMA_ATUALIZADA:
+                turma = (Turma) data.getExtras().getSerializable("turma");
+
+                nomeTurma.setText(turma.getNome());
+                
+                Glide.with(this).load(turma.getCapaUrl()).into(capa);
+                break;
+
+            case RC_TURMA_EXCLUIDA:
+                finish();
+                break;
+        }
     }
 
     // Tabs and ViewPager - https://www.youtube.com/watch?v=zQekzaAgIlQ

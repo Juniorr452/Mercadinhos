@@ -3,6 +3,7 @@ package com.mobile.pid.pid.classes_e_interfaces;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,6 +43,43 @@ public class Dialogs
 {
     public static final int RC_CAMERA       = 0;
     public static final int RC_PHOTO_PICKER = 1;
+
+    public static void mensagem(Context c, String titulo, String mensagem)
+    {
+        new AlertDialog.Builder(c)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setPositiveButton(R.string.Ok, null)
+                .show();
+    }
+
+    public static void mensagem(Context c, int titulo, int mensagem)
+    {
+        new AlertDialog.Builder(c)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setPositiveButton(R.string.Ok, null)
+                .show();
+    }
+
+    public static void mensagem(Context c, int titulo, String mensagem)
+    {
+        new AlertDialog.Builder(c)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setPositiveButton(R.string.Ok, null)
+                .show();
+    }
+
+    public static ProgressDialog dialogEnviandoImagem(Context c)
+    {
+        final ProgressDialog progressDialog = new ProgressDialog(c);
+        progressDialog.setTitle("Enviando imagem...");
+        progressDialog.setMessage("Aguarde...");
+        progressDialog.show();
+
+        return progressDialog;
+    }
 
     // AO CLICAR NA FOTO DO USUARIO, CRIA UM DIALOG MOSTRANDO ELA EM TAMANHO REAL.
     public static void mostrarImagem(Activity activity, String fotoUrl)
