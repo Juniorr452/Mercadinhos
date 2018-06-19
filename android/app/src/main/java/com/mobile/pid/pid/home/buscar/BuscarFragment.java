@@ -199,7 +199,7 @@ public class BuscarFragment extends Fragment
 
         SearchView searchView = (SearchView) item.getActionView();
 
-        //searchView.setMaxWidth(getActivity().getWindowManager().getDefaultDisplay().getWidth());
+        searchView.setMaxWidth(getActivity().getWindowManager().getDefaultDisplay().getWidth());
         
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
@@ -279,6 +279,8 @@ public class BuscarFragment extends Fragment
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(newText.length() == 0)
+                    buscarAdapter.clear();
 
                 return true;
             }
@@ -289,11 +291,13 @@ public class BuscarFragment extends Fragment
             public boolean onClose() {
 
                 buscarAdapter.clear();
-
                 sugestoes.setVisibility(View.VISIBLE);
                 busca.setVisibility(View.GONE);
+
                 return false;
             }
         });
+
+
     }
 }

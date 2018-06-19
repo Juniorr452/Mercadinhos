@@ -109,13 +109,13 @@ public class Dialogs
         View mView = activity.getLayoutInflater().inflate(R.layout.dialog_selecionar_foto, null);
         builder.setView(mView);
 
-        final ImageView camera = mView.findViewById(R.id.camera);
+        //final ImageView camera = mView.findViewById(R.id.camera);
         final ImageView galeria = mView.findViewById(R.id.galeria);
 
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        camera.setOnClickListener(new View.OnClickListener()
+        /*camera.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -145,7 +145,7 @@ public class Dialogs
 
                 dialog.dismiss();
             }
-        });
+        });*/
 
         galeria.setOnClickListener(new View.OnClickListener()
         {

@@ -4,18 +4,21 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:background="@color/fundoRecycle"
     tools:context="com.mobile.pid.pid.home.buscar.BuscarFragment">
 
     <FrameLayout
         android:id="@+id/relative_buscar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_buscar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:fitsSystemWindows="true"
             android:background="@color/colorPrimaryDark"
             android:titleTextColor="@color/white">
 
