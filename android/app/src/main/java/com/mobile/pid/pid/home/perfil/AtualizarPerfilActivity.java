@@ -98,7 +98,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         imageView_user_blur = findViewById(R.id.imageView_user_blur);
         imageView_user = findViewById(R.id.imageView_user);
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.DialogTheme);
         progressDialog.setTitle("Atualizando...");
         progressDialog.setMessage("Atualizando seu perfil...");
 

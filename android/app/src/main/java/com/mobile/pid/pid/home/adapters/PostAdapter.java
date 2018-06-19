@@ -3,6 +3,7 @@ package com.mobile.pid.pid.home.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.classes_e_interfaces.Post;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 import com.mobile.pid.pid.home.feed.FeedFunctions;
+import com.mobile.pid.pid.home.feed.PostComentarios;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,7 +61,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
         try
         {
-            holder.postTime.setText(calcularTempo(p.getPostDataFormatado()));
+            holder.postTime.setText(p.calcularTempo());
         }
         catch(ParseException e)
         {
@@ -134,6 +136,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             }
         });
 
+
         // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
         FirebaseDatabase.getInstance().getReference().child("postLikes").child(p.getId())
                 .addValueEventListener(new ValueEventListener() {
@@ -163,9 +166,47 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
             }
         });
+
+        // CARREGAR OS POSTS COM O NUMERO DE COMENTARIOS
+        FirebaseDatabase.getInstance().getReference("postComments").child(p.getId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if(dataSnapshot.getChildrenCount() == 0) {
+                            holder.countReply.setVisibility(View.INVISIBLE);
+                        } else {
+                            holder.countReply.setVisibility(View.VISIBLE);
+                            holder.countReply.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        holder.texto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, PostComentarios.class);
+                i.putExtra("post", p);
+                context.startActivity(i);
+            }
+        });
+
+        holder.reply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, PostComentarios.class);
+                i.putExtra("post", p);
+                context.startActivity(i);
+            }
+        });
     }
 
-    public String calcularTempo(String data) throws ParseException
+    /*public static String calcularTempo(String data) throws ParseException
     {
         Calendar         c   = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -197,7 +238,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                     c.get(Calendar.YEAR);
         }
 
-    }
+    }*/
 
     @Override
     public int getItemCount() {
@@ -217,6 +258,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         private TextView postTime;
         private TextView countLike;
         private CheckBox like;
+        private TextView countReply;
+        private ImageView reply;
 
         public RecyclerViewHolder(final View itemView) {
             super(itemView);
@@ -225,8 +268,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             usuario    = itemView.findViewById(R.id.tv_user_feed);
             texto      = itemView.findViewById(R.id.tv_message_feed);
             postTime   = itemView.findViewById(R.id.postTime);
+            countReply = itemView.findViewById(R.id.count_reply);
+            reply      = itemView.findViewById(R.id.reply);
+            like       = itemView.findViewById(R.id.cb_like);
             countLike  = itemView.findViewById(R.id.count_like);
-            like = itemView.findViewById(R.id.cb_like);
             
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

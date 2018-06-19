@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/fundoRecycle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/novo_comentario"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginRight="7dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+    </Toolbar>
+
+    <EditText
+        android:id="@+id/edit_comment"
+        android:layout_width="match_parent"
+        android:layout_height="300px"
+        android:inputType="textMultiLine|textEmailAddress"
+        android:background="@drawable/border_posts"
+        android:scrollbars="vertical"
+        android:gravity="top|left"
+        android:textColor="@color/white"
+        android:scrollHorizontally="false"
+        android:scrollbarStyle="insideInset"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:textColorHint="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/caracteres"
+            android:textColor="@color/gray_font"
+            android:layout_marginLeft="18dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="10dp"/>
+
+        <TextView
+            android:id="@+id/count_chars"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "@string/_0_limit"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

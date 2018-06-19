@@ -68,6 +68,23 @@
                 android:paddingRight="8dp">
 
                 <TextView
+                    android:id="@+id/count_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/gray_font"
+                    android:paddingRight="8dp"/>
+
+                <ImageView
+                    android:id="@+id/reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/outline_mode_comment_white_24"
+                    android:layout_marginRight="8dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/gray_font"/>
+
+                <TextView
                     android:id="@+id/count_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
