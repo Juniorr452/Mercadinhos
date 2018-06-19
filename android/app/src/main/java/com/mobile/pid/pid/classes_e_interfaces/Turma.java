@@ -1,7 +1,5 @@
 package com.mobile.pid.pid.classes_e_interfaces;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -22,15 +20,18 @@ import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by junio on 07/03/2018.
  */
 
-public class Turma implements Serializable // Parcelable Necessário pra passar ele pra outra activity https://youtu.be/ROQ4T47nMhI?t=619
+public class Turma implements Serializable
 {
     @Exclude
     private String id;
@@ -46,7 +47,8 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
     private Map<String, Boolean> alunosUid;
     private Map<String, Boolean> solicitacoes;
 
-    public static Comparator<Turma> compararPorNome = new Comparator<Turma>() {
+    public static Comparator<Turma> compararPorNome = new Comparator<Turma>()
+    {
         @Override
         public int compare(Turma o1, Turma o2)
         {
@@ -60,11 +62,53 @@ public class Turma implements Serializable // Parcelable Necessário pra passar 
         }
     };
 
-    // TODO: Comparar por dia
-    public static Comparator<Turma> compararPorDia = new Comparator<Turma>() {
+    public static Comparator<Turma> compararPorDia = new Comparator<Turma>()
+    {
+        Calendar calendar = Calendar.getInstance();
+
+        int hoje = calendar.get(Calendar.DAY_OF_WEEK);
+
         @Override
-        public int compare(Turma o1, Turma o2) {
-            return o1.getNome().compareTo(o2.getNome());
+        public int compare(Turma t1, Turma t2)
+        {
+            int diat1 = pegarDiaMaisProximo(t1);
+            int diat2 = pegarDiaMaisProximo(t2);
+
+            if(diat1 == diat2)
+                return 0;
+
+            diat1 = Math.abs(diat1 - hoje);
+            diat2 = Math.abs(diat2 - hoje);
+
+            return Integer.compare(diat1, diat2);
+        }
+
+        private int pegarDiaMaisProximo(Turma turma)
+        {
+            List<Integer> dias = new ArrayList<>(turma.getDiasDaSemana().values());
+
+            int diaMaisProximo   = dias.get(0);
+            int tamanhoListaDias = dias.size();
+
+            if(diaMaisProximo < hoje)
+                diaMaisProximo += 7;
+
+            if(tamanhoListaDias == 1)
+                return diaMaisProximo;
+
+            for(int i = 1; i < tamanhoListaDias; i++)
+            {
+                int dia = dias.get(i);
+
+                if(dia < hoje)
+                    dia += 7;
+
+                if(dia < diaMaisProximo)
+                    diaMaisProximo = dia;
+            }
+
+            Log.i("pegarDiaMaisProximo", "Turma " + turma.getNome() + ": " + diaMaisProximo);
+            return diaMaisProximo;
         }
     };
 

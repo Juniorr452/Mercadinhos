@@ -147,7 +147,7 @@ public class TurmasCriadasFragment extends Fragment
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                turmaAdapter.ordenar(Turma.compararPorNome);
+                turmaAdapter.ordenar(Turma.compararPorDia);
                 break;
             default:
                 return false;

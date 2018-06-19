@@ -135,7 +135,7 @@ public class TurmasMatriculadasFragment extends Fragment
                 progressBar.setVisibility(View.VISIBLE);
                 conteudo.setVisibility(View.GONE);
 
-                //turmaAdapter.ordenar(pidSort.ordenarTurmaDia());
+                turmaAdapter.ordenar(Turma.compararPorDia);
                 break;
             default:
                 return false;
