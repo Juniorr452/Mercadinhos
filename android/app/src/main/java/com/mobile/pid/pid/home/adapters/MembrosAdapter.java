@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.classes_e_interfaces.PidSort;
 import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
@@ -71,6 +72,13 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
         }
 
         Glide.with(c).load(membro.getFotoUrl()).into(holder.foto);
+
+        holder.foto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialogs.dialogUsuario(membro, c);
+            }
+        });
 
         holder.nome.setText(membro.getNome());
 

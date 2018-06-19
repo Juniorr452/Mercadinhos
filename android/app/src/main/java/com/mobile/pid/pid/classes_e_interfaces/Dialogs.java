@@ -212,7 +212,7 @@ public class Dialogs
         etAviso.addTextChangedListener(textWatcher);
     }
 
-    public void dialogUsuario(final Usuario u, final Context context)
+    public static void dialogUsuario(final Usuario u, final Context context)
     {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_perfil_usuario, null);
         final String usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
