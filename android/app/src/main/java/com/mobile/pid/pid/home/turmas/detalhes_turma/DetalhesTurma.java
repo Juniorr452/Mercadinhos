@@ -115,7 +115,7 @@ public class DetalhesTurma extends AppCompatActivity
 
         nomeTurma.setText(turma.getNome());
 
-        int qtdAlunos = turma.getQtdAlunos();
+        int qtdAlunos = turma.getQtdMembros();
         if(qtdAlunos < 2)
             tvAlunos.setText(R.string.aluno);
 

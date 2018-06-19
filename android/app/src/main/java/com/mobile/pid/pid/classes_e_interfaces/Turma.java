@@ -1,11 +1,13 @@
 package com.mobile.pid.pid.classes_e_interfaces;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,7 +33,6 @@ import java.util.Map;
  * Created by junio on 07/03/2018.
  */
 
-// TODO: MUDAR ALUNOSUID PRA MEMBROS
 public class Turma implements Serializable
 {
     @Exclude
@@ -45,7 +46,7 @@ public class Turma implements Serializable
 
     private String professorUid;
 
-    private Map<String, Boolean> alunosUid;
+    private Map<String, Boolean> membrosUid;
     private Map<String, Boolean> solicitacoes;
 
     public static Comparator<Turma> compararPorNome = new Comparator<Turma>()
@@ -121,6 +122,28 @@ public class Turma implements Serializable
         this.pin          = pin;
         this.diasDaSemana = diasDaSemana;
         this.professorUid = professorUid;
+
+        this.membrosUid = new HashMap<>(1);
+        membrosUid.put(professorUid, true);
+    }
+
+    // Inserir os dados da turma no banco de dados
+    // Erro aqui ao usar o setValue com a Turma t
+    public void cadastrar(Activity activity, ProgressDialog progressDialog, String turmaId)
+    {
+        DatabaseReference dbRoot = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference turmasCriadasDatabaseReference = dbRoot.child("userTurmasCriadas");
+        DatabaseReference turmasDatabaseReference        = dbRoot.child("turmas");
+
+        // Cadastrar a turma
+        turmasDatabaseReference.child(turmaId).setValue(this);
+
+        // Cadastrar referência no turmas_criadas
+        turmasCriadasDatabaseReference.child(professorUid).child(turmaId).setValue(true);
+
+        progressDialog.dismiss();
+        Toast.makeText(activity, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+        activity.finish();
     }
 
     public DatabaseReference atualizar(String nome, String pin, Map<String, Integer> diasDaSemana)
@@ -206,8 +229,8 @@ public class Turma implements Serializable
 
         // TODO: Verificar se está funcionando
         // Deletar no turmas_matriculadas dos alunos.
-        if(getAlunos() != null)
-            for(String auid : getAlunos().keySet())
+        if(getMembros() != null)
+            for(String auid : getMembros().keySet())
                 turmasMatriculadasRef.child(auid)
                         .child(tid)
                         .removeValue();
@@ -215,14 +238,14 @@ public class Turma implements Serializable
 
     public void desmatricularAluno(String uid)
     {
-        if(!alunosUid.containsKey(uid))
+        if(!membrosUid.containsKey(uid))
             return;
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference alunosRef = rootRef
+        DatabaseReference membrosRef = rootRef
                 .child("turmas")
                 .child(id)
-                .child("alunos")
+                .child("membros")
                 .child(uid);
 
         DatabaseReference alunoTurmaMatriculada = rootRef
@@ -230,9 +253,9 @@ public class Turma implements Serializable
                 .child(uid)
                 .child(id);
 
-        alunosRef.removeValue();
+        membrosRef.removeValue();
         alunoTurmaMatriculada.removeValue();
-        alunosUid.remove(uid);
+        membrosUid.remove(uid);
     }
 
     public String getId() {
@@ -271,13 +294,13 @@ public class Turma implements Serializable
         this.professorUid = professorUid;
     }
 
-    public Map<String, Boolean> getAlunos() {
-        return alunosUid;
+    public Map<String, Boolean> getMembros() {
+        return membrosUid;
     }
 
     @Nullable
-    public void setAlunos(Map<String, Boolean> alunosUid) {
-        this.alunosUid = alunosUid;
+    public void setMembros(Map<String, Boolean> membrosUid) {
+        this.membrosUid = membrosUid;
     }
 
     public Map<String, Integer> getDiasDaSemana() {
@@ -297,11 +320,11 @@ public class Turma implements Serializable
     }
 
     @Exclude
-    public int getQtdAlunos(){
-        if (alunosUid == null)
+    public int getQtdMembros(){
+        if (membrosUid == null)
             return 0;
         else
-            return alunosUid.size();
+            return membrosUid.size() - 1;
     }
 
     public boolean estaNaTurma(String uid)
@@ -309,9 +332,8 @@ public class Turma implements Serializable
         if(uid.equals(professorUid))
             return true;
 
-        if (alunosUid != null)
-            for(String auid : alunosUid.keySet())
-                if(uid.equals(auid))
+        if (membrosUid != null)
+            if(membrosUid.containsKey(uid))
                     return true;
 
         return false;

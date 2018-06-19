@@ -1,5 +1,6 @@
 package com.mobile.pid.pid.home.turmas;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -143,7 +144,7 @@ public class NovaTurmaActivity extends AppCompatActivity
 
                                 Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getUid(), diasDaSemana);
 
-                                cadastrarTurma(novaTurma, turmaId);
+                                novaTurma.cadastrar(NovaTurmaActivity.this, progressDialog, turmaId);
                             }
                         });
                     }
@@ -153,7 +154,7 @@ public class NovaTurmaActivity extends AppCompatActivity
             {
                 Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, user.getUid(), diasDaSemana);
 
-                cadastrarTurma(novaTurma, turmaId);
+                novaTurma.cadastrar(NovaTurmaActivity.this, progressDialog, turmaId);
             }
         }
         catch(NoSuchFieldException e)
@@ -169,21 +170,6 @@ public class NovaTurmaActivity extends AppCompatActivity
                 })
                 .show();
         }
-    }
-
-    // Inserir os dados da turma no banco de dados
-    // Erro aqui ao usar o setValue com a Turma t
-    private void cadastrarTurma(Turma t, String turmaId)
-    {
-        // Cadastrar a turma
-        turmasDatabaseReference.child(turmaId).setValue(t);
-
-        // Cadastrar referência no turmas_criadas
-        turmasCriadasDatabaseReference.child(user.getUid()).child(turmaId).setValue(true);
-
-        progressDialog.dismiss();
-        Toast.makeText(this, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
-        finish();
     }
 
     public void onCheckboxClicked(View v)

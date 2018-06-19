@@ -112,10 +112,10 @@ public class SolicitacaoAdapter extends RecyclerView.Adapter<SolicitacaoAdapter.
                 .child(uid)
                 .child(t.getId());
 
-        // Adicionar como aluno na turma
+        // Adicionar como membro na turma
         dbRef.child("turmas")
                 .child(t.getId())
-                .child("alunos")
+                .child("membros")
                 .child(uid).setValue(true);
 
         // Adicionar turma no turmas_matriculadas do aluno novo

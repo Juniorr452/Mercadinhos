@@ -7,11 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -33,10 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.FeedFunctions;
-import com.mobile.pid.pid.home.perfil.AtualizarPerfilActivity;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
 
-import java.io.File;
 import java.util.Date;
 
 public class Dialogs
@@ -410,7 +404,7 @@ public class Dialogs
 
         carregarFotoProfessor(foto, t);
 
-        count_alunos.setText(String.valueOf(t.getQtdAlunos()));
+        count_alunos.setText(String.valueOf(t.getQtdMembros()));
 
         if(t.estaNaTurma(uid))
             solicitar.setVisibility(View.GONE);

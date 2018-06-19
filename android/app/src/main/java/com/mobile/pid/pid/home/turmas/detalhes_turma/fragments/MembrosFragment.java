@@ -18,18 +18,13 @@ import com.mobile.pid.pid.home.adapters.MembrosAdapter;
 import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MembrosFragment extends Fragment
 {
     DatabaseReference firebaseDatabase;
-    DatabaseReference alunosReference;
+    DatabaseReference membrosReference;
     DatabaseReference usuariosReference;
-    DatabaseReference professorReference;
 
-    Turma   turma;
-    Usuario professor;
+    Turma turma;
 
     RecyclerView recyclerView;
 
@@ -48,9 +43,8 @@ public class MembrosFragment extends Fragment
         turma = (Turma) getArguments().getSerializable("turma");
 
         firebaseDatabase   = FirebaseDatabase.getInstance().getReference();
-        alunosReference    = firebaseDatabase.child("turmas").child(turma.getId()).child("alunos");
+        membrosReference   = firebaseDatabase.child("turmas").child(turma.getId()).child("membros");
         usuariosReference  = firebaseDatabase.child("usuarios");
-        professorReference = usuariosReference.child(turma.getProfessorUid());
 
         membrosAdapter = new MembrosAdapter(getContext(), turma);
 
@@ -78,24 +72,7 @@ public class MembrosFragment extends Fragment
 
     private void pegarMembrosTurma()
     {
-        professorReference.addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                professor = dataSnapshot.getValue(Usuario.class);
-                professor.setUid(dataSnapshot.getKey());
-
-                membrosAdapter.add(professor);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        alunosReference.addValueEventListener(new ValueEventListener()
+        membrosReference.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -105,16 +82,16 @@ public class MembrosFragment extends Fragment
 
                 for(final DataSnapshot data : dataSnapshot.getChildren())
                 {
-                    final String alunoKey = data.getKey();
+                    final String membroKey = data.getKey();
 
-                    usuariosReference.child(alunoKey).addListenerForSingleValueEvent(new ValueEventListener()
+                    usuariosReference.child(membroKey).addListenerForSingleValueEvent(new ValueEventListener()
                     {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot)
                         {
-                            Usuario aluno = dataSnapshot.getValue(Usuario.class);
-                            aluno.setUid(alunoKey);
-                            membrosAdapter.add(aluno);
+                            Usuario membro = dataSnapshot.getValue(Usuario.class);
+                            membro.setUid(membroKey);
+                            membrosAdapter.add(membro);
                         }
 
                         @Override
