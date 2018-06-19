@@ -53,7 +53,7 @@ public class ChatMensagem
 
     public void enviarComFoto(final Context c, Uri fotoUri, String tid, String nome)
     {
-        StorageReference chatStorageRef = FirebaseStorage.getInstance()
+        final StorageReference chatStorageRef = FirebaseStorage.getInstance()
             .getReference("turmas")
             .child(tid)
             .child("imagens")
@@ -68,10 +68,21 @@ public class ChatMensagem
             {
                 if(task.isSuccessful())
                 {
-                    ChatMensagem.this.imagemUrl = task.getResult().getDownloadUrl().toString();
-                    enviar();
+                    chatStorageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task)
+                        {
+                            if(task.isSuccessful())
+                            {
+                                ChatMensagem.this.imagemUrl = task.getResult().toString();
 
-                    progressDialog.dismiss();
+                                enviar();
+
+                                progressDialog.dismiss();
+                            }
+                        }
+                    });
                 }
             }
         }).addOnFailureListener(new OnFailureListener()

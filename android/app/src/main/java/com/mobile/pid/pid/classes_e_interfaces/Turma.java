@@ -146,7 +146,13 @@ public class Turma implements Serializable
 
         final ProgressDialog progressDialog = Dialogs.dialogEnviandoImagem(c);
 
-        return enviarFotoCapa(capaUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
+        // Enviar imagem
+        final StorageReference turmaStorageRef = FirebaseStorage.getInstance()
+                .getReference("turmas")
+                .child(id)
+                .child("capa");
+
+        return turmaStorageRef.putFile(capaUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
         {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
@@ -155,10 +161,17 @@ public class Turma implements Serializable
 
                 if(task.isSuccessful())
                 {
-                    Turma.this.capaUrl = task.getResult().getDownloadUrl().toString();
-                    turmaRef.child("capaUrl").setValue(Turma.this.capaUrl);
-                }
+                    turmaStorageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task)
+                        {
+                            Turma.this.capaUrl = task.getResult().toString();
 
+                            turmaRef.child("capaUrl").setValue(Turma.this.capaUrl);
+                        }
+                    });
+                }
                 else
                     Dialogs.mensagem(c, R.string.warning, "Erro ao enviar imagem: " + task.getException().getMessage());
             }
@@ -171,16 +184,6 @@ public class Turma implements Serializable
                 Dialogs.mensagem(c, R.string.warning, "Erro ao enviar imagem: " + e.getMessage());
             }
         });
-    }
-
-    private UploadTask enviarFotoCapa(Uri capaUri)
-    {
-        StorageReference turmaStorageRef = FirebaseStorage.getInstance()
-                .getReference("turmas")
-                .child(id)
-                .child("capa");
-
-        return turmaStorageRef.putFile(capaUri);
     }
 
     public void excluir()

@@ -299,10 +299,19 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                 {
                     if (task.isSuccessful())
                     {
-                        String fotoUrl = task.getResult().getDownloadUrl().toString();
-                        usuarioDatabaseRef.child("fotoUrl").setValue(fotoUrl);
+                        usuarioStorageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>()
+                        {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task)
+                            {
+                                String fotoUrl = task.getResult().toString();
 
-                        dadosPAtt.setPhotoUri(Uri.parse(fotoUrl));
+                                usuarioDatabaseRef.child("fotoUrl").setValue(fotoUrl);
+
+                                dadosPAtt.setPhotoUri(Uri.parse(fotoUrl));
+                            }
+                        });
+
                     }
                 }
             });

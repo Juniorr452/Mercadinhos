@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -124,17 +127,25 @@ public class NovaTurmaActivity extends AppCompatActivity
             if (imagemUri != null)
             {
                 String nomeImagem = imagemUri.getLastPathSegment();
-                StorageReference capaReference = turmasStorageReference.child(turmaId).child(nomeImagem);
+                final StorageReference capaReference = turmasStorageReference.child(turmaId).child(nomeImagem);
+
                 capaReference.putFile(imagemUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>()
                 {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                     {
-                        String capaUrl = taskSnapshot.getDownloadUrl().toString();
+                        capaReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>()
+                        {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task)
+                            {
+                                String capaUrl = task.getResult().toString();
 
-                        Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getUid(), diasDaSemana);
+                                Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getUid(), diasDaSemana);
 
-                        cadastrarTurma(novaTurma, turmaId);
+                                cadastrarTurma(novaTurma, turmaId);
+                            }
+                        });
                     }
                 });
             }
