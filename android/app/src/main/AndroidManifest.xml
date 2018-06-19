@@ -35,8 +35,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.RedesSociaisActivity" />
-        <activity android:name=".login.LoginActivity" />
+
+        <activity
+            android:name=".login.RedesSociaisActivity"
+            android:theme="@style/AppThemeLight"/>
+
+        <activity android:name=".login.LoginActivity"
+            android:theme="@style/AppThemeLight"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
