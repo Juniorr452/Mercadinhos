@@ -73,7 +73,7 @@ public class Dialogs
 
     public static ProgressDialog dialogEnviandoImagem(Context c)
     {
-        final ProgressDialog progressDialog = new ProgressDialog(c);
+        final ProgressDialog progressDialog = new ProgressDialog(c, R.style.DialogTheme);
         progressDialog.setTitle("Enviando imagem...");
         progressDialog.setMessage("Aguarde...");
         progressDialog.show();

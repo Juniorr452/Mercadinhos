@@ -126,4 +126,12 @@ public class FeedFunctions {
                     }
                 });
     }
+
+    public static void criarComentario(final Post p, String pid) {
+        final DatabaseReference dbComentarios = FirebaseDatabase.getInstance().getReference("postComments").child(pid);
+
+        p.setId(dbComentarios.push().getKey());
+
+        dbComentarios.child(p.getId()).setValue(p);
+    }
 }

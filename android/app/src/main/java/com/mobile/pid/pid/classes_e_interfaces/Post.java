@@ -6,7 +6,10 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -93,6 +96,11 @@ public class Post implements Parcelable{
     }
 
     @Exclude
+    public String getPostDataDiaMesAno() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(postData);
+    }
+
+    @Exclude
     public Long getPostDataLong() {
         return postData;
     }
@@ -103,6 +111,42 @@ public class Post implements Parcelable{
 
     public void setPostData(Long postData) {
         this.postData = postData;
+    }
+
+    @Exclude
+    public String calcularTempo() throws ParseException
+    {
+        Calendar c   = Calendar.getInstance();
+        String data = getPostDataFormatado();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        Date dataAtual = c.getTime();
+        Date dataPost  = sdf.parse(data);
+
+        long duracao     = dataAtual.getTime() - dataPost.getTime();
+        long horas       = duracao / (60 * 60 * 1000);
+        long minutos     = duracao / (60 * 1000) % 60;
+        long segundos    = duracao / 1000 % 60;
+
+        if(horas < 24)
+            if(horas == 0)
+                if(minutos == 0)
+                    if (segundos <= 0)
+                        return "Agora";
+                    else
+                        return String.valueOf(segundos) + "s";
+                else
+                    return String.valueOf(minutos) + "m";
+            else
+                return String.valueOf(horas) + "h";
+        else
+        {
+            c.setTime(dataPost);
+            return  String.format("%02d", c.get(Calendar.DAY_OF_MONTH)) + "/" +
+                    String.format("%02d", (c.get(Calendar.MONTH) + 1)) + "/" +
+                    c.get(Calendar.YEAR);
+        }
+
     }
 
     @Override

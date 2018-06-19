@@ -186,7 +186,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onClick(View view)
             {
-                Post post = new Post(null, usuario.getUid(), edit_post.getText().toString());
+                Post post = new Post(null, usuario.getUid(), edit_post.getText().toString().trim());
                 FeedFunctions.criarPost(post);
                 dialog.dismiss();
             }

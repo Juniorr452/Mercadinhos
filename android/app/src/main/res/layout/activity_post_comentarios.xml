@@ -8,11 +8,11 @@
     tools:context=".home.feed.PostComentarios"
     android:orientation="vertical">
 
-    <Toolbar
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:id="@+id/toolbar2">
+        android:id="@+id/toolbar_comentarios">
 
         <TextView
             android:layout_width="match_parent"
@@ -22,8 +22,8 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginRight="15dp"/>
-    </Toolbar>
+            android:layout_marginRight="70dp"/>
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
