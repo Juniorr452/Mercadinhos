@@ -2,6 +2,7 @@ package com.mobile.pid.pid.home.adapters;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,13 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.classes_e_interfaces.PidSort;
 import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 import com.mobile.pid.pid.classes_e_interfaces.Usuario;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -100,24 +100,28 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         holder.nome.setText(t.getNome());
 
         if(!professor)
-            holder.excluir.setVisibility(View.INVISIBLE);
-        else
-            holder.excluir.setOnClickListener(new View.OnClickListener() {
+        {
+            holder.acao.setBackground(activity.getDrawable(R.drawable.baseline_exit_to_app_24));
+
+            holder.acao.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(layoutInflater.getContext(), R.style.DialogTheme)
-                        .setTitle("Excluir a turma?")
-                        .setMessage("Deseja realmente excluir a turma?")
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                t.excluir();
-                            }
-                        })
-                        .setNegativeButton("Não", null)
-                        .show();
+                public void onClick(View v) {
+                    Dialogs.desmatricularAluno(activity, t, uid);
                 }
             });
+        }
+        else
+        {
+            holder.acao.setBackground(activity.getDrawable(R.drawable.baseline_close_24));
+
+            holder.acao.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Dialogs.excluirTurma(layoutInflater.getContext(), t);
+                }
+            });
+        }
+
 
         // DIAS DA SEMANA
         Map<String, Integer> dias = t.getDiasDaSemana();
@@ -257,7 +261,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
         public CardView  cardViewFotoProf;
         public ImageView fotoProf;
         public ImageView capa;
-        public ImageView excluir;
+        public ImageView acao;
         public TextView  nome;
         public TextView  dia;
 
@@ -268,7 +272,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
             cardViewFotoProf = itemView.findViewById(R.id.cardview_foto_turma);
             fotoProf         = itemView.findViewById(R.id.icon_turma_professor);
             capa             = itemView.findViewById(R.id.turma_capa);
-            excluir          = itemView.findViewById(R.id.turma_excluir);
+            acao          = itemView.findViewById(R.id.turma_acao);
             nome             = itemView.findViewById(R.id.turma_nome);
             dia              = itemView.findViewById(R.id.turma_dia);
         }

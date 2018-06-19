@@ -44,6 +44,36 @@ public class Dialogs
     public static final int RC_CAMERA       = 0;
     public static final int RC_PHOTO_PICKER = 1;
 
+    public static void desmatricularAluno(Context c, final Turma t, final String uid)
+    {
+        new android.support.v7.app.AlertDialog.Builder(c, R.style.DialogTheme)
+            .setTitle("Sair da turma?")
+            .setMessage("Deseja realmente sair da turma?")
+            .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    t.desmatricularAluno(uid);
+                }
+            })
+            .setNegativeButton("Não", null)
+            .show();
+    }
+
+    public static void excluirTurma(Context c, final Turma t)
+    {
+        new android.support.v7.app.AlertDialog.Builder(c, R.style.DialogTheme)
+            .setTitle("Excluir a turma?")
+            .setMessage("Deseja realmente excluir a turma?")
+            .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    t.excluir();
+                }
+            })
+            .setNegativeButton("Não", null)
+            .show();
+    }
+
     public static void mensagem(Context c, String titulo, String mensagem)
     {
         new AlertDialog.Builder(c)
