@@ -86,7 +86,7 @@ public class ChatActivity extends AppCompatActivity
             }
         });
 
-        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatMensagemAdapter);
