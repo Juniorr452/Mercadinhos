@@ -134,6 +134,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             }
         });
 
+
         // CARREGAR OS POSTS CURTIDOS COM O NUMERO DE CURTIDAS
         FirebaseDatabase.getInstance().getReference().child("postLikes").child(p.getId())
                 .addValueEventListener(new ValueEventListener() {
@@ -163,6 +164,34 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
 
             }
         });
+
+        // CARREGAR OS POSTS COM O NUMERO DE COMENTARIOS
+        FirebaseDatabase.getInstance().getReference("postComments").child(p.getId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if(dataSnapshot.getChildrenCount() == 0) {
+                            holder.countReply.setVisibility(View.INVISIBLE);
+                        } else {
+                            holder.countReply.setVisibility(View.VISIBLE);
+                            holder.countReply.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                        }
+
+                        if(dataSnapshot.hasChild(usuarioLogado)) {
+                            holder.reply.setButtonTintList(context.getResources().getColorStateList(R.color.red));
+                            holder.reply.setChecked(true);
+                        } else {
+                            holder.reply.setButtonTintList(context.getResources().getColorStateList(R.color.gray_font));
+                            holder.reply.setChecked(false);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public String calcularTempo(String data) throws ParseException
@@ -217,6 +246,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
         private TextView postTime;
         private TextView countLike;
         private CheckBox like;
+        private TextView countReply;
+        private CheckBox reply;
 
         public RecyclerViewHolder(final View itemView) {
             super(itemView);
@@ -226,6 +257,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
             texto      = itemView.findViewById(R.id.tv_message_feed);
             postTime   = itemView.findViewById(R.id.postTime);
             countLike  = itemView.findViewById(R.id.count_like);
+            reply      = itemView.findViewById(R.id.cb_reply);
+            countReply = itemView.findViewById(R.id.count_reply);
             like = itemView.findViewById(R.id.cb_like);
             
             itemView.setOnLongClickListener(new View.OnLongClickListener() {

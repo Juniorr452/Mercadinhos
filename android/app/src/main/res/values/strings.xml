@@ -128,8 +128,6 @@
     <string name="preencha_senhas">Preencha os campos das senhas e tente novamente.</string>
     <string name="erro_senhas">Senhas não correspondem. Tente novamente.</string>
     <string name="erro_senha_6">Senha precisa de, pelo menos, 6 caracteres. Tente novamente.</string>
-
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="chat_exibido_como">Seu chat será exibido como: </string>
     <string name="membros">Membros</string>
@@ -142,4 +140,6 @@
     <string name="sad_message_turmas_criadas">As turmas que você criar aparecerão aqui.</string>
     <string name="sad_message_turmas_usuario">Parece que este usuário não criou nenhuma turma.</string>
     <string name="trans_logo">trans_logo</string>
+    <string name="comentarios">Comentários</string>
+    <string name="comentar">Comentar</string>
 </resources>
