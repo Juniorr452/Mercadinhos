@@ -13,12 +13,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mobile.pid.pid.R;
+
+import java.util.Map;
 
 public class ChatMensagem
 {
@@ -30,6 +34,7 @@ public class ChatMensagem
     private String  mensagem;
     private String  imagemUrl;
     private boolean professor;
+    private Long    mensagemData;
 
     public ChatMensagem() { }
 
@@ -122,5 +127,18 @@ public class ChatMensagem
 
     public void setProfessor(boolean professor) {
         this.professor = professor;
+    }
+
+    public Map<String, String> getMensagemData() {
+        return ServerValue.TIMESTAMP;
+    }
+
+    @Exclude
+    public Long getMensagemDataLong() {
+        return mensagemData;
+    }
+
+    public void setMensagemData(Long mensagemData) {
+        this.mensagemData = mensagemData;
     }
 }

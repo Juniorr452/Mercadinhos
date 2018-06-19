@@ -31,6 +31,7 @@ import java.util.Map;
  * Created by junio on 07/03/2018.
  */
 
+// TODO: MUDAR ALUNOSUID PRA MEMBROS
 public class Turma implements Serializable
 {
     @Exclude
@@ -107,7 +108,6 @@ public class Turma implements Serializable
                     diaMaisProximo = dia;
             }
 
-            Log.i("pegarDiaMaisProximo", "Turma " + turma.getNome() + ": " + diaMaisProximo);
             return diaMaisProximo;
         }
     };

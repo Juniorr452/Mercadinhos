@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.classes_e_interfaces.Chat;
@@ -43,15 +44,19 @@ public class ChatActivity extends AppCompatActivity
 
     private ProgressBar  progressBar;
 
-    private Toolbar     toolbar;
-    private EditText    etMensagem;
+    private Toolbar  toolbar;
+    private EditText etMensagem;
 
-    private DatabaseReference  dbRoot;
+    private DatabaseReference dbRoot;
     private DatabaseReference chatRef;
+    private Query chatQuery;
 
     private RecyclerView        recyclerView;
     private LinearLayoutManager layoutManager;
     private ChatMensagemAdapter chatMensagemAdapter;
+    private ValueEventListener  chatEventListener;
+
+    private boolean entrouNoChat;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -71,11 +76,14 @@ public class ChatActivity extends AppCompatActivity
         recyclerView = findViewById(R.id.recycler_view_chat);
         etMensagem   = findViewById(R.id.et_chat);
 
-        dbRoot  = FirebaseDatabase.getInstance().getReference();
-        chatRef = dbRoot.child("chats").child(chat.getId());
+        dbRoot    = FirebaseDatabase.getInstance().getReference();
+        chatRef   = dbRoot.child("chats").child(chat.getId());
+        chatQuery = chatRef.orderByChild("mensagemData");
 
         layoutManager       = new LinearLayoutManager(this);
         chatMensagemAdapter = new ChatMensagemAdapter(this, new ArrayList<ChatMensagem>());
+
+        entrouNoChat = true;
 
         toolbar.setTitle(chat.getNome());
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -86,13 +94,43 @@ public class ChatActivity extends AppCompatActivity
             }
         });
 
-        layoutManager.setStackFromEnd(true);
-
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatMensagemAdapter);
 
         pegarFotoPerfil();
-        chatRef.addChildEventListener(new ChildEventListener()
+
+        chatEventListener = new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    recyclerView.getRecycledViewPool().clear();
+                    chatMensagemAdapter.clear();
+
+                    for(DataSnapshot data : dataSnapshot.getChildren())
+                    {
+                        ChatMensagem mensagem = data.getValue(ChatMensagem.class);
+
+                        chatMensagemAdapter.add(mensagem);
+                    }
+
+                    if(entrouNoChat)
+                    {
+                        layoutManager.scrollToPosition(chatMensagemAdapter.getItemCount() - 1);
+                        entrouNoChat = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        /*chatRef.addChildEventListener(new ChildEventListener()
         {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
@@ -121,7 +159,23 @@ public class ChatActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        layoutManager.scrollToPosition(chatMensagemAdapter.getItemCount() - 1);
+        chatQuery.addValueEventListener(chatEventListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        chatQuery.removeEventListener(chatEventListener);
     }
 
     public void enviar(View v)
