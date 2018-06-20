@@ -78,6 +78,7 @@ public class MembrosFragment extends Fragment
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 recyclerView.getRecycledViewPool().clear();
+                membrosAdapter.setQtdMembros((int) dataSnapshot.getChildrenCount());
                 membrosAdapter.clear();
 
                 for(final DataSnapshot data : dataSnapshot.getChildren())

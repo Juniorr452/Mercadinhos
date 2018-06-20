@@ -30,6 +30,7 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
 {
     private Context c;
     private List<Usuario> membros;
+    private int qtdMembros;
     private Turma turma;
 
     private String uidUsuarioLogado;
@@ -44,6 +45,7 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
 
         this.uidUsuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        this.qtdMembros     = Integer.MAX_VALUE;
         this.precisaOrdenar = true;
     }
 
@@ -113,7 +115,13 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
     public void add(Usuario u)
     {
         membros.add(u);
-        precisaOrdenar = true;
+
+        if(membros.size() >= qtdMembros)
+        {
+            precisaOrdenar = true;
+            ordenarMembros();
+        }
+
         notifyDataSetChanged();
     }
 
@@ -144,6 +152,10 @@ public class MembrosAdapter extends RecyclerView.Adapter<MembrosAdapter.MembrosV
 
             notifyDataSetChanged();
         }
+    }
+
+    public void setQtdMembros(int qtdMembros) {
+        this.qtdMembros = qtdMembros;
     }
 
     public class MembrosViewHolder extends RecyclerView.ViewHolder
