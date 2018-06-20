@@ -28,6 +28,8 @@ public class ComentariosAdapter extends RecyclerView.Adapter<ComentariosAdapter.
     private Context context;
     private List<Post> comentarios;
 
+    //TODO : BUG COMENTARIOS 
+
     public ComentariosAdapter(Context context) {
         this.context = context;
         this.comentarios = new ArrayList<>();
