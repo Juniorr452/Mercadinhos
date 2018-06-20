@@ -32,7 +32,7 @@ public class AvisoTurma
 
     @Exclude
     public String getDataFormatada(){
-        return new SimpleDateFormat("dd-MM-yyyy").format(data);
+        return new SimpleDateFormat("dd-MM-yyyy - HH:mm:ss").format(data);
     }
 
     public void setData(Long data) {
