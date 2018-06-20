@@ -279,10 +279,12 @@ public class Turma implements Serializable
         membrosUid.remove(uid);
     }
 
+    @Exclude
     public String getId() {
         return id;
     }
 
+    @Exclude
     public void setId(String id) {
         this.id = id;
     }
