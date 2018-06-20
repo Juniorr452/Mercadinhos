@@ -258,7 +258,7 @@ public class AtualizarPerfilActivity extends AppCompatActivity
         int mes = c.get(Calendar.MONTH);
         int dia = c.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(AtualizarPerfilActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(AtualizarPerfilActivity.this, AlertDialog.THEME_HOLO_DARK,
                 new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int ano, int mesDoAno, int dia)
