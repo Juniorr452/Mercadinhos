@@ -287,7 +287,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.RecyclerViewHo
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         FeedFunctions.excluirPost(p, context);
-                                        removePost(p);
+                                        notifyDataSetChanged();
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)

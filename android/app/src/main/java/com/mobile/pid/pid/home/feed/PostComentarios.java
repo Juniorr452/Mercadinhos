@@ -99,9 +99,14 @@ public class PostComentarios extends AppCompatActivity {
                     Post c = dataSnapshot.getValue(Post.class);
                     c.setId(dataSnapshot.getKey());
                     comentarioAdapter.add(c);
+
+                    countReply.setVisibility(View.VISIBLE);
+                    countReply.setText(String.valueOf(comentarioAdapter.getItemCount()));
+                } else {
+                    countReply.setVisibility(View.GONE);
                 }
 
-                countReply.setText(String.valueOf(comentarioAdapter.getItemCount()));
+
             }
 
             @Override
