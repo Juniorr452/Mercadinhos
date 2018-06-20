@@ -124,6 +124,7 @@ public class EditarTurma extends AppCompatActivity
             if(requestCode == Dialogs.RC_PHOTO_PICKER)
             {
                 capaUri = data.getData();
+                this.capaUri = capaUri;
                 capa.setImageURI(capaUri);
             }
         }
@@ -185,6 +186,7 @@ public class EditarTurma extends AppCompatActivity
 
         Intent i = new Intent();
         i.putExtra("turma", turma);
+        i.putExtra("capaUri", capaUri);
         setResult(DetalhesTurma.RC_TURMA_ATUALIZADA, i);
 
         try

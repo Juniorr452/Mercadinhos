@@ -124,38 +124,8 @@ public class NovaTurmaActivity extends AppCompatActivity
             // Pegar o ID da turma e o usuário logado que está criando a turma
             final String turmaId = turmasDatabaseReference.push().getKey();
 
-            // Enviar a imagem selecionada para o  Firebase Storage (Se houver) e pegar a url.
-            if (imagemUri != null)
-            {
-                String nomeImagem = imagemUri.getLastPathSegment();
-                final StorageReference capaReference = turmasStorageReference.child(turmaId).child(nomeImagem);
-
-                capaReference.putFile(imagemUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>()
-                {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-                    {
-                        capaReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>()
-                        {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task)
-                            {
-                                String capaUrl = task.getResult().toString();
-
-                                Turma novaTurma = new Turma(nomeTurma, pinTurma, capaUrl, user.getUid(), diasDaSemana);
-
-                                novaTurma.cadastrar(NovaTurmaActivity.this, progressDialog, turmaId);
-                            }
-                        });
-                    }
-                });
-            }
-            else // Se não tiver imagem, já pega a URL de capa padrão
-            {
-                Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, user.getUid(), diasDaSemana);
-
-                novaTurma.cadastrar(NovaTurmaActivity.this, progressDialog, turmaId);
-            }
+            Turma novaTurma = new Turma(nomeTurma, pinTurma, FOTO_CAPA_TURMA, user.getUid(), diasDaSemana);
+            novaTurma.cadastrar(this, progressDialog, turmaId, imagemUri);
         }
         catch(NoSuchFieldException e)
         {

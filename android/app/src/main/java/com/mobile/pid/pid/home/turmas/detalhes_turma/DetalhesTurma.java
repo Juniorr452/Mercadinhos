@@ -1,6 +1,7 @@
 package com.mobile.pid.pid.home.turmas.detalhes_turma;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -159,10 +160,10 @@ public class DetalhesTurma extends AppCompatActivity
         {
             case RC_TURMA_ATUALIZADA:
                 turma = (Turma) data.getExtras().getSerializable("turma");
-
+                Uri capaUri = (Uri) data.getExtras().get("capaUri");
                 nomeTurma.setText(turma.getNome());
 
-                Glide.with(this).load(turma.getCapaUrl()).into(capa);
+                Glide.with(this).load(capaUri).into(capa);
                 break;
 
             case RC_TURMA_EXCLUIDA:

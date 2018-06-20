@@ -129,21 +129,37 @@ public class Turma implements Serializable
 
     // Inserir os dados da turma no banco de dados
     // Erro aqui ao usar o setValue com a Turma t
-    public void cadastrar(Activity activity, ProgressDialog progressDialog, String turmaId)
+    public void cadastrar(final Activity activity, final ProgressDialog progressDialog, final String turmaId, Uri capaUri)
     {
         DatabaseReference dbRoot = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference turmasCriadasDatabaseReference = dbRoot.child("userTurmasCriadas");
-        DatabaseReference turmasDatabaseReference        = dbRoot.child("turmas");
+        final DatabaseReference turmasCriadasRef = dbRoot.child("userTurmasCriadas");
+        final DatabaseReference turmaRef         = dbRoot.child("turmas").child(turmaId);
 
-        // Cadastrar a turma
-        turmasDatabaseReference.child(turmaId).setValue(this);
+        this.id = turmaId;
 
-        // Cadastrar referência no turmas_criadas
-        turmasCriadasDatabaseReference.child(professorUid).child(turmaId).setValue(true);
+        if(capaUri != null)
+            enviarImagemCapa(activity, capaUri, progressDialog, turmaRef).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
+                {
+                    turmaRef.setValue(Turma.this);
+                    turmasCriadasRef.child(professorUid).child(turmaId).setValue(true);
+                    progressDialog.dismiss();
 
-        progressDialog.dismiss();
-        Toast.makeText(activity, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
-        activity.finish();
+                    Toast.makeText(activity, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+                    activity.finish();
+                }
+            });
+        else
+        {
+            turmaRef.setValue(Turma.this);
+            turmasCriadasRef.child(professorUid).child(turmaId).setValue(true);
+            progressDialog.dismiss();
+
+            Toast.makeText(activity, "Turma cadastrada com sucesso", Toast.LENGTH_SHORT).show();
+            activity.finish();
+        }
     }
 
     public DatabaseReference atualizar(String nome, String pin, Map<String, Integer> diasDaSemana)
@@ -169,6 +185,11 @@ public class Turma implements Serializable
 
         final ProgressDialog progressDialog = Dialogs.dialogEnviandoImagem(c);
 
+        return enviarImagemCapa(c, capaUri, progressDialog, turmaRef);
+    }
+
+    public StorageTask<UploadTask.TaskSnapshot> enviarImagemCapa(final Context c, Uri capaUri, final ProgressDialog progressDialog, final DatabaseReference turmaRef)
+    {
         // Enviar imagem
         final StorageReference turmaStorageRef = FirebaseStorage.getInstance()
                 .getReference("turmas")
@@ -284,6 +305,10 @@ public class Turma implements Serializable
 
     public String getCapaUrl() {
         return this.capaUrl;
+    }
+
+    public void setCapaUrl(String capaUrl) {
+        this.capaUrl = capaUrl;
     }
 
     public String getProfessorUid() {
