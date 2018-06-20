@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.feed.FeedFunctions;
 import com.mobile.pid.pid.home.perfil.UsuarioPerfilActivity;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 
 import java.util.Date;
 
@@ -406,8 +407,22 @@ public class Dialogs
 
         count_alunos.setText(String.valueOf(t.getQtdMembros()));
 
+
+
         if(t.estaNaTurma(uid))
+        {
+            capa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, DetalhesTurma.class);
+                    intent.putExtra("turma", t);
+                    intent.putExtra("usuario", t.getProfessorUid().equals(uid) ? DetalhesTurma.PROFESSOR : DetalhesTurma.ALUNO);
+                    context.startActivity(intent);
+                }
+            });
+
             solicitar.setVisibility(View.GONE);
+        }
         else if(t.enviouSolicitacao(uid))
             desabilitarBotaoSolicitar(solicitar);
         else
