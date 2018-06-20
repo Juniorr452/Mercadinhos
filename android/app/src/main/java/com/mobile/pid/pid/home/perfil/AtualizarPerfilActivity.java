@@ -218,18 +218,15 @@ public class AtualizarPerfilActivity extends AppCompatActivity
     {
         String nome = etNome.getText().toString();
 
-        Log.d(TAG, R.string.gender + sexo);
-        Log.d(TAG, R.string.date + dataNasc);
-
-        if (validarCampos(nome, dataNasc))
+        if (validarCampos(nome, sexo, dataNasc))
             atualizarPerfil(nome.trim(), sexo.trim(), dataNasc.trim());
         else
             Toast.makeText(this, R.string.fill_fields, Toast.LENGTH_SHORT).show();
     }
 
-    public boolean validarCampos(String nome, String data)
+    public boolean validarCampos(String nome, String sexo, String data)
     {
-        if(nome.equals("") || data.equals(""))
+        if(nome.equals("") || sexo == null || data == null)
             return false;
 
         return true;
