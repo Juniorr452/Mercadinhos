@@ -3,6 +3,8 @@ package com.mobile.pid.pid.home.feed;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +43,8 @@ import java.util.List;
 public class PostComentarios extends AppCompatActivity {
 
     private Query comentRef;
-    private ValueEventListener comentListener;
+    //private ValueEventListener comentListener;
+    private ChildEventListener comentListener;
     private ComentariosAdapter comentarioAdapter;
     private Post p;
     private String usuarioLogado;
@@ -56,6 +60,8 @@ public class PostComentarios extends AppCompatActivity {
     private TextView countLike;
     private Button comentar;
     private RecyclerView recyclerView;
+
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,29 +92,41 @@ public class PostComentarios extends AppCompatActivity {
         like.setVisibility(View.GONE);
         countLike.setVisibility(View.GONE);
 
-        comentListener = new ValueEventListener() {
+        comentListener = new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if(dataSnapshot.exists()) {
-                    countReply.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-
-                    comentarioAdapter.clear();
-
-                    for(DataSnapshot com : dataSnapshot.getChildren()) {
-                        Post c = com.getValue(Post.class);
-                        c.setId(com.getKey());
-                        comentarioAdapter.add(c);
-                    }
+                    Post c = dataSnapshot.getValue(Post.class);
+                    c.setId(dataSnapshot.getKey());
+                    comentarioAdapter.add(c);
                 }
+
+                countReply.setText(String.valueOf(comentarioAdapter.getItemCount()));
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         };
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this);
+
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -139,13 +157,14 @@ public class PostComentarios extends AppCompatActivity {
         }
         texto.setText(p.getTexto());
 
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        comentRef.addValueEventListener(comentListener);
+        comentRef.addChildEventListener(comentListener);
     }
 
     @Override
