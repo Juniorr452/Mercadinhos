@@ -28,6 +28,7 @@ import com.mobile.pid.pid.R;
 import com.mobile.pid.pid.home.adapters.ChatsAdapter;
 import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.classes_e_interfaces.Chat;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,8 @@ public class ChatsFragment extends Fragment
 
     private ValueEventListener chatsListener;
 
+    int usuario;
+
     public ChatsFragment() {
         // Required empty public constructor
     }
@@ -79,57 +82,60 @@ public class ChatsFragment extends Fragment
 
         conteudo.setVisibility(View.INVISIBLE);
 
-        fabCriarChat.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
+        if(usuario == DetalhesTurma.ALUNO)
+            fabCriarChat.setVisibility(View.GONE);
+        else
+            fabCriarChat.setOnClickListener(new View.OnClickListener()
             {
-                final View d = getLayoutInflater().inflate(R.layout.dialog_criar_chat, null);
-
-                final TextView chatExibidoComo = d.findViewById(R.id.chat_exibido_como);
-                final EditText chatNome = d.findViewById(R.id.dialog_chat_nome);
-
-                final TextWatcher textWatcher = new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count)
-                    {
-                        String nome = getString(R.string.chat_exibido_como) + " " + getNomeChat(s.toString());
-                        chatExibidoComo.setText(nome);
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                };
-
-                chatNome.addTextChangedListener(textWatcher);
-
-                DialogInterface.OnClickListener criarConta = new DialogInterface.OnClickListener()
+                @Override
+                public void onClick(View view)
                 {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i)
+                    final View d = getLayoutInflater().inflate(R.layout.dialog_criar_chat, null);
+
+                    final TextView chatExibidoComo = d.findViewById(R.id.chat_exibido_como);
+                    final EditText chatNome = d.findViewById(R.id.dialog_chat_nome);
+
+                    final TextWatcher textWatcher = new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count)
+                        {
+                            String nome = getString(R.string.chat_exibido_como) + " " + getNomeChat(s.toString());
+                            chatExibidoComo.setText(nome);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    };
+
+                    chatNome.addTextChangedListener(textWatcher);
+
+                    DialogInterface.OnClickListener criarConta = new DialogInterface.OnClickListener()
                     {
-                        String nome = chatNome.getText().toString();
-                        Chat      c = new Chat(getNomeChat(nome));
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i)
+                        {
+                            String nome = chatNome.getText().toString();
+                            Chat      c = new Chat(getNomeChat(nome));
 
-                        chatsRef.push().setValue(c);
-                    }
-                };
+                            chatsRef.push().setValue(c);
+                        }
+                    };
 
-                new AlertDialog.Builder(getContext(), R.style.DialogTheme)
-                        .setView(d)
-                        .setPositiveButton("Criar", criarConta)
-                        .setNegativeButton(R.string.cancel, null)
-                        .create()
-                        .show();
-            }
-        });
+                    new AlertDialog.Builder(getContext(), R.style.DialogTheme)
+                            .setView(d)
+                            .setPositiveButton("Criar", criarConta)
+                            .setNegativeButton(R.string.cancel, null)
+                            .create()
+                            .show();
+                }
+            });
 
         return v;
     }
@@ -140,7 +146,7 @@ public class ChatsFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         turma        = (Turma) getArguments().getSerializable("turma");
-        int usuario  = getArguments().getInt("usuario");
+        usuario  = getArguments().getInt("usuario");
         chatsAdapter = new ChatsAdapter(getActivity(), new ArrayList<Chat>(), turma, usuario);
         chatsRef     = FirebaseDatabase.getInstance().getReference()
                         .child("turmas")

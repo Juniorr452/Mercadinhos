@@ -35,8 +35,8 @@ public class DetalhesTurma extends AppCompatActivity
     public static final int RC_TURMA_EXCLUIDA   = 0;
     public static final int RC_TURMA_ATUALIZADA = 1;
 
-    private static final int PROFESSOR = 0;
-    private static final int ALUNO = 1;
+    public static final int PROFESSOR = 0;
+    public static final int ALUNO = 1;
 
     private Turma     turma;
     private Toolbar   toolbar_detalhes;

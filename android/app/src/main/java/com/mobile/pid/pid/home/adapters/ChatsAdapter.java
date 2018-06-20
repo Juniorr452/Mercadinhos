@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 import com.mobile.pid.pid.classes_e_interfaces.Turma;
 import com.mobile.pid.pid.classes_e_interfaces.Chat;
+import com.mobile.pid.pid.home.turmas.detalhes_turma.DetalhesTurma;
 import com.mobile.pid.pid.home.turmas.detalhes_turma.chat.ChatActivity;
 
 import java.util.List;
@@ -45,7 +47,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
     @Override
     public void onBindViewHolder(ChatsViewHolder holder, int position)
     {
-        final Chat c = chats.get(position);
+        final Chat chat = chats.get(position);
 
         holder.chatNome.setOnClickListener(new View.OnClickListener()
         {
@@ -54,14 +56,23 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
             {
                 Intent i = new Intent(ctx, ChatActivity.class);
                 i.putExtra("turma", turma);
-                i.putExtra("chat",    c);
+                i.putExtra("chat",    chat);
                 i.putExtra("usuario", usuario);
 
                 ctx.startActivity(i);
             }
         });
 
-        holder.chatNome.setText("#" + c.getNome());
+        if(usuario == DetalhesTurma.PROFESSOR)
+            holder.chatNome.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Dialogs.deletarChat(ctx, turma, chat);
+                    return true;
+                }
+            });
+
+        holder.chatNome.setText("#" + chat.getNome());
     }
 
     @Override
