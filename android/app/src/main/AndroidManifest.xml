@@ -66,19 +66,13 @@
         <activity
             android:name=".home.HomeActivity"
             android:windowSoftInputMode="adjustPan">
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity android:name=".home.turmas.NovaTurmaActivity" />
         <activity android:name=".home.perfil.AtualizarPerfilActivity" />
         <activity android:name=".home.turmas.detalhes_turma.DetalhesTurma" />
         <activity android:name=".home.turmas.detalhes_turma.EditarTurma" />
-        <activity android:name=".home.turmas.detalhes_turma.chat.ChatActivity" />
+        <activity android:name=".home.turmas.detalhes_turma.chat.ChatActivity"
+                  android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".home.perfil.UsuarioPerfilActivity" />
         <activity android:name=".home.feed.PostComentarios"></activity>
     </application>
