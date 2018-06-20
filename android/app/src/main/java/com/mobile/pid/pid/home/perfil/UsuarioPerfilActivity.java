@@ -157,21 +157,11 @@ public class UsuarioPerfilActivity extends AppCompatActivity {
                 if(fabSeguir.getTag().equals("SEGUINDO")) {
                     followUser(FOLLOW);
 
-                    Snackbar.make(findViewById(android.R.id.content), "Você está seguindo " + user.getNome(), Snackbar.LENGTH_SHORT).setAction("ClOSE", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    }).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Você está seguindo " + user.getNome(), Snackbar.LENGTH_SHORT).setAction("ClOSE", null).show();
                 } else {
                     followUser(UNFOLLOW);
 
-                    Snackbar.make(findViewById(android.R.id.content), "Você deixou de seguir " + user.getNome(), Snackbar.LENGTH_SHORT).setAction("ClOSE", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    }).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Você deixou de seguir " + user.getNome(), Snackbar.LENGTH_SHORT).setAction("ClOSE", null).show();
                 }
             }
         });

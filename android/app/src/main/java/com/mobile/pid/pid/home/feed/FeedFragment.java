@@ -49,7 +49,7 @@ public class FeedFragment extends Fragment {
     private ProgressBar progressBar;
     private FrameLayout conteudo;
 
-    private FirebaseUser usuario;
+    private String usuario;
     private LinearLayout mensagemSemPosts;
 
     private PostAdapter postAdapter;
@@ -118,9 +118,9 @@ public class FeedFragment extends Fragment {
 
         posts = new ArrayList<>();
         postAdapter = new PostAdapter(getActivity(), posts);
-        usuario = FirebaseAuth.getInstance().getCurrentUser();
+        usuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        postQuery = FirebaseDatabase.getInstance().getReference("feed").child(usuario.getUid()).orderByChild("postData");
+        postQuery = FirebaseDatabase.getInstance().getReference("feed").child(usuario).orderByChild("postData");
 
         postListener = new ValueEventListener()
         {
@@ -158,13 +158,25 @@ public class FeedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        postQuery.addValueEventListener(postListener);
+        //postQuery.addValueEventListener(postListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         postQuery.removeEventListener(postListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        postQuery.removeEventListener(postListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        postQuery.addValueEventListener(postListener);
     }
 
     private void criarPost(View view)
@@ -186,7 +198,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onClick(View view)
             {
-                Post post = new Post(null, usuario.getUid(), edit_post.getText().toString().trim());
+                Post post = new Post(null, usuario, edit_post.getText().toString().trim());
                 FeedFunctions.criarPost(post);
                 dialog.dismiss();
             }
