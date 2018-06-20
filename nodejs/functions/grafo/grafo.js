@@ -78,14 +78,17 @@ Grafo.prototype.dfsRecursivo = function(verticeAtual)
     {
         verticeVizinho = this.vertices[vizinhoid];
 
-        if(!verticeVizinho.ignorar)
+        if(verticeVizinho !== undefined)
         {
-            verticeVizinho.pontuacao += verticeAtual.pontuacao;
-
-            if(!verticeVizinho.visitado)
+            if(!verticeVizinho.ignorar)
             {
-                verticeVizinho.visitado = true;
-                this.dfsRecursivo(verticeVizinho);
+                verticeVizinho.pontuacao += verticeAtual.pontuacao;
+    
+                if(!verticeVizinho.visitado)
+                {
+                    verticeVizinho.visitado = true;
+                    this.dfsRecursivo(verticeVizinho);
+                }
             }
         }
     });
@@ -107,10 +110,12 @@ Grafo.prototype.lerGrafo = function(uid, profundidade)
         {
             this.addVertice(new Vertice(uid), seguindoUids);
 
+            let prof = profundidade + 1;
+
             seguindoUids.forEach(seguindo => 
             {
                 if(!this.vertices.hasOwnProperty(seguindo.key))          
-                    promises.push(this.lerGrafo(seguindo.key, profundidade + 1));
+                    promises.push(this.lerGrafo(seguindo.key, prof));
             });
         }
         
