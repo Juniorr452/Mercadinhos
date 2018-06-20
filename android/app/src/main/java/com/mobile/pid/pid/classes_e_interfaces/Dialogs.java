@@ -430,7 +430,7 @@ public class Dialogs
                                     enviarSolicitacaoTurma(t, uid);
                                     desabilitarBotaoSolicitar(solicitar);
 
-                                    Dialogs.mensagem(context, R.string.solicitacao_sucesso, R.string.Ok);
+                                    Dialogs.mensagem(context, R.string.warning, R.string.solicitacao_sucesso);
                                 }
                             })
                             .setNegativeButton(R.string.no, null)
