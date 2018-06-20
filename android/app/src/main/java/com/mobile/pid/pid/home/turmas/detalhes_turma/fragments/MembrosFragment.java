@@ -66,7 +66,7 @@ public class MembrosFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-
+        recyclerView.getRecycledViewPool().clear();
         membrosAdapter.ordenarMembros();
     }
 
