@@ -70,19 +70,19 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
     @Override
     public void onBindViewHolder(final TurmaViewHolder holder, final int position)
     {
-        final Turma           t = listaTurmas.get(position);
+        final Turma       turma = listaTurmas.get(position);
         final String        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final boolean professor = uid.equals(t.getProfessorUid());
+        final boolean professor = uid.equals(turma.getProfessorUid());
 
         // Carregar imagem da capa
         Glide.with(holder.capa.getContext())
-                .load(t.getCapaUrl())
+                .load(turma.getCapaUrl())
                 .into(holder.capa);
 
         // Carregar imagem do prof
         FirebaseDatabase.getInstance().getReference()
             .child("usuarios")
-            .child(t.getProfessorUid())
+            .child(turma.getProfessorUid())
             .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -97,34 +97,37 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 }
             });
 
-        holder.nome.setText(t.getNome());
+        holder.nome.setText(turma.getNome());
+        holder.acao.setVisibility(View.VISIBLE);
 
-        if(!professor)
+        if(!professor && turma.estaNaTurma(uid))
         {
             holder.acao.setBackground(activity.getDrawable(R.drawable.baseline_exit_to_app_24));
 
             holder.acao.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Dialogs.desmatricularAluno(activity, t, uid);
+                    Dialogs.desmatricularAluno(activity, turma, uid);
                 }
             });
         }
-        else
+        else if(professor)
         {
             holder.acao.setBackground(activity.getDrawable(R.drawable.baseline_close_24));
 
             holder.acao.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Dialogs.excluirTurma(layoutInflater.getContext(), t);
+                    Dialogs.excluirTurma(layoutInflater.getContext(), turma);
                 }
             });
         }
+        else
+            holder.acao.setVisibility(View.INVISIBLE);
 
 
         // DIAS DA SEMANA
-        Map<String, Integer> dias = t.getDiasDaSemana();
+        Map<String, Integer> dias = turma.getDiasDaSemana();
         String dia = "";
 
         for (Map.Entry<String, Integer> entry: dias.entrySet())
@@ -143,7 +146,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 final Context c = holder.itemView.getContext();
 
                 // Se o usuário está na turma.
-                if (t.estaNaTurma(uid))
+                if (turma.estaNaTurma(uid))
                 {
                     // https://www.youtube.com/watch?v=BF4yvhpMPcg&t=494s
                     Intent i = new Intent(layoutInflater.getContext(), DetalhesTurma.class);
@@ -156,7 +159,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
 
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(activity, views);
 
-                    i.putExtra("turma", t);
+                    i.putExtra("turma", turma);
 
                     if(professor)
                         i.putExtra("usuario", PROFESSOR);
@@ -168,7 +171,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                 else
                 {
                     // Se a turma não tiver PIN
-                    if(t.getPin().equals(""))
+                    if(turma.getPin().equals(""))
                     {
                         new AlertDialog.Builder(c, R.style.DialogTheme)
                                 .setTitle(R.string.warning)
@@ -178,7 +181,7 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i)
                                     {
-                                        enviarSolicitacaoTurma(t, uid);
+                                        enviarSolicitacaoTurma(turma, uid);
 
                                         new AlertDialog.Builder(c)
                                                 .setMessage(R.string.solicitacao_sucesso)
@@ -213,9 +216,9 @@ public class TurmaAdapter extends RecyclerView.Adapter<TurmaAdapter.TurmaViewHol
                                         .setTitle(R.string.warning)
                                         .setPositiveButton(R.string.Ok, null);
 
-                                if(pin.equals(t.getPin()))
+                                if(pin.equals(turma.getPin()))
                                 {
-                                    enviarSolicitacaoTurma(t, uid);
+                                    enviarSolicitacaoTurma(turma, uid);
                                     alerta.setMessage(R.string.solicitacao_sucesso);
                                     dialog.dismiss();
                                 }

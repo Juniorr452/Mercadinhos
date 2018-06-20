@@ -430,10 +430,7 @@ public class Dialogs
                                     enviarSolicitacaoTurma(t, uid);
                                     desabilitarBotaoSolicitar(solicitar);
 
-                                    new android.support.v7.app.AlertDialog.Builder(context, R.style.DialogTheme)
-                                            .setMessage(R.string.solicitacao_sucesso)
-                                            .setPositiveButton(R.string.Ok, null)
-                                            .show();
+                                    Dialogs.mensagem(context, R.string.solicitacao_sucesso, R.string.Ok);
                                 }
                             })
                             .setNegativeButton(R.string.no, null)

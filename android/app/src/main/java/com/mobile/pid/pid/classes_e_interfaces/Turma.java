@@ -329,9 +329,6 @@ public class Turma implements Serializable
 
     public boolean estaNaTurma(String uid)
     {
-        if(uid.equals(professorUid))
-            return true;
-
         if (membrosUid != null)
             if(membrosUid.containsKey(uid))
                     return true;
