@@ -70,7 +70,7 @@ public class Dialogs
 
     public static void mensagem(Context c, String titulo, String mensagem)
     {
-        new AlertDialog.Builder(c)
+        new AlertDialog.Builder(c, R.style.DialogTheme)
                 .setTitle(titulo)
                 .setMessage(mensagem)
                 .setPositiveButton(R.string.Ok, null)
@@ -79,7 +79,7 @@ public class Dialogs
 
     public static void mensagem(Context c, int titulo, int mensagem)
     {
-        new AlertDialog.Builder(c)
+        new AlertDialog.Builder(c, R.style.DialogTheme)
                 .setTitle(titulo)
                 .setMessage(mensagem)
                 .setPositiveButton(R.string.Ok, null)
@@ -88,7 +88,7 @@ public class Dialogs
 
     public static void mensagem(Context c, int titulo, String mensagem)
     {
-        new AlertDialog.Builder(c)
+        new AlertDialog.Builder(c, R.style.DialogTheme)
                 .setTitle(titulo)
                 .setMessage(mensagem)
                 .setPositiveButton(R.string.Ok, null)
@@ -522,5 +522,35 @@ public class Dialogs
     // https://stackoverflow.com/questions/21388586/get-uri-from-camera-intent-in-android
     private static String getNomeArquivo() {
         return DateFormat.format("yyyy-MM-dd_hhmmss", new Date()).toString() + ".jpg";
+    }
+
+    public static void deletarChat(final Context ctx, final Turma turma, final Chat chat)
+    {
+        new AlertDialog.Builder(ctx)
+            .setTitle(R.string.warning)
+            .setMessage("Deseja excluir o chat #" + chat.getNome() + "?")
+            .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    DatabaseReference dbRoot = FirebaseDatabase.getInstance().getReference();
+
+                    DatabaseReference turmaChatRef = dbRoot
+                            .child("turmas")
+                            .child(turma.getId())
+                            .child("chats")
+                            .child(chat.getId());
+
+                    DatabaseReference chatRef = dbRoot
+                            .child("chats")
+                            .child(chat.getId());
+
+                    turmaChatRef.removeValue();
+                    chatRef.removeValue();
+                }
+            })
+            .setNegativeButton(R.string.cancel, null)
+            .show();
     }
 }

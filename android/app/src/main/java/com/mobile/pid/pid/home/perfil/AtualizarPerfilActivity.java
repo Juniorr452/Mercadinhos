@@ -202,10 +202,6 @@ public class AtualizarPerfilActivity extends AppCompatActivity
                     break;
             }
         }
-        else
-        {
-            Log.d(TAG, resultCode + " Não deu " + data.getAction());
-        }
     }
 
     private void carregarImagemNasViews(Object imagem)

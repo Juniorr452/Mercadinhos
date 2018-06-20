@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mobile.pid.pid.R;
+import com.mobile.pid.pid.classes_e_interfaces.Dialogs;
 
 public class LoginActivity extends AppCompatActivity
 {
@@ -111,10 +112,7 @@ public class LoginActivity extends AppCompatActivity
         {
             progressDialog.dismiss();
 
-            new AlertDialog.Builder(LoginActivity.this)
-                    .setTitle(R.string.warning)
-                    .setMessage(e.getMessage())
-                    .show();
+            Dialogs.mensagem(LoginActivity.this, R.string.warning, e.getMessage());
         }
     }
 
