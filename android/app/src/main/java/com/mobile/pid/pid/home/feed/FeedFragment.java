@@ -158,7 +158,7 @@ public class FeedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //postQuery.addValueEventListener(postListener);
+        postQuery.addValueEventListener(postListener);
     }
 
     @Override
@@ -170,13 +170,13 @@ public class FeedFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        postQuery.removeEventListener(postListener);
+        //postQuery.removeEventListener(postListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        postQuery.addValueEventListener(postListener);
+        //postQuery.addValueEventListener(postListener);
     }
 
     private void criarPost(View view)
